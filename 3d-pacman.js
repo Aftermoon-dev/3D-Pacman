@@ -7,6 +7,8 @@
 import * as THREE from 'https://unpkg.com/three@0.108.0/build/three.module.js';
 import { GLTFLoader } from 'https://unpkg.com/three@0.108.0/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'https://unpkg.com/three@0.108.0/examples/jsm/controls/OrbitControls.js';
+import * as Utils from './js/utils.js';
+import * as Maps from './js/maps.js';
 
 
 /* 필수 Variable */
@@ -18,57 +20,6 @@ const object = {};
 const defaultSpeed = 50;
 const timeStep = 1/30;
 
-/* Class */
-class worldObj {
-	constructor(objName, mesh, body) {
-		this.objName = objName;
-		this.body = body;
-		this.mesh = mesh;
-
-		this.mesh.position.copy(body.position);
-		this.mesh.quaternion.copy(body.quaternion);
-
-		this.add = function(scene, world) {
-			scene.add(this.mesh);
-			world.add(this.body);
-		}
-
-		this.position = function(x, y, z) {
-			this.mesh.position.set(x, y, z);
-			this.body.position.set(x, y, z);
-		}
-
-		this.rotateX = function(angle) {
-			var axis = new CANNON.Vec3(1, 0, 0);
-			this.mesh.rotateX(angle * Math.PI / 180);
-			this.body.quaternion.setFromAxisAngle(axis, angle * Math.PI / 180);
-		}
-
-		this.rotateY = function(angle) {
-			var axis = new CANNON.Vec3(0, 1, 0);
-			this.mesh.rotateY(angle * Math.PI / 180);
-			this.body.quaternion.setFromAxisAngle(axis, angle * Math.PI / 180);
-		}
-
-		this.rotateZ = function(angle) {
-			var axis = new CANNON.Vec3(0, 0, 1);
-			this.mesh.rotateZ(angle * Math.PI / 180);
-			this.body.quaternion.setFromAxisAngle(axis, angle * Math.PI / 180);
-		}
-		
-		this.update = function() {
-			this.mesh.position.copy(body.position);
-			this.mesh.quaternion.copy(body.quaternion);
-		}
-	}
-}
-
-function getMeshSize(mesh) {
-	var box = new THREE.Box3().setFromObject(mesh);
-	console.log(box.getSize());
-	return box.getSize()
-}
-
 /**
  * Window OnLoad Event
  */
@@ -78,17 +29,6 @@ window.onload = function() {
 	initObject();
 	animate();
 	initEvent();
-}
-
-/**
- * 신규 GLTF Object 추가
- * @param {String} objName 
- * @param {THREE.Mesh} geometry 
- * @param {CANNON.Body} body 
- */
- function addNewObject(objName, mesh, body) {
-	object[objName] = new worldObj(objName, mesh, body);
-	object[objName].add(scene, world);
 }
 
 /**
@@ -135,9 +75,9 @@ function initObject() {
 	var groundBody = new CANNON.Body({
 		shape: groundShape,
 		collisionFilterGroup: 2,
-		mass: 0
+		mass: 0,
 	});
-	addNewObject('ground', new THREE.Mesh(new THREE.BoxGeometry(1000, 5, 1000), new THREE.MeshBasicMaterial({ color: 0x808080})), groundBody);
+	object['ground'] = Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(1000, 5, 1000), new THREE.MeshBasicMaterial({ color: 0x808080})), groundBody);
 	object['ground'].position(0, -60, 0);
 
 
@@ -148,16 +88,17 @@ function initObject() {
 		collisionFilterMask: 2 | 4,
 		mass: 3
 	});
-	addNewObject('pacman', new THREE.Mesh(new THREE.SphereGeometry(50, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd400 })), pacmanBody);
+	object['pacman'] = Utils.createNewObject(scene, world, 'pacman', new THREE.Mesh(new THREE.SphereGeometry(50, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd400 })), pacmanBody);
 	object['pacman'].position(0, 60, 0);
 
 	var wallShape = new CANNON.Box(new CANNON.Vec3(500, 300, 30));
 	var wallBody = new CANNON.Body({
 		shape: wallShape,
 		collisionFilterGroup: 4,
-		mass: 0
+		mass: 0,
+		type: 1000 // 이걸로 Collide Event에서 뭐랑 부딪힌건지 확인 가능
 	});
-	addNewObject('wall1', new THREE.Mesh(new THREE.BoxGeometry(500, 300, 30), new THREE.MeshBasicMaterial({ color: 0x121212 })), wallBody);
+	object['wall1'] = Utils.createNewObject(scene, world, 'wall1', new THREE.Mesh(new THREE.BoxGeometry(500, 300, 30), new THREE.MeshBasicMaterial({ color: 0x121212 })), wallBody);
 	object['wall1'].position(100, 100, 0);
 	object['wall1'].rotateY(90);
 }
@@ -214,11 +155,15 @@ function initEvent() {
 	});
 
 	object['pacman'].body.addEventListener("collide", function(e) {
-		console.log(object['pacman'].body);
 		console.log(e);
 		var relativeVelocity = e.contact.getImpactVelocityAlongNormal();
 		if(Math.abs(relativeVelocity) > 10) {
 			object['pacman'].body.velocity.set(0, 0, 0);
+		}
+		
+		// 부딪힌 Object Type 확인
+		if(e.body.type == 1000) {
+			console.log("Collide with Walls!");
 		}
 	});
 }
