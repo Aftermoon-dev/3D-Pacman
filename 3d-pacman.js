@@ -5,7 +5,6 @@
  */
 
 import * as THREE from 'https://unpkg.com/three@0.108.0/build/three.module.js';
-import { GLTFLoader } from 'https://unpkg.com/three@0.108.0/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'https://unpkg.com/three@0.108.0/examples/jsm/controls/OrbitControls.js';
 import * as Utils from './js/utils.js';
 import * as Maps from './js/maps.js';
@@ -13,12 +12,6 @@ import * as Maps from './js/maps.js';
 
 /* 필수 Variable */
 var world, canvas, camera, scene, renderer;
-const loader = new GLTFLoader();
-const object = {};
-
-/* Setting */
-const defaultSpeed = 50;
-const timeStep = 1/30;
 
 /**
  * Window OnLoad Event
@@ -28,7 +21,6 @@ window.onload = function() {
 	initCannon();
 	initObject();
 	animate();
-	initEvent();
 }
 
 /**
@@ -70,37 +62,12 @@ function initCannon() {
  * Initializing Object
  */
 function initObject() {
-	// Ground
-	var groundShape = new CANNON.Box(new CANNON.Vec3(1000, 5, 1000));
-	var groundBody = new CANNON.Body({
-		shape: groundShape,
-		collisionFilterGroup: 2,
-		mass: 0,
-	});
-	object['ground'] = Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(1000, 5, 1000), new THREE.MeshBasicMaterial({ color: 0x808080})), groundBody);
-	object['ground'].position(0, -60, 0);
+	// 맵 생성
+	Maps.initGachonMap(scene, world);
 
-
-	var pacmanShape = new CANNON.Box(new CANNON.Vec3(50, 50, 16));
-	var pacmanBody = new CANNON.Body({ 
-		shape: pacmanShape,
-		collisionFilterGroup: 1,
-		collisionFilterMask: 2 | 4,
-		mass: 3
-	});
-	object['pacman'] = Utils.createNewObject(scene, world, 'pacman', new THREE.Mesh(new THREE.SphereGeometry(50, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd400 })), pacmanBody);
-	object['pacman'].position(0, 60, 0);
-
-	var wallShape = new CANNON.Box(new CANNON.Vec3(500, 300, 30));
-	var wallBody = new CANNON.Body({
-		shape: wallShape,
-		collisionFilterGroup: 4,
-		mass: 0,
-		type: 1000 // 이걸로 Collide Event에서 뭐랑 부딪힌건지 확인 가능
-	});
-	object['wall1'] = Utils.createNewObject(scene, world, 'wall1', new THREE.Mesh(new THREE.BoxGeometry(500, 300, 30), new THREE.MeshBasicMaterial({ color: 0x121212 })), wallBody);
-	object['wall1'].position(100, 100, 0);
-	object['wall1'].rotateY(90);
+	// 팩맨 만들기
+	Utils.object['pacman'] = Utils.createPacman(scene, world, 0, 50, 0);
+	Utils.setUserEvent(Utils.object['pacman']);
 }
 
 /**
@@ -113,66 +80,10 @@ function onWindowResize() {
 }
 
 /**
- * Update Physical Engine 
- */
-function updatePhysics() {
-	// Step the physics world
-	world.step(timeStep);
-
-	Object.keys(object).forEach(function(key) {
-		object[key].update();
-	});
-}
-
-/**
- * Initializing Event 
- */
-function initEvent() {
-	document.addEventListener("keydown", function(event) {
-		console.log(event.key);
-		switch(event.key) {
-			case "W":
-			case "w":
-				object['pacman'].body.velocity.set(0, 0, -defaultSpeed);
-				break;
-			case "S":
-			case "s":
-				object['pacman'].body.velocity.set(0, 0, defaultSpeed);
-				break;
-			case "A":
-			case "a":
-				object['pacman'].body.velocity.set(-defaultSpeed, 0, 0);
-				break;
-			case "D":
-			case "d":
-				object['pacman'].body.velocity.set(defaultSpeed, 0, 0);
-				break;
-		}
-	});
-
-	document.addEventListener("keyup", function(event) {
-		object['pacman'].body.velocity.set(0, 0, 0);
-	});
-
-	object['pacman'].body.addEventListener("collide", function(e) {
-		console.log(e);
-		var relativeVelocity = e.contact.getImpactVelocityAlongNormal();
-		if(Math.abs(relativeVelocity) > 10) {
-			object['pacman'].body.velocity.set(0, 0, 0);
-		}
-		
-		// 부딪힌 Object Type 확인
-		if(e.body.type == 1000) {
-			console.log("Collide with Walls!");
-		}
-	});
-}
-
-/**
  * Animate
  */
 function animate() {
 	requestAnimationFrame(animate);
-	updatePhysics();
+	Utils.updatePhysics(world);
 	renderer.render(scene, camera);
 }
