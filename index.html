@@ -1,13 +1,26 @@
 <html>
-    <head>
-        <script type="text/javascript" src="js/three.min.js"></script>
-        <script type="text/javascript" src="js/GLTFLoader.js"></script>
-        <script type="text/javascript" src="js/orbitcontrols.js"></script>	
-        <script type="text/javascript" src="3d-pacman.js"></script>
-    </head>
-    <body>
-        <canvas id="gl-canvas" width="1920" height="1080">
-            Oops ... your browser doesn't support the HTML5 canvas element
-        </canvas>    
-    </body>
+
+<head>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+    <script type="module" src="3d-pacman.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Monospace;
+        }
+
+        canvas {
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="gl-canvas" width="1920" height="1080" tabindex="0">
+        Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+</body>
+
 </html>
