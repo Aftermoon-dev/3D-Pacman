@@ -8,11 +8,12 @@ import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQ
 import { OrbitControls } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/controls/OrbitControls.js';
 import * as Utils from './js/utils.js';
 import * as Maps from './js/maps.js';
+import CannonDebugRenderer from './js/CannonDebugRenderer.js';
 
 
 /* 필수 Variable */
 var world, canvas, camera, scene, renderer;
-
+var debug;
 /**
  * Window OnLoad Event
  */
@@ -56,6 +57,8 @@ function initCannon() {
 	world.gravity.set(0, -9.8, 0);
 	world.broadphase = new CANNON.NaiveBroadphase();
 	world.solver.iterations = 10;
+	
+	debug = new CannonDebugRenderer(scene, world);
 }
 
 /**
@@ -81,6 +84,6 @@ function onWindowResize() {
 function animate() {
 	requestAnimationFrame(animate);
 	Utils.updatePhysics(world);
-	//cannonDebugRenderer.update();
+	debug.update();
 	renderer.render(scene, camera);
 }
