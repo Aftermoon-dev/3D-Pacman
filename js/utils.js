@@ -10,7 +10,7 @@ import { GLTFLoader } from 'https://unpkg.com/three@0.108.0/examples/jsm/loaders
 /* Setting */
 const timeStep = 1/30;
 const defaultSpeed = 50;
-const loader = new GLTFLoader();
+export const loader = new GLTFLoader();
 
 /* Object Dictonary */
 export const object = {};
@@ -63,7 +63,7 @@ export class worldObj {
 }
 
 /**
- * 신규 GLTF Object 추가
+ * 신규 Object 추가
  * @param {String} objName 
  * @param {THREE.Mesh} geometry 
  * @param {CANNON.Body} body 
@@ -71,7 +71,7 @@ export class worldObj {
 export function createNewObject(scene, world, objName, mesh, body) {
     var newObj = new worldObj(objName, mesh, body);
     newObj.add(scene, world);
-	return newObj; 
+	object[objName] = newObj; 
 }
 
 /**
@@ -81,7 +81,6 @@ export function createNewObject(scene, world, objName, mesh, body) {
  * @param {X} posx 
  * @param {Y} posy 
  * @param {Z} posz 
- * @returns worldObj
  */
 export function createPacman(scene, world, posx, posy, posz) {
 	var pacmanMesh = new THREE.Mesh(new THREE.SphereGeometry(100, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd400 }))
@@ -92,19 +91,36 @@ export function createPacman(scene, world, posx, posy, posz) {
 		mass: 3
 	});
 	
-	var pacman = createNewObject(scene, world, 'pacman', pacmanMesh, pacmanBody);
-	pacman.position(posx, posy, posz);
-	return pacman;
+	createNewObject(scene, world, 'pacman', pacmanMesh, pacmanBody);
+	object['pacman'].position(posx, posy, posz);
 }
 
 /**
- * O Event Listener 등록
+ * 벽 생성
+ * @param {THREE.Scene} scene 
+ * @param {CANNON.World} world 
+ * @param {String} wallname 
+ * @param {String (Color Hex Code, 0xFFFFFF)} wallcolor 
+ * @param {X} x 
+ * @param {Y} y 
+ * @param {Z} z 
+ */
+export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
+	var wallBody = new CANNON.Body({
+		shape: new CANNON.Box(new CANNON.Vec3(x, y, z)),
+		collisionFilterGroup: 2,
+		mass: 0
+	});
+	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color: wallcolor})), wallBody);
+}
+
+/**
+ * User Event Listener 등록
  * @param {worldObj} userObject 
  */
 export function setUserEvent(userObject) {
 	// Key를 올렸을 때
 	document.addEventListener("keydown", function(event) {
-		console.log(event.key);
 		switch(event.key) {
 			case "W":
 			case "w":
@@ -145,7 +161,6 @@ export function setUserEvent(userObject) {
 
 	// Collide Event
 	userObject.body.addEventListener("collide", function(e) {
-		console.log(e);
 		// 부딪힌 Object Type 확인
 		if(e.body.type == 1000) {
 			console.log("Collide with Walls!");

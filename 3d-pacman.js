@@ -64,10 +64,6 @@ function initCannon() {
 function initObject() {
 	// 맵 생성
 	Maps.initGachonMap(scene, world);
-
-	// 팩맨 만들기
-	Utils.object['pacman'] = Utils.createPacman(scene, world, 0, 50, 0);
-	Utils.setUserEvent(Utils.object['pacman']);
 }
 
 /**
