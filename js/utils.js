@@ -88,6 +88,7 @@ export function createPacman(scene, world, posx, posy, posz) {
 		//shape: new CANNON.Box(new CANNON.Vec3(180, 180, 180)),
 		shape: new CANNON.Sphere(180),
 		collisionFilterGroup: 1,
+		angularDamping: 1,
 		collisionFilterMask: 2 | 4, // 2번 바닥 4번 벽 
 		mass: 3
 	});
@@ -126,18 +127,23 @@ export function setUserEvent(userObject) {
 		switch(event.key) {
 			case "W":
 			case "w":
+				userObject.body.angularDamping = 0;
 				userObject.body.velocity.set(0, 0, -userSpeed);
+				console.log(userObject.body);
 				break;
 			case "S":
 			case "s":
+				userObject.body.angularDamping = 0;
 				userObject.body.velocity.set(0, 0, userSpeed);
 				break;
 			case "A":
 			case "a":
+				userObject.body.angularDamping = 0;
 				userObject.body.velocity.set(-userSpeed, 0, 0);
 				break;
 			case "D":
 			case "d":
+				userObject.body.angularDamping = 0;
 				userObject.body.velocity.set(userSpeed, 0, 0);
 				break;
 		}
@@ -155,6 +161,7 @@ export function setUserEvent(userObject) {
 			case "D":
 			case "d":
 				userObject.body.velocity.set(0, 0, 0);
+				userObject.body.angularDamping = 1;
 				break;
 			default:
 				break;
