@@ -4,8 +4,8 @@
  * Dept. of Software, Gachon Univ.
  */
 
-import * as THREE from 'https://unpkg.com/three@0.108.0/build/three.module.js';
-import { OrbitControls } from 'https://unpkg.com/three@0.108.0/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/optimized/three.js';
+import { OrbitControls } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/controls/OrbitControls.js';
 import * as Utils from './js/utils.js';
 import * as Maps from './js/maps.js';
 
@@ -37,7 +37,7 @@ function initThreeJS() {
 
 	scene = new THREE.Scene();
 
-	camera = new THREE.PerspectiveCamera( 75, canvas.width / canvas.height, 1, 5000 );
+	camera = new THREE.PerspectiveCamera( 75, canvas.width / canvas.height, 1, 10000);
 	camera.position.y = 30;
 	camera.position.z = 300;
 	scene.add( camera );
@@ -81,5 +81,6 @@ function onWindowResize() {
 function animate() {
 	requestAnimationFrame(animate);
 	Utils.updatePhysics(world);
+	//cannonDebugRenderer.update();
 	renderer.render(scene, camera);
 }
