@@ -4,12 +4,12 @@
  * Dept. of Software, Gachon Univ.
  */
 
-import * as THREE from 'https://unpkg.com/three@0.108.0/build/three.module.js';
-import { GLTFLoader } from 'https://unpkg.com/three@0.108.0/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/optimized/three.js';
+import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/loaders/GLTFLoader.js';
 
 /* Setting */
 const timeStep = 1/30;
-const defaultSpeed = 100;
+export var userSpeed = 50;
 export const loader = new GLTFLoader();
 
 /* Object Dictonary */
@@ -83,10 +83,12 @@ export function createNewObject(scene, world, objName, mesh, body) {
  * @param {Z} posz 
  */
 export function createPacman(scene, world, posx, posy, posz) {
-	var pacmanMesh = new THREE.Mesh(new THREE.SphereGeometry(100, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd400 }))
+	var pacmanMesh = new THREE.Mesh(new THREE.SphereGeometry(180, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd400 }))
 	var pacmanBody = new CANNON.Body({ 
-		shape: new CANNON.Sphere(100),
+		//shape: new CANNON.Box(new CANNON.Vec3(180, 180, 180)),
+		shape: new CANNON.Sphere(180),
 		collisionFilterGroup: 1,
+		angularDamping: 1,
 		collisionFilterMask: 2 | 4, // 2번 바닥 4번 벽 
 		mass: 3
 	});
@@ -107,8 +109,9 @@ export function createPacman(scene, world, posx, posy, posz) {
  */
 export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 	var wallBody = new CANNON.Body({
-		shape: new CANNON.Box(new CANNON.Vec3(x, y, z)),
-		collisionFilterGroup: 2,
+		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
+		collisionFilterGroup: 4,
+		type: 1000,
 		mass: 0
 	});
 	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color: wallcolor})), wallBody);
@@ -140,19 +143,24 @@ export function setUserEvent(userObject) {
 		switch(event.key) {
 			case "W":
 			case "w":
-				userObject.body.velocity.set(0, 0, -defaultSpeed);
+				userObject.body.angularDamping = 0;
+				userObject.body.velocity.set(0, 0, -userSpeed);
+				console.log(userObject.body);
 				break;
 			case "S":
 			case "s":
-				userObject.body.velocity.set(0, 0, defaultSpeed);
+				userObject.body.angularDamping = 0;
+				userObject.body.velocity.set(0, 0, userSpeed);
 				break;
 			case "A":
 			case "a":
-				userObject.body.velocity.set(-defaultSpeed, 0, 0);
+				userObject.body.angularDamping = 0;
+				userObject.body.velocity.set(-userSpeed, 0, 0);
 				break;
 			case "D":
 			case "d":
-				userObject.body.velocity.set(defaultSpeed, 0, 0);
+				userObject.body.angularDamping = 0;
+				userObject.body.velocity.set(userSpeed, 0, 0);
 				break;
 		}
 	});
@@ -169,6 +177,7 @@ export function setUserEvent(userObject) {
 			case "D":
 			case "d":
 				userObject.body.velocity.set(0, 0, 0);
+				userObject.body.angularDamping = 1;
 				break;
 			default:
 				break;
@@ -201,6 +210,28 @@ export function resetScene(scene, objList) {
 	removeGlobalEventListener();
 	for (var item in objList) delete objList[item];
 }
+
+/**
+ * 상자 만들기
+ * @param {THREE.Scene} scene 
+ * @param {CANNON.World} world 
+ * @param {Object Name} name 
+ * @param {X} x 
+ * @param {Y} y 
+ * @param {G} z 
+ * @param {Color} sur_color 
+ * @param {collisionFilterGroup} collisionFilterGroup_val 
+ * @param {mass} mass_val 
+ */
+export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterGroup_val, mass_val) {
+	var boxShape = new CANNON.Box(new CANNON.Vec3(x/2, y/2, z/2));
+	var boxBody = new CANNON.Body({
+	   shape: boxShape,
+	   collisionFilterGroup: collisionFilterGroup_val,
+	   mass: mass_val
+	});
+	addNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color:  sur_color})), boxBody);
+ }
 
 /**
  * Update Physical Engine 
