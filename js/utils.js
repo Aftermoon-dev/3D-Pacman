@@ -146,9 +146,6 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber) 
  */
 export function itemCollisionCheck(pacman, item) {
 	var distance = Math.pow((Math.pow((pacman.body.position.x - item.body.position.x), 2) + Math.pow((pacman.body.position.z - item.body.position.z), 2)), 1/2)
-	
-	if (item.objName == 'item1')
-		console.log(distance);
 
 	if (distance <= 180 + 80) // distance <= pacmanRadius + itemRadius
 		return true;
