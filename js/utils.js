@@ -9,7 +9,7 @@ import { GLTFLoader } from 'https://unpkg.com/three@0.108.0/examples/jsm/loaders
 
 /* Setting */
 const timeStep = 1/30;
-const defaultSpeed = 60;
+const defaultSpeed = 100;
 export const loader = new GLTFLoader();
 
 /* Object Dictonary */
@@ -112,6 +112,22 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 		mass: 0
 	});
 	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color: wallcolor})), wallBody);
+}
+
+/**
+ * Item 등록
+ * @param {THREE.Scene} scene 
+ * @param {CANNON.World} world 
+ * @param {String} itemNmae 
+ * @param {String (Color Hex Code, 0xFFFFFF)} itemColor 
+ */
+export function createItemObject(scene, world, itemName, itemColor) { // item 번호 붙여서 번호마다 기능 다르게 넣기
+	var itemBody = new CANNON.Body({ 
+		shape: new CANNON.Sphere(50),
+		collisionFilterGroup: 110,
+	});
+	
+	createNewObject(scene, world, itemName, new THREE.Mesh(new THREE.SphereGeometry(30, 32, 16), new THREE.MeshBasicMaterial({ color: itemColor})), itemBody);
 }
 
 /**
