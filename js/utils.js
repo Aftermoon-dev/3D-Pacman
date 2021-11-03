@@ -185,34 +185,53 @@ export function eatItem(scene, userObject) {
  * User Event Listener 등록
  * @param {THREE.Scene} scene
  * @param {worldObj} userObject 
+ * @param {OrbitControls} controls
  */
-export function setUserEvent(scene, userObject) {
+export function setUserEvent(scene, userObject, controls) {
 	// Key를 올렸을 때
 	document.addEventListener("keydown", function(event) {
+		let directionVector;
+
 		switch(event.key) {
 			case "W":
 			case "w":
 				userObject.body.angularDamping = 0;
-				userObject.body.velocity.set(0, 0, -userSpeed);
+				directionVector = new CANNON.Vec3(0, 0, 1);
+				directionVector.z -= userSpeed;
+				 // 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
+				directionVector = userObject.body.quaternion.vmult( directionVector );
+				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
 				eatItem(scene, userObject);
 				break;
+
 			case "S":
 			case "s":
 				userObject.body.angularDamping = 0;
-				userObject.body.velocity.set(0, 0, userSpeed);
+				directionVector = new CANNON.Vec3(0, 0, 1);
+				directionVector.z += userSpeed;
+				directionVector = userObject.body.quaternion.vmult( directionVector );
+				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
 				eatItem(scene, userObject);
 				break;
+
 			case "A":
 			case "a":
 				userObject.body.angularDamping = 0;
-				userObject.body.velocity.set(-userSpeed, 0, 0);
+				directionVector = new CANNON.Vec3(0, 0, 1);
+				directionVector.x -= userSpeed;
+				directionVector = userObject.body.quaternion.vmult( directionVector );
+				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
 				eatItem(scene, userObject);
 				break;
+				
 			case "D":
 			case "d":
 				userObject.body.angularDamping = 0;
-				userObject.body.velocity.set(userSpeed, 0, 0);
-				eatItem(scene, userObject);
+				directionVector = new CANNON.Vec3(0, 0, 1);
+				directionVector.x += userSpeed;
+				directionVector = userObject.body.quaternion.vmult( directionVector );
+				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );	
+				eatItem(scene, userObject);			
 				break;
 		}
 	});
@@ -244,6 +263,16 @@ export function setUserEvent(scene, userObject) {
 			console.log("Collide with Walls!");
 		}
 	});
+
+	// mouse로 카메라 움직일 때
+	document.addEventListener("mousemove", function(event) {
+		
+		const toangle = controls.getAzimuthalAngle() * (180 / Math.PI);
+		
+		//카메라 보는 각도가 정면이 되도록 팩맨을 돌림
+		userObject.rotateY(toangle);
+	})
+
 }
 
 /**
