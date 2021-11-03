@@ -10,10 +10,13 @@ import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVC
 /* Setting */
 const timeStep = 1/30;
 export var userSpeed = 500;
-export var itemArr = [];
-export var itemFlag = true;
-export var item1Timer;
 export const loader = new GLTFLoader();
+
+/* Item Setting */
+export var itemArr = [];
+export var item1Flag = true;
+export var item1Timer;
+export var item2Timer;
 
 /* Object Dictonary */
 export const object = {};
@@ -93,7 +96,7 @@ export function createPacman(scene, world, posx, posy, posz) {
 		collisionFilterGroup: 1,
 		angularDamping: 1,
 		collisionFilterMask: 2 | 4, // 2번 바닥 4번 벽
-		mass: 3
+		mass: 8
 	});
 	
 	createNewObject(scene, world, 'pacman', pacmanMesh, pacmanBody);
@@ -158,38 +161,80 @@ export function itemCollisionCheck(pacman, item) {
 /**
  * 먹은 Item 삭제 Step (2)
  * @param {THREE.Scene} scene 
+ * @param {CANNON.World} world 
  * @param {worldObj} object 
  */
-export function deleteObject(scene, object) {
+export function deleteObject(scene, world, object) {
 	console.log("Item Name : " + object.objName);
+	world.removeBody(object.body);
 	scene.remove(object.mesh);
+
+	// itemArr에서 이미 먹은 아이템들을 제거
+	for (var i = 0; i < itemArr.length; i++) {
+		if (itemArr[i] === object.objName) {
+			itemArr.splice(i, 1);
+			i--;
+		}
+	}
+
+	console.log(itemArr);
 }
 
 /**
- * 
+ * Item Event 함수
  * @param {String} itemName
  */
-export function applyItemEvent(itemName) {
-	if (itemName == 'item1')
-		itemFlag = false;
+ export function applyItemEvent(itemName) {
+	if (itemName == 'item1') {
+		applyItem1Event();
+	}
+	else if (itemName == 'item2') {
+		applyItem2Event();
+	}
+}
+
+/**
+ * Item1 - 방향키 반대로
+ */
+export function applyItem1Event() {
+	item1Flag = false;
 	
 	item1Timer = setTimeout(function(){
-        itemFlag = true;
-    }, 5000)
-	// 5초 동안만 방향키 반대로 5초 지나면 원래대로!!
+        item1Flag = true;
+    }, 8000)
+	// 8초 동안만 방향키 반대로 5초 지나면 원래대로!!
+}
+
+/**
+ * Item2 - 팩맨 Speed
+ */
+ export function applyItem2Event() {
+	var speedFlag = Math.random() * 10
+	// Random Integer 값을 이용해 0 ~ 4 = Speed Down / 5 ~ 9 = Speed Up
+
+	if (speedFlag <= 4) {
+		userSpeed = 200;
+	} else {
+		userSpeed = 1000;
+	}
+	
+	item2Timer = setTimeout(function(){
+		userSpeed = 500;
+	}, 8000)
 }
 
 /**
  * Eat Item Final
  * @param {THREE.Scene} scene 
+ * @param {CANNON.World} world 
  * @param {worldObj} userObject 
  */
-export function eatItem(scene, userObject) {
+export function eatItem(scene, world, userObject) {
 	for (var i = 0; i < itemArr.length; i++) { // To Check the Collision with All items
 		var collisionResult = itemCollisionCheck(userObject, object[itemArr[i]]); // Check the Collision with item
 
 		if (collisionResult == true) { // True = Collision / False = Not Collision
-			deleteObject(scene, object[itemArr[i]]);
+			deleteObject(scene, world, object[itemArr[i]]);
 			applyItemEvent(object[itemArr[i]].objName);
 		}
 	}
@@ -198,59 +243,56 @@ export function eatItem(scene, userObject) {
 /**
  * User Event Listener 등록
  * @param {THREE.Scene} scene
+ * @param {CANNON.World} world 
  * @param {worldObj} userObject 
  * @param {OrbitControls} controls
  */
-export function setUserEvent(scene, userObject, controls) {
+export function setUserEvent(scene, world, userObject, controls) {
 	// Key를 올렸을 때
 	document.addEventListener("keydown", function(event) {
 		let directionVector;
 
-		if (itemFlag) {
+		if (item1Flag) {
 			switch(event.key) {
 				case "W":
 				case "w":
-					console.log("Check = " + itemFlag);
 					userObject.body.angularDamping = 0;
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.z -= userSpeed;
 					 // 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, userObject);
+					eatItem(scene, world, userObject);
 					break;
 	
 				case "S":
 				case "s":
-					console.log("Check = " + itemFlag);
 					userObject.body.angularDamping = 0;
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.z += userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, userObject);
+					eatItem(scene, world, userObject);
 					break;
 	
 				case "A":
 				case "a":
-					console.log("Check = " + itemFlag);
 					userObject.body.angularDamping = 0;
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.x -= userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, userObject);
+					eatItem(scene, world, userObject);
 					break;
 					
 				case "D":
 				case "d":
-					console.log("Check = " + itemFlag);
 					userObject.body.angularDamping = 0;
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.x += userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );	
-					eatItem(scene, userObject);			
+					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					eatItem(scene, world, userObject);
 					break;
 			}
 		} else {
@@ -262,7 +304,7 @@ export function setUserEvent(scene, userObject, controls) {
 					directionVector.z += userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, userObject);
+					eatItem(scene, world, userObject);
 					break;
 	
 				case "S":
@@ -272,7 +314,7 @@ export function setUserEvent(scene, userObject, controls) {
 					directionVector.z -= userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, userObject);
+					eatItem(scene, world, userObject);
 					break;
 	
 				case "A":
@@ -281,8 +323,8 @@ export function setUserEvent(scene, userObject, controls) {
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.x += userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );	
-					eatItem(scene, userObject);			
+					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					eatItem(scene, world, userObject);
 					break;
 					
 				case "D":
@@ -292,11 +334,10 @@ export function setUserEvent(scene, userObject, controls) {
 					directionVector.x -= userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, userObject);
+					eatItem(scene, world, userObject);
 					break;
 			}
 		}
-		
 	});
 
 	// Key를 뗐을 때 
@@ -312,7 +353,7 @@ export function setUserEvent(scene, userObject, controls) {
 			case "d":
 				userObject.body.velocity.set(0, 0, 0);
 				userObject.body.angularDamping = 1;
-				eatItem(scene, userObject);
+				eatItem(scene, world, userObject);
 				break;
 			default:
 				break;
@@ -358,9 +399,9 @@ export function resetScene(scene, objList) {
 
 /**
  * 상자 만들기
- * @param {THREE.Scene} scene 
- * @param {CANNON.World} world 
- * @param {Object Name} name 
+ * @param {THREE.Scene} scene
+ * @param {CANNON.World} world
+ * @param {Object Name} name
  * @param {X} x 
  * @param {Y} y 
  * @param {G} z 
