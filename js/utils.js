@@ -9,8 +9,10 @@ import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVC
 
 /* Setting */
 const timeStep = 1/30;
-export var userSpeed = 1000;
+export var userSpeed = 500;
 export var itemArr = [];
+export var itemFlag = true;
+export var item1Timer;
 export const loader = new GLTFLoader();
 
 /* Object Dictonary */
@@ -164,6 +166,20 @@ export function deleteObject(scene, object) {
 }
 
 /**
+ * 
+ * @param {String} itemName
+ */
+export function applyItemEvent(itemName) {
+	if (itemName == 'item1')
+		itemFlag = false;
+	
+	item1Timer = setTimeout(function(){
+        itemFlag = true;
+    }, 5000)
+	// 5초 동안만 방향키 반대로 5초 지나면 원래대로!!
+}
+
+/**
  * Eat Item Final
  * @param {THREE.Scene} scene 
  * @param {worldObj} userObject 
@@ -174,6 +190,7 @@ export function eatItem(scene, userObject) {
 
 		if (collisionResult == true) { // True = Collision / False = Not Collision
 			deleteObject(scene, object[itemArr[i]]);
+			applyItemEvent(object[itemArr[i]].objName);
 		}
 	}
 }
@@ -189,48 +206,97 @@ export function setUserEvent(scene, userObject, controls) {
 	document.addEventListener("keydown", function(event) {
 		let directionVector;
 
-		switch(event.key) {
-			case "W":
-			case "w":
-				userObject.body.angularDamping = 0;
-				directionVector = new CANNON.Vec3(0, 0, 1);
-				directionVector.z -= userSpeed;
-				 // 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
-				directionVector = userObject.body.quaternion.vmult( directionVector );
-				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-				eatItem(scene, userObject);
-				break;
-
-			case "S":
-			case "s":
-				userObject.body.angularDamping = 0;
-				directionVector = new CANNON.Vec3(0, 0, 1);
-				directionVector.z += userSpeed;
-				directionVector = userObject.body.quaternion.vmult( directionVector );
-				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-				eatItem(scene, userObject);
-				break;
-
-			case "A":
-			case "a":
-				userObject.body.angularDamping = 0;
-				directionVector = new CANNON.Vec3(0, 0, 1);
-				directionVector.x -= userSpeed;
-				directionVector = userObject.body.quaternion.vmult( directionVector );
-				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-				eatItem(scene, userObject);
-				break;
-				
-			case "D":
-			case "d":
-				userObject.body.angularDamping = 0;
-				directionVector = new CANNON.Vec3(0, 0, 1);
-				directionVector.x += userSpeed;
-				directionVector = userObject.body.quaternion.vmult( directionVector );
-				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );	
-				eatItem(scene, userObject);			
-				break;
+		if (itemFlag) {
+			switch(event.key) {
+				case "W":
+				case "w":
+					console.log("Check = " + itemFlag);
+					userObject.body.angularDamping = 0;
+					directionVector = new CANNON.Vec3(0, 0, 1);
+					directionVector.z -= userSpeed;
+					 // 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
+					directionVector = userObject.body.quaternion.vmult( directionVector );
+					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					eatItem(scene, userObject);
+					break;
+	
+				case "S":
+				case "s":
+					console.log("Check = " + itemFlag);
+					userObject.body.angularDamping = 0;
+					directionVector = new CANNON.Vec3(0, 0, 1);
+					directionVector.z += userSpeed;
+					directionVector = userObject.body.quaternion.vmult( directionVector );
+					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					eatItem(scene, userObject);
+					break;
+	
+				case "A":
+				case "a":
+					console.log("Check = " + itemFlag);
+					userObject.body.angularDamping = 0;
+					directionVector = new CANNON.Vec3(0, 0, 1);
+					directionVector.x -= userSpeed;
+					directionVector = userObject.body.quaternion.vmult( directionVector );
+					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					eatItem(scene, userObject);
+					break;
+					
+				case "D":
+				case "d":
+					console.log("Check = " + itemFlag);
+					userObject.body.angularDamping = 0;
+					directionVector = new CANNON.Vec3(0, 0, 1);
+					directionVector.x += userSpeed;
+					directionVector = userObject.body.quaternion.vmult( directionVector );
+					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );	
+					eatItem(scene, userObject);			
+					break;
+			}
+		} else {
+			switch(event.key) {
+				case "W":
+				case "w":
+					userObject.body.angularDamping = 0;
+					directionVector = new CANNON.Vec3(0, 0, 1);
+					directionVector.z += userSpeed;
+					directionVector = userObject.body.quaternion.vmult( directionVector );
+					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					eatItem(scene, userObject);
+					break;
+	
+				case "S":
+				case "s":
+					userObject.body.angularDamping = 0;
+					directionVector = new CANNON.Vec3(0, 0, 1);
+					directionVector.z -= userSpeed;
+					directionVector = userObject.body.quaternion.vmult( directionVector );
+					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					eatItem(scene, userObject);
+					break;
+	
+				case "A":
+				case "a":
+					userObject.body.angularDamping = 0;
+					directionVector = new CANNON.Vec3(0, 0, 1);
+					directionVector.x += userSpeed;
+					directionVector = userObject.body.quaternion.vmult( directionVector );
+					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );	
+					eatItem(scene, userObject);			
+					break;
+					
+				case "D":
+				case "d":
+					userObject.body.angularDamping = 0;
+					directionVector = new CANNON.Vec3(0, 0, 1);
+					directionVector.x -= userSpeed;
+					directionVector = userObject.body.quaternion.vmult( directionVector );
+					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					eatItem(scene, userObject);
+					break;
+			}
 		}
+		
 	});
 
 	// Key를 뗐을 때 

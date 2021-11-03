@@ -46,6 +46,7 @@ export function initGachonMap(scene, world, controls) {
 	// 팩맨 만들기
 	Utils.createPacman(scene, world, 0, 180, 0);
 	Utils.setUserEvent(scene, Utils.object['pacman'], controls);
+	// itemFlag = 이동 방향이 정방향인지 반대 방향인지 구분하기 위함!
 
 	// 아이템 만들기
 	// 아이템 y축 나중에 팩맨 중심이랑 맞도록 바꾸기!!!!
