@@ -9,7 +9,7 @@ import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVC
 
 /* Setting */
 const timeStep = 1/30;
-export var userSpeed = 50;
+export var userSpeed = 500;
 export const loader = new GLTFLoader();
 
 /* Object Dictonary */
@@ -85,11 +85,10 @@ export function createNewObject(scene, world, objName, mesh, body) {
 export function createPacman(scene, world, posx, posy, posz) {
 	var pacmanMesh = new THREE.Mesh(new THREE.SphereGeometry(180, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd400 }))
 	var pacmanBody = new CANNON.Body({ 
-		//shape: new CANNON.Box(new CANNON.Vec3(180, 180, 180)),
 		shape: new CANNON.Sphere(180),
 		collisionFilterGroup: 1,
 		angularDamping: 1,
-		collisionFilterMask: 2 | 4, // 2번 바닥 4번 벽 
+		collisionFilterMask: 2 | 4 | 8, // 2번 바닥 4번 벽 8번 고스트 시작 벽
 		mass: 3
 	});
 	
@@ -115,6 +114,24 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 		mass: 0
 	});
 	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color: wallcolor})), wallBody);
+}
+
+/**
+ * 고스트 시작 위치 벽 생성
+ * @param {THREE.Scene} scene 
+ * @param {CANNON.World} world 
+ * @param {String} wallname 
+ * @param {X} x 
+ * @param {Y} y 
+ * @param {Z} z 
+ */
+ export function createStartWallObject(scene, world, wallname, x, y, z) {
+	var wallBody = new CANNON.Body({
+		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
+		collisionFilterGroup: 8,
+		mass: 0
+	});
+	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color: 0xffd400})), wallBody);
 }
 
 /**

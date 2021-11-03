@@ -39,7 +39,7 @@ function initThreeJS() {
 	scene = new THREE.Scene();
 
 	camera = new THREE.PerspectiveCamera( 75, canvas.width / canvas.height, 1, 10000);
-	camera.position.y = 30;
+	camera.position.y = 8000;
 	camera.position.z = 300;
 	scene.add( camera );
 
@@ -84,6 +84,6 @@ function onWindowResize() {
 function animate() {
 	requestAnimationFrame(animate);
 	Utils.updatePhysics(world);
-	debug.update();
+	//debug.update();
 	renderer.render(scene, camera);
 }
