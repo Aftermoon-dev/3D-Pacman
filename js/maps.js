@@ -17,8 +17,9 @@ import * as Utils from './utils.js';
  * Gachon Map 초기화
  * @param {THREE.Scene} scene 
  * @param {CANNON.World} world 
+ * @param {OrbitControls} controls
  */
-export function initGachonMap(scene, world) {
+export function initGachonMap(scene, world, controls) {
     // Scene 리셋
     Utils.resetScene(scene);
 
@@ -44,5 +45,5 @@ export function initGachonMap(scene, world) {
 	
 	// 팩맨 만들기
 	Utils.createPacman(scene, world, 0, 180, 0);
-	Utils.setUserEvent(Utils.object['pacman']);
+	Utils.setUserEvent(Utils.object['pacman'], controls);
 }

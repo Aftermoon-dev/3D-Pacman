@@ -14,6 +14,7 @@ import CannonDebugRenderer from './js/CannonDebugRenderer.js';
 /* 필수 Variable */
 var world, canvas, camera, scene, renderer;
 var debug;
+var controls;
 /**
  * Window OnLoad Event
  */
@@ -43,7 +44,7 @@ function initThreeJS() {
 	camera.position.z = 300;
 	scene.add( camera );
 
-	const controls = new OrbitControls(camera, renderer.domElement);
+	controls = new OrbitControls(camera, renderer.domElement);
 	
 	const hlight = new THREE.AmbientLight(0x404040, 30);
 	scene.add(hlight);
@@ -66,7 +67,7 @@ function initCannon() {
  */
 function initObject() {
 	// 맵 생성
-	Maps.initGachonMap(scene, world);
+	Maps.initGachonMap(scene, world, controls);
 }
 
 /**
