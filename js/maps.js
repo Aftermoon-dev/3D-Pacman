@@ -146,10 +146,6 @@ export function initGachonMap(scene, world, controls) {
 	Utils.object['wall37'].position(2800, 0, -2700);
 	Utils.object['wall37'].rotateY(90);
 
-	// 팩맨 만들기
-	Utils.createPacman(scene, world, 0, 180, -1500);
-	Utils.setUserEvent(Utils.object['pacman']);
-
 	Utils.createPacman(scene, world, 0, 180, 0);
 	Utils.setUserEvent(scene, Utils.object['pacman'], controls);
 
