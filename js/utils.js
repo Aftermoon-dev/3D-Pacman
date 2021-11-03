@@ -9,7 +9,8 @@ import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVC
 
 /* Setting */
 const timeStep = 1/30;
-export var userSpeed = 500;
+export var userSpeed = 1000;
+export var itemArr = [];
 export const loader = new GLTFLoader();
 
 /* Object Dictonary */
@@ -64,14 +65,14 @@ export class worldObj {
 
 /**
  * 신규 Object 추가
- * @param {String} objName 
- * @param {THREE.Mesh} geometry 
- * @param {CANNON.Body} body 
+ * @param {String} objName
+ * @param {THREE.Mesh} geometry
+ * @param {CANNON.Body} body
  */
 export function createNewObject(scene, world, objName, mesh, body) {
     var newObj = new worldObj(objName, mesh, body);
     newObj.add(scene, world);
-	object[objName] = newObj; 
+	object[objName] = newObj;
 }
 
 /**
@@ -135,33 +136,116 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 }
 
 /**
- * User Event Listener 등록
+ * Item 등록
+ * @param {THREE.Scene} scene
+ * @param {CANNON.World} world
+ * @param {String} itemName
+ * @param {String (Color Hex Code, 0xFFFFFF)} itemColor
+ * @param {Integer} itemNumber
+ */
+export function createItemObject(scene, world, itemName, itemColor, itemNumber) { // item 번호 붙여서 번호마다 기능 다르게 넣기
+	var itemMesh = new THREE.Mesh(new THREE.SphereGeometry(80, 32, 16), new THREE.MeshBasicMaterial({ color: itemColor}));
+	var itemBody = new CANNON.Body({ 
+		shape: new CANNON.Sphere(80),
+		collisionFilterGroup: 6,
+		collisionFilterMask: 2 | 4, // 2번 바닥 4번 벽 
+		type: itemNumber,
+	});
+	
+	createNewObject(scene, world, itemName, itemMesh, itemBody);
+	itemArr.push(itemName);
+}
+
+/**
+ * Item과 충돌 여부 확인 Step (1)
+ * @param {worldObj} pacman 
+ * @param {worldObj} item
+ */
+export function itemCollisionCheck(pacman, item) {
+	var distance = Math.pow((Math.pow((pacman.body.position.x - item.body.position.x), 2) + Math.pow((pacman.body.position.z - item.body.position.z), 2)), 1/2)
+
+	if (distance <= 180 + 80) // distance <= pacmanRadius + itemRadius
+		return true;
+	else
+		return false;
+}
+
+/**
+ * 먹은 Item 삭제 Step (2)
+ * @param {THREE.Scene} scene 
+ * @param {worldObj} object 
+ */
+export function deleteObject(scene, object) {
+	console.log("Item Name : " + object.objName);
+	scene.remove(object.mesh);
+}
+
+/**
+ * Eat Item Final
+ * @param {THREE.Scene} scene 
  * @param {worldObj} userObject 
  */
-export function setUserEvent(userObject) {
+export function eatItem(scene, userObject) {
+	for (var i = 0; i < itemArr.length; i++) { // To Check the Collision with All items
+		var collisionResult = itemCollisionCheck(userObject, object[itemArr[i]]); // Check the Collision with item
+
+		if (collisionResult == true) { // True = Collision / False = Not Collision
+			deleteObject(scene, object[itemArr[i]]);
+		}
+	}
+}
+
+/**
+ * User Event Listener 등록
+ * @param {THREE.Scene} scene
+ * @param {worldObj} userObject 
+ * @param {OrbitControls} controls
+ */
+export function setUserEvent(scene, userObject, controls) {
 	// Key를 올렸을 때
 	document.addEventListener("keydown", function(event) {
+		let directionVector;
+
 		switch(event.key) {
 			case "W":
 			case "w":
 				userObject.body.angularDamping = 0;
-				userObject.body.velocity.set(0, 0, -userSpeed);
-				console.log(userObject.body);
+				directionVector = new CANNON.Vec3(0, 0, 1);
+				directionVector.z -= userSpeed;
+				 // 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
+				directionVector = userObject.body.quaternion.vmult( directionVector );
+				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+				eatItem(scene, userObject);
 				break;
+
 			case "S":
 			case "s":
 				userObject.body.angularDamping = 0;
-				userObject.body.velocity.set(0, 0, userSpeed);
+				directionVector = new CANNON.Vec3(0, 0, 1);
+				directionVector.z += userSpeed;
+				directionVector = userObject.body.quaternion.vmult( directionVector );
+				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+				eatItem(scene, userObject);
 				break;
+
 			case "A":
 			case "a":
 				userObject.body.angularDamping = 0;
-				userObject.body.velocity.set(-userSpeed, 0, 0);
+				directionVector = new CANNON.Vec3(0, 0, 1);
+				directionVector.x -= userSpeed;
+				directionVector = userObject.body.quaternion.vmult( directionVector );
+				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+				eatItem(scene, userObject);
 				break;
+				
 			case "D":
 			case "d":
 				userObject.body.angularDamping = 0;
-				userObject.body.velocity.set(userSpeed, 0, 0);
+				directionVector = new CANNON.Vec3(0, 0, 1);
+				directionVector.x += userSpeed;
+				directionVector = userObject.body.quaternion.vmult( directionVector );
+				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );	
+				eatItem(scene, userObject);			
 				break;
 		}
 	});
@@ -179,6 +263,7 @@ export function setUserEvent(userObject) {
 			case "d":
 				userObject.body.velocity.set(0, 0, 0);
 				userObject.body.angularDamping = 1;
+				eatItem(scene, userObject);
 				break;
 			default:
 				break;
@@ -188,10 +273,20 @@ export function setUserEvent(userObject) {
 	// Collide Event
 	userObject.body.addEventListener("collide", function(e) {
 		// 부딪힌 Object Type 확인
-		if(e.body.type == 1000) {
+		if (e.body.type == 1000) {
 			console.log("Collide with Walls!");
 		}
 	});
+
+	// mouse로 카메라 움직일 때
+	document.addEventListener("mousemove", function(event) {
+		
+		const toangle = controls.getAzimuthalAngle() * (180 / Math.PI);
+		
+		//카메라 보는 각도가 정면이 되도록 팩맨을 돌림
+		userObject.rotateY(toangle);
+	})
+
 }
 
 /**
@@ -232,7 +327,7 @@ export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterG
 	   mass: mass_val
 	});
 	addNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color:  sur_color})), boxBody);
- }
+}
 
 /**
  * Update Physical Engine 
