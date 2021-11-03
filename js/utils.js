@@ -9,7 +9,7 @@ import { GLTFLoader } from 'https://unpkg.com/three@0.108.0/examples/jsm/loaders
 
 /* Setting */
 const timeStep = 1/30;
-const defaultSpeed = 50;
+const defaultSpeed = 60;
 export const loader = new GLTFLoader();
 
 /* Object Dictonary */
