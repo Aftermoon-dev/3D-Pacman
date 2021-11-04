@@ -85,6 +85,6 @@ function onWindowResize() {
 function animate() {
 	requestAnimationFrame(animate);
 	Utils.updatePhysics(world);
-	//debug.update();
+	debug.update();
 	renderer.render(scene, camera);
 }

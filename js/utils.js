@@ -17,6 +17,7 @@ export var itemArr = [];
 export var item1Flag = true;
 export var item1Timer;
 export var item2Timer;
+export var item3Timer;
 
 /* Object Dictonary */
 export const object = {};
@@ -85,11 +86,11 @@ export function createNewObject(scene, world, objName, mesh, body) {
  * @param {THREE.Scene} scene 
  * @param {CANNON.World} world 
  * @param {X} posx 
- * @param {Y} posy 
+ * @param {Y} posy
  * @param {Z} posz 
  */
-export function createPacman(scene, world, posx, posy, posz) {
-	var pacmanMesh = new THREE.Mesh(new THREE.SphereGeometry(180, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd400 }))
+export function createPacman(scene, world, posx, posy, posz, radius) {
+	var pacmanMesh = new THREE.Mesh(new THREE.SphereGeometry(radius, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd400 }))
 	var pacmanBody = new CANNON.Body({ 
 		shape: new CANNON.Sphere(180),
 		collisionFilterGroup: 1,
@@ -131,7 +132,7 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
  * @param {Y} y 
  * @param {Z} z 
  */
- export function createStartWallObject(scene, world, wallname, x, y, z) {
+export function createStartWallObject(scene, world, wallname, x, y, z) {
 	var wallBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
 		collisionFilterGroup: 8,
@@ -183,6 +184,7 @@ export function itemCollisionCheck(pacman, item) {
  */
 export function deleteObject(scene, world, object) {
 	console.log("Item Name : " + object.objName);
+
 	world.removeBody(object.body);
 	scene.remove(object.mesh);
 
@@ -199,14 +201,19 @@ export function deleteObject(scene, world, object) {
 
 /**
  * Item Event 함수
+ * @param {THREE.Scene} scene
+ * @param {CANNON.World} world 
+ * @param {worldObj} userObject 
+ * @param {OrbitControls} controls
  * @param {String} itemName
  */
- export function applyItemEvent(itemName) {
+export function applyItemEvent(scene, world, userObject, controls, itemName) {
 	if (itemName == 'item1') {
 		applyItem1Event();
-	}
-	else if (itemName == 'item2') {
+	} else if (itemName == 'item2') {
 		applyItem2Event();
+	} else if (itemName == 'item3') {
+		applyItem3Event(scene, world, userObject, controls);
 	}
 }
 
@@ -225,7 +232,7 @@ export function applyItem1Event() {
 /**
  * Item2 - 팩맨 Speed
  */
- export function applyItem2Event() {
+export function applyItem2Event() {
 	var speedFlag = Math.random() * 10
 	// Random Integer 값을 이용해 0 ~ 4 = Speed Down / 5 ~ 9 = Speed Up
 
@@ -241,18 +248,52 @@ export function applyItem1Event() {
 }
 
 /**
+ * Item3 - 팩맨 Size Up
+ * @param {THREE.Scene} scene
+ * @param {CANNON.World} world 
+ * @param {worldObj} userObject 
+ * @param {OrbitControls} controls
+ */
+export function applyItem3Event(scene, world, userObject, controls) {
+	var x = userObject.body.position.x;
+	var y = userObject.body.position.y;
+	var z = userObject.body.position.z;
+
+	scene.remove(userObject.mesh);
+	world.removeBody(userObject.body);
+	createPacman(scene, world, x, y, z, 300);
+	setUserEvent(scene, world, object['pacman'], controls);
+
+	//////////////////////////////////
+	// 물리엔진 body 없애기
+	
+	item3Timer = setTimeout(function(){
+		// world.removeBody(object['pacman'].body);
+		scene.remove(object['pacman'].mesh);
+
+		var x = object['pacman'].body.position.x;
+		var y = object['pacman'].body.position.y;
+		var z = object['pacman'].body.position.z;
+
+		createPacman(scene, world, x, y, z, 180);
+		setUserEvent(scene, world, object['pacman'], controls);
+	}, 3000);
+}
+
+/**
  * Eat Item Final
  * @param {THREE.Scene} scene 
  * @param {CANNON.World} world 
+ * @param {OrbitControls} controls
  * @param {worldObj} userObject 
  */
-export function eatItem(scene, world, userObject) {
+export function eatItem(scene, world, controls, userObject) {
 	for (var i = 0; i < itemArr.length; i++) { // To Check the Collision with All items
 		var collisionResult = itemCollisionCheck(userObject, object[itemArr[i]]); // Check the Collision with item
 
 		if (collisionResult == true) { // True = Collision / False = Not Collision
+			applyItemEvent(scene, world, userObject, controls, object[itemArr[i]].objName);
 			deleteObject(scene, world, object[itemArr[i]]);
-			applyItemEvent(object[itemArr[i]].objName);
 		}
 	}
 }
@@ -276,10 +317,10 @@ export function setUserEvent(scene, world, userObject, controls) {
 					userObject.body.angularDamping = 0;
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.z -= userSpeed;
-					 // 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
+					// 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, world, userObject);
+					eatItem(scene, world, controls, userObject);
 					break;
 	
 				case "S":
@@ -289,7 +330,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector.z += userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, world, userObject);
+					eatItem(scene, world, controls, userObject);
 					break;
 	
 				case "A":
@@ -299,7 +340,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector.x -= userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, world, userObject);
+					eatItem(scene, world, controls, userObject);
 					break;
 					
 				case "D":
@@ -309,7 +350,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector.x += userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, world, userObject);
+					eatItem(scene, world, controls, userObject);
 					break;
 			}
 		} else {
@@ -321,7 +362,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector.z += userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, world, userObject);
+					eatItem(scene, world, controls, userObject);
 					break;
 	
 				case "S":
@@ -331,7 +372,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector.z -= userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, world, userObject);
+					eatItem(scene, world, controls, userObject);
 					break;
 	
 				case "A":
@@ -341,7 +382,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector.x += userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, world, userObject);
+					eatItem(scene, world, controls, userObject);
 					break;
 					
 				case "D":
@@ -351,7 +392,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector.x -= userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
-					eatItem(scene, world, userObject);
+					eatItem(scene, world, controls, userObject);
 					break;
 			}
 		}
@@ -370,7 +411,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 			case "d":
 				userObject.body.velocity.set(0, 0, 0);
 				userObject.body.angularDamping = 1;
-				eatItem(scene, world, userObject);
+				eatItem(scene, world, controls, userObject);
 				break;
 			default:
 				break;
@@ -392,7 +433,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 		
 		//카메라 보는 각도가 정면이 되도록 팩맨을 돌림
 		userObject.rotateY(toangle);
-	})
+	});
 
 }
 

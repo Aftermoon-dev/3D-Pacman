@@ -184,7 +184,7 @@ export function initGachonMap(scene, world, controls) {
 	Utils.object['wall41'].rotateY(-60);
 
 	// 팩맨
-	Utils.createPacman(scene, world, 0, 180, 0);
+	Utils.createPacman(scene, world, 0, 180, 0, 180);
 	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls);
 	// itemFlag = 이동 방향이 정방향인지 반대 방향인지 구분하기 위함!
 
@@ -204,7 +204,8 @@ export function initGachonMap(scene, world, controls) {
 	Utils.object['item2'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
 	
 	Utils.createItemObject(scene, world, 'item3', 0x92d050, 103);
-	Utils.object['item3'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+	// Utils.object['item3'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+	Utils.object['item3'].position(400, 180, 400);
 	
 	Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104);
 	Utils.object['item4'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
