@@ -267,8 +267,8 @@ export function initBasicMap(scene, world, controls) {
 	Utils.createWallObject(scene, world, 'wall3', 0xFFFFFF, 100, 800, 1600);
 	Utils.object['wall3'].position(0, 0, 400);
 	Utils.object['wall3'].rotateY(90);
-	Utils.createStartWallObject(scene, world, 'ghost_wall', 100, 600, 800); // Ghost 출발 벽
-	Utils.object['ghost_wall'].position(750, 0, 0);
+	// Utils.createStartWallObject(scene, world, 'ghost_wall', 100, 600, 800); // Ghost 출발 벽
+	// Utils.object['ghost_wall'].position(750, 0, 0);
 
 	// 아래 튀어나온 Teleport 벽
 	Utils.createWallObject(scene, world, 'wall4', 0x333366, 800, 800, 1200);
