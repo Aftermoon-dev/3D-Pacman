@@ -38,7 +38,7 @@ export function initGachonMap(scene, world, controls) {
 		mass: 0,
 		
 	});
-	ceilingBody.position.set(0, 300, 0);
+	ceilingBody.position.set(0, 500, 0);
 	world.add(ceilingBody);
 
 	/** 벽 만들기 **/
