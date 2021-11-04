@@ -27,6 +27,7 @@ export function initGachonMap(scene, world, controls) {
 	var groundBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 500 / 2, 8000 / 2)),
 		collisionFilterGroup: 2,
+		collisionFilterMask: 1,
 		mass: 0
 	});
 	Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(10000, 500, 8000), new THREE.MeshBasicMaterial({ color: 0x808080})), groundBody);
@@ -187,7 +188,7 @@ export function initGachonMap(scene, world, controls) {
 	Utils.object['wall41'].rotateY(-60);
 
 	// 팩맨
-	Utils.createPacman(scene, world, 800, 100, 0);
+	Utils.createPacman(scene, world, 0, 230, 0);
 	Utils.setUserEvent(scene, Utils.object['pacman'], controls);
 
 	// 아이템 만들기
@@ -254,7 +255,7 @@ export function initBasicMap(scene, world, controls) {
 		mass: 0
 	});
 	Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(7000, 5, 8000), ground_material), groundBody);
-	Utils.object['ground'].position(0, 0, 0);
+	Utils.object['ground'].position(0, -200, 0);
 
 	/** 벽 만들기 **/
 
