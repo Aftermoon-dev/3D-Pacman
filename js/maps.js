@@ -32,6 +32,15 @@ export function initGachonMap(scene, world, controls) {
 	Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(10000, 5, 8000), new THREE.MeshBasicMaterial({ color: 0x808080})), groundBody);
 	Utils.object['ground'].position(0, 0, 0);
 
+	var ceilingBody = new CANNON.Body({
+		shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 5 / 2, 8000 / 2)),
+		collisionFilterGroup: 2,
+		mass: 0,
+		
+	});
+	ceilingBody.position.set(0, 300, 0);
+	world.add(ceilingBody);
+
 	/** 벽 만들기 **/
 
 	// 맵 감싸는 벽
@@ -63,13 +72,16 @@ export function initGachonMap(scene, world, controls) {
 	Utils.object['wall4'].position(-600, 0, -3100);
 	Utils.createWallObject(scene, world, 'wall5', 0x1200ff, 600, 800, 1800);
 	Utils.object['wall5'].position(600, 0, -3100);
+	Utils.makeBox(scene, world, 'tpnorth', 600, 50, 600, 0x008000, 32, 0);
+	Utils.object['tpnorth'].position(0, 50, -3700);
 
 	// 아래 Teleport 벽
 	Utils.createWallObject(scene, world, 'wall7', 0x1200ff, 600, 800, 1800);
 	Utils.object['wall7'].position(-600, 0, 3100);
 	Utils.createWallObject(scene, world, 'wall8', 0x1200ff, 600, 800, 1800);
 	Utils.object['wall8'].position(600, 0, 3100);
-
+	Utils.makeBox(scene, world, 'tpsouth', 600, 50, 600, 0x008000, 32, 0);
+	Utils.object['tpsouth'].position(0, 50, 3700);
 
 	// 위 2칸 블록 왼쪽
 	Utils.createWallObject(scene, world, 'wall10', 0x1200ff, 600, 800, 1200);
@@ -184,7 +196,7 @@ export function initGachonMap(scene, world, controls) {
 	Utils.object['wall41'].rotateY(-60);
 
 	// 팩맨
-	Utils.createPacman(scene, world, 0, 180, 0);
+	Utils.createPacman(scene, world, 800, 180, 0);
 	Utils.setUserEvent(scene, Utils.object['pacman'], controls);
 
 	// 아이템 만들기
@@ -210,4 +222,20 @@ export function initGachonMap(scene, world, controls) {
 	
 	Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
 	Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+
+	// 텔레포트 구현
+	const obj1Pos = Utils.object['tpnorth'].body.position;
+	const obj2Pos = Utils.object['tpsouth'].body.position;
+
+	Utils.object['tpnorth'].body.addEventListener("collide", function(e) {
+		if (e.body.type == 1) {
+			Utils.object['pacman'].position(obj2Pos.x, 182, obj2Pos.z - 800);
+		}
+	});
+
+	Utils.object['tpsouth'].body.addEventListener("collide", function(e) {
+		if (e.body.type == 1) {
+			Utils.object['pacman'].position(obj1Pos.x, 182, obj1Pos.z + 800);
+		}
+	});
 }	
