@@ -191,14 +191,13 @@ export function initGachonMap(scene, world, controls) {
 	Utils.object['wall41'].rotateY(-60);
 
 	// 팩맨
-	Utils.createPacman(scene, world, 0, 230, 0);
-	Utils.setUserEvent(scene, Utils.object['pacman'], controls);
+	Utils.createPacman(scene, world, 0, 230, 0, 180);
+	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls);
 
 	// 고스트
 	Utils.createGhost(scene, world, 'ghost1', -850, 500, 0, 0xFFFF00);
 
 	// 아이템 만들기
-	// 아이템 y축 나중에 팩맨 중심이랑 맞도록 바꾸기!!!!
 	// random int 계산식 맵 크기에 따라서 나중에 수정해주기!!!
 	// Math.random() * (맵크기 / 간격 + 1) * (간격 얼마나 줄건지) - (맵크기 / 2)
 
@@ -372,8 +371,8 @@ export function initBasicMap(scene, world, controls) {
 	Utils.object['wall27'].position(-3500, 0, 0);
 
 	// 팩맨
-	Utils.createPacman(scene, world, 0, 180, 0);
-	Utils.setUserEvent(scene, Utils.object['pacman'], controls);
+	Utils.createPacman(scene, world, 0, 230, 0, 180);
+	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls);
 
 	Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
 	Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500); 
