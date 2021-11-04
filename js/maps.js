@@ -32,14 +32,6 @@ export function initGachonMap(scene, world, controls) {
 	Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(10000, 500, 8000), new THREE.MeshBasicMaterial({ color: 0x808080})), groundBody);
 	Utils.object['ground'].position(0, -200, 0);
 
-	var ceilingBody = new CANNON.Body({
-		shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 5 / 2, 8000 / 2)),
-		collisionFilterGroup: 2,
-		mass: 0,
-	});
-	ceilingBody.position.set(0, 500, 0);
-	world.add(ceilingBody);
-
 	/** 벽 만들기 **/
 
 	// 맵 감싸는 벽
