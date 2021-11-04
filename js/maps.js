@@ -25,18 +25,17 @@ export function initGachonMap(scene, world, controls) {
 
     // 바닥 만들기
 	var groundBody = new CANNON.Body({
-		shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 5 / 2, 8000 / 2)),
+		shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 500 / 2, 8000 / 2)),
 		collisionFilterGroup: 2,
 		mass: 0
 	});
-	Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(10000, 5, 8000), new THREE.MeshBasicMaterial({ color: 0x808080})), groundBody);
-	Utils.object['ground'].position(0, 0, 0);
+	Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(10000, 500, 8000), new THREE.MeshBasicMaterial({ color: 0x808080})), groundBody);
+	Utils.object['ground'].position(0, -200, 0);
 
 	var ceilingBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 5 / 2, 8000 / 2)),
 		collisionFilterGroup: 2,
 		mass: 0,
-		
 	});
 	ceilingBody.position.set(0, 500, 0);
 	world.add(ceilingBody);
@@ -196,7 +195,7 @@ export function initGachonMap(scene, world, controls) {
 	Utils.object['wall41'].rotateY(-60);
 
 	// 팩맨
-	Utils.createPacman(scene, world, 800, 180, 0);
+	Utils.createPacman(scene, world, 800, 100, 0);
 	Utils.setUserEvent(scene, Utils.object['pacman'], controls);
 
 	// 아이템 만들기
@@ -229,13 +228,13 @@ export function initGachonMap(scene, world, controls) {
 
 	Utils.object['tpnorth'].body.addEventListener("collide", function(e) {
 		if (e.body.type == 1) {
-			Utils.object['pacman'].position(obj2Pos.x, 182, obj2Pos.z - 800);
+			Utils.object['pacman'].position(obj2Pos.x, 105, obj2Pos.z - 800);
 		}
 	});
 
 	Utils.object['tpsouth'].body.addEventListener("collide", function(e) {
 		if (e.body.type == 1) {
-			Utils.object['pacman'].position(obj1Pos.x, 182, obj1Pos.z + 800);
+			Utils.object['pacman'].position(obj1Pos.x, 105, obj1Pos.z + 800);
 		}
 	});
 }	
