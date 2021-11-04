@@ -220,7 +220,8 @@ export function deleteObject(scene, world, object) {
 	} else if (itemName == 'item2') {
 		applyItem2Event();
 	} else if (itemName == 'item3') {
-		applyItem3Event(scene, world, userObject, controls);
+		// applyItem3Event(scene, world, userObject, controls);
+		// 미완성
 	}
 }
 
