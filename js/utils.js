@@ -96,8 +96,9 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 		shape: new CANNON.Sphere(180),
 		collisionFilterGroup: 1,
 		angularDamping: 1,
-		collisionFilterMask: 2 | 4 | 8, // 2번 바닥 4번 벽 8번 고스트 시작 벽
-		mass: 3
+		collisionFilterMask: 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥
+		mass: 3,
+		type: 1
 	});
 	
 	createNewObject(scene, world, 'pacman', pacmanMesh, pacmanBody);
@@ -118,10 +119,17 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 	var wallBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
 		collisionFilterGroup: 4,
-		type: 1000,
 		mass: 0
 	});
 	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color: wallcolor})), wallBody);
+}
+export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x, y, z, material) {
+	var wallBody = new CANNON.Body({
+		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
+		collisionFilterGroup: 4,
+		mass: 0
+	});
+	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), material), wallBody);
 }
 
 /**
@@ -154,8 +162,7 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber) 
 	var itemMesh = new THREE.Mesh(new THREE.SphereGeometry(80, 32, 16), new THREE.MeshBasicMaterial({ color: itemColor}));
 	var itemBody = new CANNON.Body({ 
 		shape: new CANNON.Sphere(80),
-		collisionFilterGroup: 6,
-		collisionFilterMask: 2 | 4, // 2번 바닥 4번 벽 
+		collisionFilterGroup: 16,
 		type: itemNumber,
 	});
 	
@@ -336,7 +343,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector.z -= userSpeed;
 					// 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
 					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
 					eatItem(scene, world, controls, userObject);
 					checkItemState();
 					break;
@@ -347,7 +354,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.z += userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
 					eatItem(scene, world, controls, userObject);
 					checkItemState();
 					break;
@@ -358,7 +365,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.x -= userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
 					eatItem(scene, world, controls, userObject);
 					checkItemState();
 					break;
@@ -369,7 +376,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.x += userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
 					eatItem(scene, world, controls, userObject);
 					checkItemState();
 					break;
@@ -382,7 +389,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.z += userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
 					eatItem(scene, world, controls, userObject);
 					checkItemState();
 					break;
@@ -393,7 +400,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.z -= userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
 					eatItem(scene, world, controls, userObject);
 					checkItemState();
 					break;
@@ -404,7 +411,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.x += userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
 					eatItem(scene, world, controls, userObject);
 					checkItemState();
 					break;
@@ -415,7 +422,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = new CANNON.Vec3(0, 0, 1);
 					directionVector.x -= userSpeed;
 					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
 					eatItem(scene, world, controls, userObject);
 					checkItemState();
 					break;
@@ -447,9 +454,9 @@ export function setUserEvent(scene, world, userObject, controls) {
 	// Collide Event
 	userObject.body.addEventListener("collide", function(e) {
 		// 부딪힌 Object Type 확인
-		if (e.body.type == 1000) {
-			console.log("Collide with Walls!");
-		}
+		// if (e.body.type == 1000) {
+		// 	console.log("Collide with Walls!");
+		// }
 	});
 
 	// mouse로 카메라 움직일 때
@@ -488,19 +495,18 @@ export function resetScene(scene, objList) {
  * @param {Object Name} name
  * @param {X} x 
  * @param {Y} y 
- * @param {G} z 
+ * @param {Z} z 
  * @param {Color} sur_color 
  * @param {collisionFilterGroup} collisionFilterGroup_val 
  * @param {mass} mass_val 
  */
 export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterGroup_val, mass_val) {
-	var boxShape = new CANNON.Box(new CANNON.Vec3(x/2, y/2, z/2));
 	var boxBody = new CANNON.Body({
-	   shape: boxShape,
+	   shape: new CANNON.Box(new CANNON.Vec3(x/2, y/2, z/2)),
 	   collisionFilterGroup: collisionFilterGroup_val,
 	   mass: mass_val
 	});
-	addNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color:  sur_color})), boxBody);
+	createNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color:  sur_color})), boxBody);
 }
 
 /**
