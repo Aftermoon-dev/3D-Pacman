@@ -23,11 +23,14 @@ export function initGachonMap(scene, world, controls) {
     // Scene 리셋
     Utils.resetScene(scene);
 
+	const hlight = new THREE.AmbientLight(0x404040, 100);
+	scene.add(hlight);
+
     // 바닥 만들기
 	var groundBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 500 / 2, 8000 / 2)),
 		collisionFilterGroup: 2,
-		collisionFilterMask: 1,
+		collisionFilterMask: 1 | 64,
 		mass: 0
 	});
 	Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(10000, 500, 8000), new THREE.MeshBasicMaterial({ color: 0x808080})), groundBody);
@@ -190,6 +193,9 @@ export function initGachonMap(scene, world, controls) {
 	// 팩맨
 	Utils.createPacman(scene, world, 0, 230, 0);
 	Utils.setUserEvent(scene, Utils.object['pacman'], controls);
+
+	// 고스트
+	Utils.createGhost(scene, world, 'ghost1', -850, 500, 0, 0xFFFF00);
 
 	// 아이템 만들기
 	// 아이템 y축 나중에 팩맨 중심이랑 맞도록 바꾸기!!!!

@@ -45,9 +45,6 @@ function initThreeJS() {
 	scene.add( camera );
 
 	controls = new OrbitControls(camera, renderer.domElement);
-	
-	const hlight = new THREE.AmbientLight(0x404040, 30);
-	scene.add(hlight);
 }
 
 /**
@@ -67,8 +64,8 @@ function initCannon() {
  */
 function initObject() {
 	// 맵 생성
-	//Maps.initGachonMap(scene, world, controls);
-	Maps.initBasicMap(scene, world, controls);
+	Maps.initGachonMap(scene, world, controls);
+	//Maps.initBasicMap(scene, world, controls);
 }
 
 /**

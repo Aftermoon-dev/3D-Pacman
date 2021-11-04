@@ -336,6 +336,49 @@ export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterG
 }
 
 /**
+ * 고스트 생성
+ * @param {THREE.Scene} scene 
+ * @param {CANNON.World} world 
+ * @param {Object Name} objName 
+ * @param {Position X} x 
+ * @param {Position Y} y 
+ * @param {Position Z} z 
+ * @param {Color} color 
+ */
+export function createGhost(scene, world, objName, x, y, z, color) {
+	var ghostBody = new CANNON.Body({
+		shape: new CANNON.Box(new CANNON.Vec3(150, 400, 150)),
+		collisionFilterGroup: 64,
+		angularDamping: 1,
+		collisionFilterMask: 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥
+		position: new CANNON.Vec3(x, y, z),
+		mass: 3
+	});
+
+	loader.load("./models/pacman_ghost_blue/scene.gltf", (gltf) => {
+		console.log("LOAD");
+		const root = gltf.scene;
+		var ghost = root.children[0];
+		ghost.scale.set(1.5, 1.5, 1.5);
+		
+		root.traverse((ghost) => {
+			if (ghost.isMesh) {
+				// 눈 부분은 색 안바꾸게
+				if(ghost.material.color.r != 0 ||
+					ghost.material.color.g != 0 ||
+					ghost.material.color.b != 0) {
+						ghost.material.color.set(color);
+					}
+				
+			}
+		});
+		createNewObject(scene, world, objName, root, ghostBody);
+		object[objName].position(x, y, z);
+	});
+	
+}
+
+/**
  * Update Physical Engine 
  */
 export function updatePhysics(world) {
