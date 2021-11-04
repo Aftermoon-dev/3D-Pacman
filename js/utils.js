@@ -17,6 +17,7 @@ export var itemArr = [];
 export var item1Flag = true;
 export var item1Timer;
 export var item2Timer;
+export var item3Flag = 180; // 팩맨 크기 넣어주기
 export var item3Timer;
 
 /* Object Dictonary */
@@ -259,14 +260,17 @@ export function applyItem3Event(scene, world, userObject, controls) {
 	var y = userObject.body.position.y;
 	var z = userObject.body.position.z;
 
-	scene.remove(userObject.mesh);
-	world.removeBody(userObject.body);
 	createPacman(scene, world, x, y, z, 300);
 	setUserEvent(scene, world, object['pacman'], controls);
 
+	item3Flag = 300;
+
 	//////////////////////////////////
 	// 물리엔진 body 없애기
-	
+
+	// world.removeBody(userObject.body);
+	scene.remove(userObject.mesh);
+
 	item3Timer = setTimeout(function(){
 		// world.removeBody(object['pacman'].body);
 		scene.remove(object['pacman'].mesh);
@@ -277,6 +281,8 @@ export function applyItem3Event(scene, world, userObject, controls) {
 
 		createPacman(scene, world, x, y, z, 180);
 		setUserEvent(scene, world, object['pacman'], controls);
+
+		item3Flag = 180;
 	}, 3000);
 }
 
@@ -296,6 +302,17 @@ export function eatItem(scene, world, controls, userObject) {
 			deleteObject(scene, world, object[itemArr[i]]);
 		}
 	}
+}
+
+/**
+ * 적용된 아이템 확인
+ */
+export function checkItemState() {
+	console.log('Arror = ' + item1Flag); // Item1
+	console.log('Pacman Speed = ' + userSpeed); // Item2
+	console.log('Pacman Size = ' + item3Flag); // Item3
+	console.log('ITEM4 = '); // Item4
+	console.log('ITEM5 = '); // Item5
 }
 
 /**
@@ -321,6 +338,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
 					eatItem(scene, world, controls, userObject);
+					checkItemState();
 					break;
 	
 				case "S":
@@ -331,6 +349,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
 					eatItem(scene, world, controls, userObject);
+					checkItemState();
 					break;
 	
 				case "A":
@@ -341,6 +360,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
 					eatItem(scene, world, controls, userObject);
+					checkItemState();
 					break;
 					
 				case "D":
@@ -351,6 +371,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
 					eatItem(scene, world, controls, userObject);
+					checkItemState();
 					break;
 			}
 		} else {
@@ -363,6 +384,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
 					eatItem(scene, world, controls, userObject);
+					checkItemState();
 					break;
 	
 				case "S":
@@ -373,6 +395,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
 					eatItem(scene, world, controls, userObject);
+					checkItemState();
 					break;
 	
 				case "A":
@@ -383,6 +406,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
 					eatItem(scene, world, controls, userObject);
+					checkItemState();
 					break;
 					
 				case "D":
@@ -393,6 +417,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 					directionVector = userObject.body.quaternion.vmult( directionVector );
 					userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
 					eatItem(scene, world, controls, userObject);
+					checkItemState();
 					break;
 			}
 		}
@@ -412,6 +437,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 				userObject.body.velocity.set(0, 0, 0);
 				userObject.body.angularDamping = 1;
 				eatItem(scene, world, controls, userObject);
+				checkItemState();
 				break;
 			default:
 				break;
