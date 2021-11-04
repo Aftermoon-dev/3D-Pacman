@@ -221,7 +221,7 @@ export function setUserEvent(scene, userObject, controls) {
 				directionVector.z -= userSpeed;
 				 // 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
 				directionVector = userObject.body.quaternion.vmult( directionVector );
-				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+				userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
 				eatItem(scene, userObject);
 				break;
 
@@ -231,7 +231,7 @@ export function setUserEvent(scene, userObject, controls) {
 				directionVector = new CANNON.Vec3(0, 0, 1);
 				directionVector.z += userSpeed;
 				directionVector = userObject.body.quaternion.vmult( directionVector );
-				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+				userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
 				eatItem(scene, userObject);
 				break;
 
@@ -241,7 +241,7 @@ export function setUserEvent(scene, userObject, controls) {
 				directionVector = new CANNON.Vec3(0, 0, 1);
 				directionVector.x -= userSpeed;
 				directionVector = userObject.body.quaternion.vmult( directionVector );
-				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );
+				userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
 				eatItem(scene, userObject);
 				break;
 				
@@ -251,7 +251,7 @@ export function setUserEvent(scene, userObject, controls) {
 				directionVector = new CANNON.Vec3(0, 0, 1);
 				directionVector.x += userSpeed;
 				directionVector = userObject.body.quaternion.vmult( directionVector );
-				userObject.body.velocity.set( directionVector.x, directionVector.y, directionVector.z );	
+				userObject.body.velocity.set( directionVector.x, 0, directionVector.z );	
 				eatItem(scene, userObject);			
 				break;
 		}
