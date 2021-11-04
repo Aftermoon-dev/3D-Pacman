@@ -195,7 +195,7 @@ export function initGachonMap(scene, world, controls) {
 	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls);
 
 	// 고스트
-	Utils.createGhost(scene, world, 'ghost1', -850, 500, 0, 0xFFFF00);
+	Utils.createGhost(scene, world, 'ghost1', -850, 450, 0, 0xFFFF00);
 
 	// 아이템 만들기
 	// random int 계산식 맵 크기에 따라서 나중에 수정해주기!!!
