@@ -116,6 +116,14 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 	});
 	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color: wallcolor})), wallBody);
 }
+export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x, y, z, material) {
+	var wallBody = new CANNON.Body({
+		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
+		collisionFilterGroup: 4,
+		mass: 0
+	});
+	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), material), wallBody);
+}
 
 /**
  * 고스트 시작 위치 벽 생성
