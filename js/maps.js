@@ -187,7 +187,7 @@ export function initGachonMap(scene, world, controls) {
 	Utils.object['wall41'].rotateY(-60);
 
 	// 팩맨
-	Utils.createPacman(scene, world, 800, 100, 0, 180);
+	Utils.createPacman(scene, world, 0, 230, 0, 180);
 	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls);
 
 	// 아이템 만들기
@@ -364,7 +364,7 @@ export function initBasicMap(scene, world, controls) {
 	Utils.object['wall27'].position(-3500, 0, 0);
 
 	// 팩맨
-	Utils.createPacman(scene, world, 0, 180, 0, 180);
+	Utils.createPacman(scene, world, 0, 230, 0, 180);
 	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls);
 
 	Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
