@@ -12,10 +12,16 @@ import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVC
 
 /* Setting */
 const timeStep = 1/30;
-export var userSpeed = 500;
+
+export var userSpeed = 500; //유저의 속도를 결정 -> 나중에 아이템에서 써먹을수있음
+export var pacman_height = 180; //팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
+export var pacman_height2D = 8000; //2D view height
+
 export const loader = new GLTFLoader();
  
 /* Item Setting */
+export var useitem = true; //item 적용할꺼면 true로
+
 export var itemArr = [];
 export var item1Flag = true;
 export var item1Timer;
@@ -27,6 +33,13 @@ export var item4Timer;
 
 /* Score Setting */
 export var score = 0;
+
+/* camera control variable */
+export var if2D = false;
+export var currentCameraType = 1; //1 - 1인칭, 2 - 2D (ㅎ)
+
+export var developerMode = true; //개발자 모드 ON!
+
 
 /* Object Dictonary */
 export const object = {};
@@ -81,6 +94,55 @@ export class worldObj {
 			this.mesh.quaternion.copy(body.quaternion);
 		}
 	}
+	
+	//객체의 위치를 알려줌
+	getPosition() {
+		return this.body.position;
+	}
+
+	//객체의 회전률을 알려줌
+	getRotation() {
+	return this.body.rotation;
+	}
+
+	// 객체의 속도를 설정
+	setVelocity(flag){
+		var directionVector;
+
+		if (flag == 1){
+			console.log("w");
+			directionVector = new CANNON.Vec3(0, 0, 1);
+			directionVector.z -= userSpeed;
+		}
+		else if (flag == 2){
+			console.log("s");
+
+			directionVector = new CANNON.Vec3(0, 0, 1);
+			directionVector.z += userSpeed;
+		}
+		else if (flag == 3){
+			console.log("a");
+
+			directionVector = new CANNON.Vec3(1, 0, 0);
+			directionVector.x -= userSpeed;
+		}
+		else if (flag == 4){
+			console.log("d");
+
+			directionVector = new CANNON.Vec3(1, 0, 0);
+			directionVector.x += userSpeed;
+		}
+		else if (flag == 0){
+			this.body.velocity.set(0, 0, 0);
+			return;
+		}
+
+		if (if2D == false){ // 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
+			directionVector = this.body.quaternion.vmult(directionVector);
+		}
+
+		this.body.velocity.set(directionVector.x, 0, directionVector.z);
+	}
 }
 
 /**
@@ -116,8 +178,7 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 	});
 	
 	createNewObject(scene, world, 'pacman', pacmanMesh, pacmanBody);
-	object['pacman'].position(posx, posy, posz);
-}
+	object['pacman'].position(posx, posy, posz);}
 
 /**
  * 벽 생성
@@ -345,15 +406,19 @@ export function deleteObject(scene, world, object) {
  * @param {worldObj} userObject 
  */
  export function eatItem(scene, world, controls, userObject) {
-	for (var i = 0; i < itemArr.length; i++) { // To Check the Collision with All items
-		var collisionResult = itemCollisionCheck(userObject, object[itemArr[i]]); // Check the Collision with item
-
-		if (collisionResult == true) { // True = Collision / False = Not Collision
-			applyItemEvent(scene, world, userObject, controls, object[itemArr[i]].objName);
-			deleteObject(scene, world, object[itemArr[i]]);
+	if (useitem == true){
+		for (var i = 0; i < itemArr.length; i++) { // To Check the Collision with All items
+			var collisionResult = itemCollisionCheck(userObject, object[itemArr[i]]); // Check the Collision with item
+	
+			if (collisionResult == true) { // True = Collision / False = Not Collision
+				applyItemEvent(scene, world, userObject, controls, object[itemArr[i]].objName);
+				deleteObject(scene, world, object[itemArr[i]]);
+			}
 		}
+		checkItemState();
 	}
 }
+
 
 /**
  * 적용된 아이템 확인
@@ -374,110 +439,101 @@ export function deleteObject(scene, world, object) {
  * @param {CANNON.World} world 
  * @param {worldObj} userObject 
  * @param {OrbitControls} controls
+ * @param {PerspectiveCamera} camera
  */
-export function setUserEvent(scene, world, userObject, controls) {
+
+export function setUserEvent(scene, world, userObject, controls, camera) {
+	userObject.body.velocity.set(0, 0, 0);
+	userObject.body.angularDamping = 1;
+
+	//3인칭 뷰 일 때에는 마우스 작동이 아예 안되게! 
+	if (if2D == false)
+		controls.enabled = true;
+	else
+		controls.enabled = false;
+
 	// Key를 올렸을 때
 	document.addEventListener("keydown", function(event) {
-		let directionVector;
+		userObject.body.angularDamping = 1;
+		eatItem(scene, world, controls, userObject);
 
-		if (item1Flag) {
-			switch(event.key) {
-				case "W":
-				case "w":
-					userObject.body.angularDamping = 0;
-					directionVector = new CANNON.Vec3(0, 0, 1);
-					directionVector.z -= userSpeed;
-					 // 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
-					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
-					eatItem(scene, world, controls, userObject);
-					checkItemState();
-					break;
-	
-				case "S":
-				case "s":
-					userObject.body.angularDamping = 0;
-					directionVector = new CANNON.Vec3(0, 0, 1);
-					directionVector.z += userSpeed;
-					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
-					eatItem(scene, world, controls, userObject);
-					checkItemState();
-					break;
-	
-				case "A":
-				case "a":
-					userObject.body.angularDamping = 0;
-					directionVector = new CANNON.Vec3(0, 0, 1);
-					directionVector.x -= userSpeed;
-					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
-					eatItem(scene, world, controls, userObject);
-					checkItemState();
-					break;
-					
-				case "D":
-				case "d":
-					userObject.body.angularDamping = 0;
-					directionVector = new CANNON.Vec3(0, 0, 1);
-					directionVector.x += userSpeed;
-					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );	
-					eatItem(scene, world, controls, userObject);
-					checkItemState();
-					break;
-			}
-		} else {
-			switch(event.key) {
-				case "W":
-				case "w":
-					userObject.body.angularDamping = 0;
-					directionVector = new CANNON.Vec3(0, 0, 1);
-					directionVector.z += userSpeed;
-					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
-					eatItem(scene, world, controls, userObject);
-					checkItemState();
-					break;
-	
-				case "S":
-				case "s":
-					userObject.body.angularDamping = 0;
-					directionVector = new CANNON.Vec3(0, 0, 1);
-					directionVector.z -= userSpeed;
-					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
-					eatItem(scene, world, controls, userObject);
-					checkItemState();
-					break;
-	
-				case "A":
-				case "a":
-					userObject.body.angularDamping = 0;
-					directionVector = new CANNON.Vec3(0, 0, 1);
-					directionVector.x += userSpeed;
-					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );	
-					eatItem(scene, world, controls, userObject);
-					checkItemState();
-					break;
-					
-				case "D":
-				case "d":
-					userObject.body.angularDamping = 0;
-					directionVector = new CANNON.Vec3(0, 0, 1);
-					directionVector.x -= userSpeed;
-					directionVector = userObject.body.quaternion.vmult( directionVector );
-					userObject.body.velocity.set( directionVector.x, 0, directionVector.z );
-					eatItem(scene, world, controls, userObject);
-					checkItemState();
-					break;
-			}
+		switch(event.key) {
+			case "W":
+			case "w":
+				if (item1Flag)
+					userObject.setVelocity(1); //w
+				else
+					userObject.setVelocity(2); //s		
+				break;
+
+			case "S":
+			case "s":
+				if (item1Flag)
+					userObject.setVelocity(2);
+				else
+					userObject.setVelocity(1);
+				break;
+
+			case "A":
+			case "a":
+				if (item1Flag)
+					userObject.setVelocity(3); //a
+				else
+					userObject.setVelocity(4); //d
+				break;
+				
+			case "D":
+			case "d":
+				if (item1Flag)
+					userObject.setVelocity(4);
+				else
+					userObject.setVelocity(3);
+				break;
+
+
+			//임시로 넣어둔 부분! 누르면 1인칭 <-> 3인칭
+			case "C":
+			case "c":
+				if (if2D == false){
+					if2D = true;
+				}
+				else{
+					if2D = false;
+				}
+				break;
+
+			//임시로 넣어둔 부분! 누르면 팩맨 카메라 높이가 올라감
+			case "Z":
+			case "z":
+				if (if2D == false)
+					pacman_height += 30;
+				break;
+
+			//임시로 넣어둔 부분! 누르면 팩맨 카메라 높이가 내려감
+			case "X":
+			case "x":
+				if (if2D == false)
+					pacman_height -= 30;
+				break;
+
+			//임시로 넣어둔 부분! 누르면 팩맨 속도 증가
+			case "N":
+			case "n":
+				userSpeed += 100;
+				break;
+
+			//임시로 넣어둔 부분! 누르면 팩맨 속도 감소
+			case "M":
+			case "m":
+				userSpeed -= 100;
+				break;
 		}
 	});
 
 	// Key를 뗐을 때 
 	document.addEventListener("keyup", function(event) {
+		eatItem(scene, world, controls, userObject);
+
 		switch(event.key) {
 			case "W":
 			case "w":
@@ -487,12 +543,7 @@ export function setUserEvent(scene, world, userObject, controls) {
 			case "a":
 			case "D":
 			case "d":
-				userObject.body.velocity.set(0, 0, 0);
-				userObject.body.angularDamping = 1;
-				eatItem(scene, world, controls, userObject);
-				checkItemState();
-				break;
-			default:
+				userObject.setVelocity(0);
 				break;
 		}
 	});
@@ -510,13 +561,65 @@ export function setUserEvent(scene, world, userObject, controls) {
 
 	// mouse로 카메라 움직일 때
 	document.addEventListener("mousemove", function(event) {
-		
 		const toangle = controls.getAzimuthalAngle() * (180 / Math.PI);
-		
-		//카메라 보는 각도가 정면이 되도록 팩맨을 돌림
-		userObject.rotateY(toangle);
+			//1인칭 시점일 때만 작동함
+		if (if2D == false)
+			userObject.rotateY(toangle); //카메라 보는 각도가 정면이 되도록 팩맨을 돌림
 	})
+}
 
+/**
+ *  카메라 선택
+ */
+function selectCameraType(userObject, camera, controls){
+	//1인칭 시점일 때만 작동함
+	if (if2D == false && currentCameraType == 1){
+		moveFirstPersonCameraAll(userObject, camera, controls)
+	}
+	else if(if2D == false && currentCameraType == 2){
+		controls.minPolarAngle =  Math.PI * 0.5;
+		controls.maxPolarAngle =  Math.PI * 0.5;
+		controls.rotateSpeed = 1;
+
+		currentCameraType = 1;
+		moveFirstPersonCameraAll(userObject, camera, controls)
+	}
+	else if(if2D == true && currentCameraType == 1){
+		controls.minPolarAngle =  0;
+		controls.maxPolarAngle =  0;
+		controls.rotateSpeed = 0;
+
+		currentCameraType = 2;
+		move2DCameraAll(camera, controls);
+	}
+}
+
+
+
+/**
+ * orbitcontrol을 first person 시점으로 사용
+ */
+function moveFirstPersonCameraAll(userObject, camera, controls){
+	userObject.body.angularDamping = 1; //계속 회전 방지
+
+	var ve = userObject.getPosition(); //현재 팩맨 중심좌표
+	var direct = new THREE.Vector3();
+	camera.getWorldDirection(direct); // 카메라가 바라보는 방향 받아오기
+
+	camera.position.set(ve.x - 10 * direct.x, pacman_height, ve.z - 10 * direct.z); //카메라 셋팅
+	controls.target.set(ve.x, pacman_height, ve.z); //타겟 설정 - 얘를 중심으로 공전
+
+	userObject.body.angularDamping = 1; //계속 회전 방지
+}
+
+
+/**
+ * orbitcontrol을 3인칭 시점(2D)으로 사용
+ */
+function move2DCameraAll(camera, controls){
+	//1인칭 시점일 때만 작동함
+	camera.position.set(0, pacman_height2D, 0); //카메라 셋팅
+	controls.target.set(0, 0, 0); //타겟 설정 - 얘를 중심으로 공전
 }
 
 /**
@@ -555,7 +658,7 @@ export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterG
 	   collisionFilterGroup: collisionFilterGroup_val,
 	   mass: mass_val
 	});
-	createNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color:  sur_color})), boxBody);
+	createNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshDepthMaterial ({ color: sur_color})), boxBody);
 }
 
 /**
@@ -619,9 +722,12 @@ export function playAudio(audioName) {
 /**
  * Update Physical Engine 
  */
-export function updatePhysics(world) {
+export function updatePhysics(world, camera, controls) {
 	// Step the physics world
 	world.step(timeStep);
+
+	//카메라 설정
+	selectCameraType(object['pacman'], camera, controls)
 
 	Object.keys(object).forEach(function(key) {
 		object[key].update();

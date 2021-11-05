@@ -18,8 +18,10 @@ import * as Utils from './utils.js';
  * @param {THREE.Scene} scene
  * @param {CANNON.World} world 
  * @param {OrbitControls} controls
+ * @param {PerspectiveCamera} camera
+
  */
-export function initGachonMap(scene, world, controls) {
+export function initGachonMap(scene, world, controls, camera) {
     // Scene 리셋
     Utils.resetScene(scene);
 
@@ -195,7 +197,7 @@ export function initGachonMap(scene, world, controls) {
 
 	// 팩맨
 	Utils.createPacman(scene, world, 600, 230, 0, 180);
-	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls);
+	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls, camera);
 
 	// 고스트
 	Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
@@ -242,7 +244,7 @@ export function initGachonMap(scene, world, controls) {
 	});
 }	
 
-export function initBasicMap(scene, world, controls) {
+export function initBasicMap(scene, world, controls, camera) {
 	// Scene 리셋
     Utils.resetScene(scene);
 
@@ -279,8 +281,8 @@ export function initBasicMap(scene, world, controls) {
 	Utils.createWallObject(scene, world, 'wall3', 0xFFFFFF, 100, 800, 1600);
 	Utils.object['wall3'].position(0, 0, 400);
 	Utils.object['wall3'].rotateY(90);
-	Utils.createStartWallObject(scene, world, 'ghost_wall', 100, 600, 800); // Ghost 출발 벽
-	Utils.object['ghost_wall'].position(750, 0, 0);
+	// Utils.createStartWallObject(scene, world, 'ghost_wall', 100, 600, 800); // Ghost 출발 벽
+	// Utils.object['ghost_wall'].position(750, 0, 0);
 
 	// 아래 튀어나온 Teleport 벽
 	Utils.createWallObject(scene, world, 'wall4', 0x333366, 800, 800, 1200);
@@ -378,7 +380,7 @@ export function initBasicMap(scene, world, controls) {
 
 	// 팩맨
 	Utils.createPacman(scene, world, 0, 230, 0, 180);
-	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls);
+	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls, camera);
 
 	Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
 	Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500); 

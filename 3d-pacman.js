@@ -16,6 +16,7 @@ import CannonDebugRenderer from './js/CannonDebugRenderer.js';
 var world, canvas, camera, scene, renderer;
 var debug;
 var controls;
+
 /**
  * Window OnLoad Event
  */
@@ -41,12 +42,14 @@ function initThreeJS() {
 
 	scene = new THREE.Scene();
 
-	camera = new THREE.PerspectiveCamera( 75, canvas.width / canvas.height, 1, 10000);
+	camera = new THREE.PerspectiveCamera( 75, canvas.width / canvas.height, 1, 15000);
 	camera.position.y = 8000;
 	camera.position.z = 300;
 	scene.add( camera );
 
 	controls = new OrbitControls(camera, renderer.domElement);
+	controls.enablePan = false; //우클릭 이동 방지
+	//y축 움직임 제한
 }
 
 /**
@@ -67,7 +70,7 @@ function initCannon() {
 function initObject() {
 	// 맵 생성
 	Maps.initGachonMap(scene, world, controls);
-	//Maps.initBasicMap(scene, world, controls);
+	// Maps.initBasicMap(scene, world, controls);
 }
 
 /**
@@ -84,7 +87,7 @@ function onWindowResize() {
  */
 function animate() {
 	requestAnimationFrame(animate);
-	Utils.updatePhysics(world);
+	Utils.updatePhysics(world, camera, controls);
 	debug.update();
 	renderer.render(scene, camera);
 }
