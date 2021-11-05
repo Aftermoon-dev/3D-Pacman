@@ -26,6 +26,9 @@ export function initGachonMap(scene, world, controls) {
 	const hlight = new THREE.AmbientLight(0x404040, 100);
 	scene.add(hlight);
 
+	// 화면에 Stage 글자 변경
+	document.getElementById("stageNum").innerHTML="STAGE 1";
+
     // 바닥 만들기
 	var groundBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 500 / 2, 8000 / 2)),
@@ -59,8 +62,8 @@ export function initGachonMap(scene, world, controls) {
 	Utils.createWallObject(scene, world, 'wall3', 0xFFFFFF, 100, 800, 1200);
 	Utils.object['wall3'].position(0, 0, 800);
 	Utils.object['wall3'].rotateY(90);
-	Utils.createStartWallObject(scene, world, 'ghost_wall', 100, 600, 1600); // Ghost 출발 벽
-	Utils.object['ghost_wall'].position(550, 0, 0);
+	// Utils.createStartWallObject(scene, world, 'ghost_wall', 100, 600, 1600); // Ghost 출발 벽
+	// Utils.object['ghost_wall'].position(550, 0, 0);
 
 	// 위 Teleport 벽
 	Utils.createWallObject(scene, world, 'wall4', 0x1200ff, 600, 800, 1800);
@@ -195,7 +198,7 @@ export function initGachonMap(scene, world, controls) {
 	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls);
 
 	// 고스트
-	Utils.createGhost(scene, world, 'ghost1', -850, 450, 0, 0xFFFF00);
+	Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
 
 	// 아이템 만들기
 	// random int 계산식 맵 크기에 따라서 나중에 수정해주기!!!
@@ -252,6 +255,7 @@ export function initBasicMap(scene, world, controls) {
 		map: texture_wall,
 	});
 
+	document.getElementById("stageNum").innerHTML="STAGE 1";
 
     // 바닥 만들기
 	var groundBody = new CANNON.Body({

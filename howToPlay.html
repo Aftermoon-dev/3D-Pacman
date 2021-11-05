@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <!-- 글꼴 적용 -->
+        <meta charset="utf-8">
+        <link href="font/fontStyle.css" rel="stylesheet">
+
+        <!-- 배경색 적용 -->
+        <style>
+            body {
+                background-color: #000000;
+            }
+        </style>
+        
+        <!-- 여러 가지 적용 -->
+        <style>
+            #button {
+                background-color: #000000;
+                height: 55px;
+                text-align: left;
+                width: 100%;
+            }
+
+            .button {
+                width: 125px;
+                height: 60px;
+            }
+
+            #title {
+                color: #000000;
+                font-size: 2.5em;
+                width: 100%;
+                text-align: "center";
+            }
+
+            table {
+                width: 100%;
+                height: 400px;
+                text-align: "center";
+                margin-top: 20px;
+                display: inline;
+            }
+
+            #th {
+                color: #ffd400;
+                font-size: 1.5em;
+            }
+
+            th {
+                border: 2px solid #000000;
+                background-color: #000000;
+            }
+
+            td {
+                text-align: "left";
+                padding: 10px 10px;
+            }
+
+            th, tr {
+                color: #ffffff;
+            }
+
+        </style>
+    </head>
+
+	<body>
+        <div id = "button">
+            <input type = "image" class = "button" src = "image/backButton.png" onClick="location.href='http://127.0.0.1:8887/start.html'"></button>
+        </div> 
+        
+        <div id = "title" style = "text-align: center; background-color: white;"> <span>How to Play</span> </div>
+
+        <div style = "width: 100%; margin-top: 20px;">
+            <div style = "width: 50%; float:left; text-align: center;">
+                <table width="50%">
+                    <th colspan = "2">
+                        <div id = "th"> <span>INTRODUCTION</span> </div>
+                    </th>
+                    <tr>
+                        <td><img type = "itemImage" src = "image/pacman.png" width = "100" height = "100"></td>
+                        <td align=left style = "font-family: bing">This is PACMAN.<br><br>You can control Pacman with W, A, S, D keyboard keys.</td>
+                    </tr>
+                    <tr>
+                        <td><img id = "itemImage" src = "image/ghost.png" width = "100" height = "100"></td>
+                        <td align=left style = "font-family: bing">This is Ghost.<br><br>If you touch the ghost, Pacman dies.</td>
+                    </tr>
+                    <tr>
+                        <td><img id = "itemImage" src = "image/teleport.png" width = "100" height = "100"></td>
+                        <td align=left style = "font-family: bing">This is Teleport.<br><br>If you arrive at the teleport, you can move to another teleport location.</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style = "width: 50%; float:left; text-align: center;">
+                <table>
+                    <th colspan = "2">
+                        <div id = "th"> <span>ITEM & EFFECT</span> </div>
+                    </th>
+                    <tr>
+                        <td><img type = "itemImage" src = "image/item1.png" width = "50" height = "50"></td>
+                        <td align=left width = "100%" style = "font-family: bing">Arrow key changes the other way around.</td>
+                    </tr>
+                    <tr>
+                        <td><img id = "itemImage" src = "image/item2.png" width = "50" height = "50"></td>
+                        <td align=left style = "font-family: bing">Pacman's speed changes randomly.</td>
+                    </tr>
+                    <tr>
+                        <td><img id = "itemImage" src = "image/item3.png" width = "50" height = "50"></td>
+                        <td align=left style = "font-family: bing">Pacman's size gets bigger.</td>
+                    </tr>
+                    <tr>
+                        <td><img id = "itemImage" src = "image/item4.png" width = "50" height = "50"></td>
+                        <td align=left style = "font-family: bing">Pacman can kill the ghosts.</td>
+                    </tr>
+                    <tr>
+                        <td><img id = "itemImage" src = "image/item5.png" width = "50" height = "50"></td>
+                        <td align=left style = "font-family: bing">The camera view changes 3D to 2D.</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

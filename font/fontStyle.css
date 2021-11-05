@@ -1,0 +1,8 @@
+@font-face{
+    src: url("../font/bing.ttf");
+    font-family: "bing";
+}
+
+span {
+    font-family: "bing";
+}

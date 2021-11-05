@@ -6,6 +6,9 @@
 
 import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/optimized/three.js';
 import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/loaders/GLTFLoader.js';
+// import { FontLoader } from '../build/FontLoader.js';
+// import { TextGeometry } from '../build/TextGeometry.js';
+
 
 /* Setting */
 const timeStep = 1/30;
@@ -19,6 +22,11 @@ export var item1Timer;
 export var item2Timer;
 export var item3Flag = 180; // 팩맨 크기 넣어주기
 export var item3Timer;
+export var item4Flag = true;
+export var item4Timer;
+
+/* Score Setting */
+export var score = 0;
 
 /* Object Dictonary */
 export const object = {};
@@ -97,7 +105,7 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 		shape: new CANNON.Sphere(radius),
 		collisionFilterGroup: 1,
 		angularDamping: 1,
-		collisionFilterMask: 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥
+		collisionFilterMask: 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥 64 고스트
 		mass: 3,
 		type: 1
 	});
@@ -120,7 +128,8 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 	var wallBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
 		collisionFilterGroup: 4,
-		mass: 0
+		mass: 0,
+		type: 1000
 	});
 	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color: wallcolor})), wallBody);
 }
@@ -128,7 +137,8 @@ export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x
 	var wallBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
 		collisionFilterGroup: 4,
-		mass: 0
+		mass: 0,
+		type: 1000
 	});
 	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), material), wallBody);
 }
@@ -146,7 +156,8 @@ export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x
 	var wallBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
 		collisionFilterGroup: 8,
-		mass: 0
+		mass: 0,
+		type: 1000
 	});
 	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color: 0xffd400})), wallBody);
 }
@@ -222,6 +233,10 @@ export function deleteObject(scene, world, object) {
 	} else if (itemName == 'item3') {
 		// applyItem3Event(scene, world, userObject, controls);
 		// 미완성
+	} else if (itemName == 'item4') {
+		// applyItem4Event();
+	} else if (itemName == 'item5') {
+		// applyItem5Event();
 	}
 }
 
@@ -290,7 +305,31 @@ export function deleteObject(scene, world, object) {
 		setUserEvent(scene, world, object['pacman'], controls);
 
 		item3Flag = 180;
-	}, 3000);
+	}, 8000);
+}
+
+/**
+ * Item4 - Kill the Ghost
+ */
+ export function applyItem4Event() {
+	/*
+	item4Flag = false;
+
+	item4Timer = setTimeout(function(){
+		item4Flag = true;
+	}, 8000);
+	*/
+}
+
+/**
+ * Item5 - Change 3D -> 2D
+ */
+ export function applyItem5Event() {
+	/*
+	item5Timer = setTimeout(function(){
+
+	}, 8000);
+	*/
 }
 
 /**
@@ -315,11 +354,13 @@ export function deleteObject(scene, world, object) {
  * 적용된 아이템 확인
  */
  export function checkItemState() {
+	 /*
 	console.log('Arror = ' + item1Flag); // Item1
 	console.log('Pacman Speed = ' + userSpeed); // Item2
 	console.log('Pacman Size = ' + item3Flag); // Item3
 	console.log('ITEM4 = '); // Item4
 	console.log('ITEM5 = '); // Item5
+	*/
 }
 
 /**
@@ -455,8 +496,11 @@ export function setUserEvent(scene, world, userObject, controls) {
 	userObject.body.addEventListener("collide", function(e) {
 		// 부딪힌 Object Type 확인
 		// if (e.body.type == 1000) {
-		// 	console.log("Collide with Walls!");
+		 	// console.log("Collide with Walls!");
 		// }
+		if (e.body.type == 4444) {
+			console.log("Meet the Ghost!");
+		}
 	});
 
 	// mouse로 카메라 움직일 때
@@ -526,7 +570,8 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		angularDamping: 1,
 		collisionFilterMask: 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥
 		position: new CANNON.Vec3(x, y, z),
-		mass: 3
+		mass: 3,
+		// type: 4444
 	});
 
 	loader.load("./models/pacman_ghost_blue/scene.gltf", (gltf) => {
@@ -549,7 +594,13 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		createNewObject(scene, world, objName, root, ghostBody);
 		object[objName].position(x, y, z);
 	});
-	
+}
+
+/**
+ * Calculate Score
+ */
+export function calculateScore() {
+	document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
 }
 
 /**
