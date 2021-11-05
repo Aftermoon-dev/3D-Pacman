@@ -23,6 +23,11 @@ export var item3Timer;
 /* Object Dictonary */
 export const object = {};
 
+/* Audio List */
+export const audioList = {
+	'teleport': new Audio("./audio/teleport.mp3")
+};
+
 /**
  * Mesh Object Class
  */
@@ -550,6 +555,14 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		object[objName].position(x, y, z);
 	});
 	
+}
+
+/**
+ * 오디오 재생
+ * @param {Audio Name} audioName 
+ */
+export function playAudio(audioName) {
+	audioList[audioName].play();
 }
 
 /**

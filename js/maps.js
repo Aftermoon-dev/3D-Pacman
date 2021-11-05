@@ -191,7 +191,7 @@ export function initGachonMap(scene, world, controls) {
 	Utils.object['wall41'].rotateY(-60);
 
 	// 팩맨
-	Utils.createPacman(scene, world, 0, 230, 0, 180);
+	Utils.createPacman(scene, world, 600, 230, 0, 180);
 	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls);
 
 	// 고스트
@@ -226,12 +226,14 @@ export function initGachonMap(scene, world, controls) {
 
 	Utils.object['tpnorth'].body.addEventListener("collide", function(e) {
 		if (e.body.type == 1) {
+			Utils.playAudio('teleport');
 			Utils.object['pacman'].position(obj2Pos.x, 105, obj2Pos.z - 800);
 		}
 	});
 
 	Utils.object['tpsouth'].body.addEventListener("collide", function(e) {
 		if (e.body.type == 1) {
+			Utils.playAudio('teleport');
 			Utils.object['pacman'].position(obj1Pos.x, 105, obj1Pos.z + 800);
 		}
 	});
