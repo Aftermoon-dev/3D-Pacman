@@ -31,6 +31,11 @@ export var score = 0;
 /* Object Dictonary */
 export const object = {};
 
+/* Audio List */
+export const audioList = {
+	'teleport': new Audio("./audio/teleport.mp3")
+};
+
 /**
  * Mesh Object Class
  */
@@ -601,6 +606,14 @@ export function createGhost(scene, world, objName, x, y, z, color) {
  */
 export function calculateScore() {
 	document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
+}
+
+/**
+ * 오디오 재생
+ * @param {Audio Name} audioName 
+ */
+export function playAudio(audioName) {
+	audioList[audioName].play();
 }
 
 /**
