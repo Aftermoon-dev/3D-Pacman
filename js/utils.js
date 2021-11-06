@@ -45,7 +45,9 @@ export const object = {};
 
 /* Audio List */
 export const audioList = {
-	'teleport': new Audio("./audio/teleport.mp3")
+	'teleport': new Audio("./audio/teleport.mp3"),
+	'gameclear': new Audio("./audio/gameclear.mp3"),
+	'gameover': new Audio("./audio/gameover.wav")
 };
 
 /**
@@ -758,6 +760,12 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		itemArr = [];
 		circleArr = [];
 		window.open('gameclear.html');
+		playAudio('gameclear');
+		// 나중에 고스트 만들고 난 이후에 위치 옮기기!
+		/*
+		window.open('gameover.html');
+		playAudio('gameover');
+		*/
 	}
 }
 
