@@ -173,7 +173,7 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 		shape: new CANNON.Sphere(radius),
 		collisionFilterGroup: 1,
 		angularDamping: 1,
-		collisionFilterMask: 2 | 4 | 8 | 32 | 64, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥 64 고스트
+		collisionFilterMask: 2 | 4 | 8 | 16 | 32 | 64, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥 64 고스트
 		mass: 3,
 		type: 1
 	});
@@ -243,6 +243,8 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber) 
 	var itemBody = new CANNON.Body({ 
 		shape: new CANNON.Sphere(80),
 		collisionFilterGroup: 16,
+		collisionFilterMask: 1 | 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥
+		mass: 0,
 		type: itemNumber,
 	});
 	
@@ -251,28 +253,12 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber) 
 }
 
 /**
- * Item과 충돌 여부 확인 Step (1)
- * @param {worldObj} pacman 
- * @param {worldObj} item
- */
-export function itemCollisionCheck(pacman, item) {
-	var distance = Math.pow((Math.pow((pacman.body.position.x - item.body.position.x), 2) + Math.pow((pacman.body.position.z - item.body.position.z), 2)), 1/2)
-
-	if (distance <= 200 + 100) // distance <= pacmanRadius + itemRadius (범위 좀 더 넓게)
-		return true;
-	else
-		return false;
-}
-
-/**
- * 먹은 Item 삭제 Step (2)
+ * 먹은 Item 삭제
  * @param {THREE.Scene} scene 
  * @param {CANNON.World} world 
  * @param {worldObj} object 
  */
 export function deleteObject(scene, world, object) {
-	console.log("Item Name : " + object.objName);
- 
 	world.removeBody(object.body);
 	scene.remove(object.mesh);
  
@@ -282,29 +268,6 @@ export function deleteObject(scene, world, object) {
 			itemArr.splice(i, 1);
 			i--;
 		}
-	}
-}
-
-/**
- * Item Event 함수
- * @param {THREE.Scene} scene
- * @param {CANNON.World} world 
- * @param {worldObj} userObject 
- * @param {OrbitControls} controls
- * @param {String} itemName
- */
- export function applyItemEvent(scene, world, userObject, controls, itemName) {
-	if (itemName == 'item1') {
-		applyItem1Event();
-	} else if (itemName == 'item2') {
-		applyItem2Event();
-	} else if (itemName == 'item3') {
-		// applyItem3Event(scene, world, userObject, controls);
-		// 미완성
-	} else if (itemName == 'item4') {
-		// applyItem4Event();
-	} else if (itemName == 'item5') {
-		applyItem5Event();
 	}
 }
 
@@ -379,60 +342,23 @@ export function deleteObject(scene, world, object) {
 /**
  * Item4 - Kill the Ghost
  */
- export function applyItem4Event() {
-	/*
-	item4Flag = false;
+export function applyItem4Event() {
+	item4Flag = true;
 
 	item4Timer = setTimeout(function(){
-		item4Flag = true;
+		item4Flag = false;
 	}, 8000);
-	*/
 }
 
 /**
  * Item5 - Change 3D -> 2D
  */
- export function applyItem5Event() {
+export function applyItem5Event() {
 	if2D = true;
 
 	item5Timer = setTimeout(function(){
 		if2D = false
 	}, 10000);
-}
-
-/**
- * Eat Item Final
- * @param {THREE.Scene} scene 
- * @param {CANNON.World} world 
- * @param {OrbitControls} controls
- * @param {worldObj} userObject 
- */
-export function eatItem(scene, world, controls, userObject) {
-	if (useitem == true){
-		for (var i = 0; i < itemArr.length; i++) { // To Check the Collision with All items
-			var collisionResult = itemCollisionCheck(userObject, object[itemArr[i]]); // Check the Collision with item
-	
-			if (collisionResult == true) { // True = Collision / False = Not Collision
-				applyItemEvent(scene, world, userObject, controls, object[itemArr[i]].objName);
-				deleteObject(scene, world, object[itemArr[i]]);
-			}
-		}
-		checkItemState();
-	}
-}
-
-
-/**
- * 적용된 아이템 확인
- */
-export function checkItemState() {
-	 /*
-	console.log('Arror = ' + item1Flag); // Item1
-	console.log('Pacman Speed = ' + userSpeed); // Item2
-	console.log('Pacman Size = ' + item3Flag); // Item3
-	console.log('ITEM4 = '); // Item4
-	console.log('ITEM5 = '); // Item5
-	*/
 }
 
 /**
@@ -456,7 +382,6 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 	// Key를 올렸을 때
 	document.addEventListener("keydown", function(event) {
 		userObject.body.angularDamping = 1;
-		eatItem(scene, world, controls, userObject);
 		eatCircle(scene, world, controls, userObject);
 
 		switch(event.key) {
@@ -523,7 +448,6 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 
 	// Key를 뗐을 때 
 	document.addEventListener("keyup", function(event) {
-		eatItem(scene, world, controls, userObject);
 		eatCircle(scene, world, controls, userObject);
 
 		switch(event.key) {
@@ -548,12 +472,30 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 
 			// 먹는 모드일 경우
 			if(item4Flag) {
-				
+				let output = Object.fromEntries(Object.entries(object).filter(([k,v]) => v.body == e.body));
+            	console.log(output[Object.keys(output)[0]]);
+            	world.removeBody(e.body);
+            	scene.remove(output[Object.keys(output)[0]].mesh);
 			}
 			// 아니면
 			else {
 				document.location.href = "./gameover.html";
 			}
+		} else if (e.body.type == 101) {
+			applyItem1Event();
+			deleteObject(scene, world, object['item1']);
+		} else if (e.body.type == 102) {
+			applyItem2Event();
+			deleteObject(scene, world, object['item2']);
+		} else if (e.body.type == 103) {
+			// applyItem3Event(scene, world, userObject, controls);
+			deleteObject(scene, world, object['item3']);
+		} else if (e.body.type == 104) {
+			applyItem4Event();
+			deleteObject(scene, world, object['item4']);
+		} else if (e.body.type == 105) {
+			applyItem5Event();
+			deleteObject(scene, world, object['item5']);
 		}
 	});
 
@@ -751,7 +693,7 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		}
 	}
 
-	if (score == 20) {  // Stage 1 Clear 점수 넣기!
+	if (score == 80) {  // Stage 1 Clear 점수 넣기!
 		// 두번째 맵으로 전환
 		// 아이템 및 동글이 초기화
 		itemArr = [];
@@ -761,7 +703,6 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		itemArr = [];
 		circleArr = [];
 	} else if (score == 240) { // Stage 3 Clear 점수 넣기!
-		// 게임 마무리 창? 띄우기
 		itemArr = [];
 		circleArr = [];
 		window.location.href = 'gameclear.html';
