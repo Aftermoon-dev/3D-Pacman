@@ -351,7 +351,7 @@ export function deleteObject(scene, world, object) {
 	var z = userObject.body.position.z;
 
 	createPacman(scene, world, x, y, z, 300);
-	setUserEvent(scene, world, object['pacman'], controls);
+	setUserEvent(scene, world, object['pacman'], controls, camera);
 
 	item3Flag = 300;
 
@@ -370,7 +370,7 @@ export function deleteObject(scene, world, object) {
 		var z = object['pacman'].body.position.z;
 
 		createPacman(scene, world, x, y, z, 180);
-		setUserEvent(scene, world, object['pacman'], controls);
+		setUserEvent(scene, world, object['pacman'], controls, camera);
 
 		item3Flag = 180;
 	}, 8000);
@@ -578,8 +578,8 @@ function selectCameraType(userObject, camera, controls){
 		moveFirstPersonCameraAll(userObject, camera, controls)
 	}
 	else if(if2D == true){
-		controls.minPolarAngle =  0;
-		controls.maxPolarAngle =  0;
+		controls.minPolarAngle = 0;
+		controls.maxPolarAngle = 0;
 		controls.rotateSpeed = 0;
 		move2DCameraAll(camera, controls);
 	}
@@ -596,7 +596,7 @@ function moveFirstPersonCameraAll(userObject, camera, controls){
 	var ve = userObject.getPosition(); //현재 팩맨 중심좌표
 	var direct = new THREE.Vector3();
 	camera.getWorldDirection(direct); // 카메라가 바라보는 방향 받아오기
-
+	
 	camera.position.set(ve.x - 10 * direct.x, pacman_height, ve.z - 10 * direct.z); //카메라 셋팅
 	controls.target.set(ve.x, pacman_height, ve.z); //타겟 설정 - 얘를 중심으로 공전
 
@@ -611,6 +611,7 @@ function move2DCameraAll(camera, controls){
 	//1인칭 시점일 때만 작동함
 	camera.position.set(0, pacman_height2D, 0); //카메라 셋팅
 	controls.target.set(0, 0, 0); //타겟 설정 - 얘를 중심으로 공전
+	camera.lookAt(new THREE.Vector3(0, 1, 0));
 }
 
 /**
