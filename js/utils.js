@@ -17,8 +17,21 @@ export var pacman_height = 180; //팩맨의 카메라 높이 결정  -> 나중�
 export var pacman_height2D = 8000; //2D view height
 export var ghostSpeed = 450; // 고스트 속도
 
-export const loader = new GLTFLoader();
- 
+export const loadManager = new THREE.LoadingManager();
+loadManager.onStart = () => {
+	document.getElementById("loading").style.visibility = "visible";
+}
+
+loadManager.onLoad = () => {
+	document.getElementById("loading").style.visibility = "hidden";
+	console.log("Loading Finished");
+	isloadingFinished = true;
+};
+
+export const loader = new GLTFLoader(loadManager);
+export const textureLoader = new THREE.TextureLoader(loadManager);
+export let isloadingFinished = false; // 로딩 완료 여부 확인
+
 /* Item Setting */
 export var useitem = true; //item 적용할꺼면 true로
 
@@ -789,16 +802,18 @@ export function changeGhostColor(objectName, color) {
  * Update Physical Engine 
  */
 export function updatePhysics(world, camera, controls) {
-	// Step the physics world
-	world.step(timeStep);
+	if (isloadingFinished) {
+		// Step the physics world
+		world.step(timeStep);
 
-	//카메라 설정
-	selectCameraType(object['pacman'], camera, controls)
+		//카메라 설정
+		selectCameraType(object['pacman'], camera, controls)
 
-	Object.keys(object).forEach(function(key) {
-		if(object[key].mesh != undefined && object[key].body != undefined)
-			object[key].update();
-		else
-			delete object[key];
-	});
+		Object.keys(object).forEach(function(key) {
+			if(object[key].mesh != undefined && object[key].body != undefined)
+				object[key].update();
+			else
+				delete object[key];
+		});
+	}
 }
