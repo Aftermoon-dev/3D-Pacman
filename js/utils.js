@@ -20,6 +20,7 @@ export var ghostSpeed = 450; // 고스트 속도
 export const loadManager = new THREE.LoadingManager();
 loadManager.onStart = () => {
 	document.getElementById("loading").style.visibility = "visible";
+	isloadingFinished = false;
 }
 
 loadManager.onLoad = () => {
