@@ -359,7 +359,7 @@ export function applyItem5Event() {
 
 	item5Timer = setTimeout(function(){
 		if2D = false
-	}, 10000);
+	}, 5000);
 }
 
 /**
