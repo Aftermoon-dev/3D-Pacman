@@ -28,7 +28,7 @@ export var item1Timer;
 export var item2Timer;
 export var item3Flag = 180; // 팩맨 크기 넣어주기
 export var item3Timer;
-export var item4Flag = true;
+export var item4Flag = false;
 export var item4Timer;
 export var item5Timer;
 
@@ -37,7 +37,7 @@ export var score = 0;
 
 /* camera control variable */
 export var if2D = false;
-export var developerMode = false; //개발자 모드 ON!
+export var developerMode = true; //개발자 모드 ON!
 
 
 /* Object Dictonary */
@@ -173,7 +173,7 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 		shape: new CANNON.Sphere(radius),
 		collisionFilterGroup: 1,
 		angularDamping: 1,
-		collisionFilterMask: 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥 64 고스트
+		collisionFilterMask: 2 | 4 | 8 | 32 | 64, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥 64 고스트
 		mass: 3,
 		type: 1
 	});
@@ -542,12 +542,18 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 
 	// Collide Event
 	userObject.body.addEventListener("collide", function(e) {
-		// 부딪힌 Object Type 확인
-		// if (e.body.type == 1000) {
-		 	// console.log("Collide with Walls!");
-		// }
-		if (e.body.type == 4444) {
-			console.log("Meet the Ghost!");
+		// 고스트랑 닿을 경우
+		if (e.body.type == 3) {
+			console.log("Meet the Ghost!" + item4Flag);
+
+			// 먹는 모드일 경우
+			if(item4Flag) {
+				
+			}
+			// 아니면
+			else {
+				document.location.href = "./gameover.html";
+			}
 		}
 	});
 
@@ -643,7 +649,7 @@ export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterG
 	   collisionFilterGroup: collisionFilterGroup_val,
 	   mass: mass_val
 	});
-	createNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshDepthMaterial ({ color: sur_color})), boxBody);
+	createNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial ({ color: sur_color})), boxBody);
 }
 
 /**
@@ -661,14 +667,13 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		shape: new CANNON.Box(new CANNON.Vec3(150, 400, 150)),
 		collisionFilterGroup: 64,
 		angularDamping: 1,
-		collisionFilterMask: 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥
+		collisionFilterMask: 1 | 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥
 		position: new CANNON.Vec3(x, y, z),
-		mass: 3,
-		// type: 4444
+		mass: 0,
+		type: 3
 	});
 
 	loader.load("./models/pacman_ghost_blue/scene.gltf", (gltf) => {
-		console.log("LOAD");
 		const root = gltf.scene;
 		var ghost = root.children[0];
 		ghost.scale.set(1.5, 1.5, 1.5);

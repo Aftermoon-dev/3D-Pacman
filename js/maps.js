@@ -197,13 +197,6 @@ export function initGachonMap(scene, world, controls, camera) {
 	Utils.object['wall41'].position(3550, 0, 2400);
 	Utils.object['wall41'].rotateY(-60);
 
-	// 팩맨
-	Utils.createPacman(scene, world, 600, 230, 0, 180);
-	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls, camera);
-
-	// 고스트
-	Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
-
 	// 아이템 만들기
 	// random int 계산식 맵 크기에 따라서 나중에 수정해주기!!!
 	// Math.random() * (맵크기 / 간격 + 1) * (간격 얼마나 줄건지) - (맵크기 / 2)
@@ -253,6 +246,13 @@ export function initGachonMap(scene, world, controls, camera) {
 			Utils.object['pacman'].position(obj1Pos.x, 230, obj1Pos.z + 800);
 		}
 	});
+
+	// 팩맨
+	Utils.createPacman(scene, world, 600, 230, 0, 180);
+	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls, camera);
+	
+	// 고스트
+	Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
 	
 	document.getElementById("loading").style.visibility = "hidden";
 }	
