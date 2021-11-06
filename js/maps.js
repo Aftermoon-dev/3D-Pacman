@@ -23,7 +23,7 @@ import * as Utils from './utils.js';
  */
 export function initGachonMap(scene, world, controls, camera) {
 	// Scene 리셋
-	Utils.resetScene(scene);
+	Utils.resetScene(scene, world);
 
 	const hlight = new THREE.AmbientLight(0x404040, 100);
 	scene.add(hlight);
@@ -257,7 +257,7 @@ export function initGachonMap(scene, world, controls, camera) {
 
 export function initBasicMap(scene, world, controls, camera) {
 	// Scene 리셋
-	Utils.resetScene(scene);
+	Utils.resetScene(scene, world);
 
 	Utils.updateStage(2);
 	Utils.ChangePacmanHeight(80);
@@ -277,7 +277,7 @@ export function initBasicMap(scene, world, controls, camera) {
 		Utils.object['ground'].position(0, -200, 0);
 
 		// 팩맨
-		Utils.createPacman(scene, world, 1000, -15, 0, 180);
+		Utils.createPacman(scene, world, 500, -15, 0, 180);
 		Utils.setUserEvent(scene, world, Utils.object['pacman'], controls, camera);
 
 		Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
@@ -296,7 +296,7 @@ export function initBasicMap(scene, world, controls, camera) {
 		Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500);
 
 		// 고스트
-		Utils.createGhost(scene, world, 'ghost1', 0, 300, 0, 0xFFFF00);
+		Utils.createGhost(scene, world, 'ghost1', 0, 220, 0, 0xFFFF00);
 	});
 
 
