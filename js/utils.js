@@ -37,7 +37,7 @@ export var score = 0;
 
 /* camera control variable */
 export var if2D = false;
-export var developerMode = true; //개발자 모드 ON!
+export var developerMode = false; //개발자 모드 ON!
 
 
 /* Object Dictonary */
