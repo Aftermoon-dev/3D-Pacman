@@ -45,7 +45,9 @@ export const object = {};
 
 /* Audio List */
 export const audioList = {
-	'teleport': new Audio("./audio/teleport.mp3")
+	'teleport': new Audio("./audio/teleport.mp3"),
+	'gameclear': new Audio("./audio/gameclear.mp3"),
+	'gameover': new Audio("./audio/gameover.wav")
 };
 
 /**
@@ -744,7 +746,7 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		}
 	}
 
-	if (score == 80) {  // Stage 1 Clear 점수 넣기!
+	if (score == 20) {  // Stage 1 Clear 점수 넣기!
 		// 두번째 맵으로 전환
 		// 아이템 및 동글이 초기화
 		itemArr = [];
@@ -758,6 +760,12 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		itemArr = [];
 		circleArr = [];
 		window.open('gameclear.html');
+		playAudio('gameclear');
+		// 나중에 고스트 만들고 난 이후에 위치 옮기기!
+		/*
+		window.open('gameover.html');
+		playAudio('gameover');
+		*/
 	}
 }
 
