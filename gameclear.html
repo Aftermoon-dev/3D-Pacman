@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <!-- 글꼴 적용 -->
+        <meta charset="utf-8">
+        <link href="font/fontStyle.css" rel="stylesheet">
+
+        <!-- 배경색 적용 -->
+        <style>
+            body {
+                background-color: #000000;
+            }
+        </style>
+        
+        <!-- 여러 가지 적용 -->
+        <style>
+            #pacmanImage {
+                text-align: center;
+                margin-top: 120px;
+                width: 100%;
+            }
+
+            #title {
+                text-align: center;
+                color: #ffd400;
+                font-size: 3em;
+                width: 100%;
+            }
+
+            #subtitle {
+                text-align: center;
+                color: #ffd400;
+                font-size: 2.5em;
+                width: 100%;
+            }
+
+            #button {
+                text-align: center;
+                margin-top: 20px;
+                width: 100%;
+            }
+
+            .button {
+                background-color: rgb(122, 241, 92);
+                border: none;
+                color: black;
+                font-family: "bing";
+                font-size: 30px;
+                padding: 5px 120px;
+                text-align: center;
+                text-decoration: none;
+                margin-left: 16px;
+                margin-right: 16px;
+                cursor: pointer;
+            }
+
+            .button:active {
+                background-color: #3e8e41;
+                box-shadow: 0 5px #666;
+                transform: translateY(4px);
+            }
+            .button:hover {background-color: tomato}
+
+            #madeby {
+                margin-top: 100px;
+                text-align: center;
+                color: #ffffff;
+                font-size: 0.5em;
+                width: 100%;
+            }
+        </style>
+    </head>
+
+	<body>
+        <div id = "pacmanImage"> <img src="image/pacman.png" width = "120px" height = "120px"> </div>
+        <div id = "title"> <span> Game Clear </span> </div>
+        <div id = "subtitle"> <span> Congratulation! </span> </div>
+        <div id = "button">
+            <input type = "button" value= "Home" class = "button" onClick="location.href='start.html'"></button>
+        </div>
+        <div id = "madeby"> <span> Made by 고지민, 김수현, 박태현, 선민재 </span> </div>
+    </body>
+</html>

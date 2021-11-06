@@ -233,8 +233,6 @@ export function initGachonMap(scene, world, controls, camera) {
 	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 6);
 	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 7);
 	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 8);
-	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 9);
-	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 10);
 
 	// 텔레포트 구현
 	const obj1Pos = Utils.object['tpnorth'].body.position;
@@ -270,7 +268,7 @@ export function initBasicMap(scene, world, controls, camera) {
 		map: texture_wall,
 	});
 
-	document.getElementById("stageNum").innerHTML="STAGE 1";
+	document.getElementById("stageNum").innerHTML="STAGE 2";
 
     // 바닥 만들기
 	var groundBody = new CANNON.Body({

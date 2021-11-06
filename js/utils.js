@@ -6,8 +6,7 @@
 
 import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/optimized/three.js';
 import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/loaders/GLTFLoader.js';
-// import { FontLoader } from '../build/FontLoader.js';
-// import { TextGeometry } from '../build/TextGeometry.js';
+import * as Maps from '../js/maps.js'
 
 
 /* Setting */
@@ -456,7 +455,7 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 	document.addEventListener("keydown", function(event) {
 		userObject.body.angularDamping = 1;
 		eatItem(scene, world, controls, userObject);
-		eatCircle(scene, world, userObject);
+		eatCircle(scene, world, controls, userObject);
 
 		switch(event.key) {
 			case "W":
@@ -523,7 +522,7 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 	// Key를 뗐을 때 
 	document.addEventListener("keyup", function(event) {
 		eatItem(scene, world, controls, userObject);
-		eatCircle(scene, world, userObject);
+		eatCircle(scene, world, controls, userObject);
 
 		switch(event.key) {
 			case "W":
@@ -729,9 +728,10 @@ export function createGhost(scene, world, objName, x, y, z, color) {
  * 먹은 동글이 삭제 - Step (2)
  * @param {THREE.Scene} scene 
  * @param {CANNON.World} world 
+ * @param {OrbitControls} controls
  * @param {worldObj} object 
  */
- export function deleteCircle(scene, world, object) {
+ export function deleteCircle(scene, world, controls, object) {
 	score += 10;
 	document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
 
@@ -743,21 +743,38 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 			circleArr.splice(i, 1);
 		}
 	}
+
+	if (score == 80) {  // Stage 1 Clear 점수 넣기!
+		// 두번째 맵으로 전환
+		// 아이템 및 동글이 초기화
+		itemArr = [];
+		circleArr = [];
+	} else if (score == 160) { // Stage 2 Clear 점수 넣기!
+		// 세번째 맵으로 전환
+		itemArr = [];
+		circleArr = [];
+	} else if (score == 240) { // Stage 3 Clear 점수 넣기!
+		// 게임 마무리 창? 띄우기
+		itemArr = [];
+		circleArr = [];
+		window.open('gameclear.html');
+	}
 }
 
 /**
  * Eat Circle Final
  * @param {THREE.Scene} scene
  * @param {CANNON.World} world 
+ * @param {OrbitControls} controls
  * @param {worldObj} userObject 
  */
- export function eatCircle(scene, world, userObject) {
+ export function eatCircle(scene, world, controls, userObject) {
 	for (var i = 0; i < circleArr.length; i++) {
 		var circleName = 'circle' + circleArr[i];
 		var collisionResult = circleCollisionCheck(userObject, object[circleName]); 
 
 		if (collisionResult == true) {
-			deleteCircle(scene, world, object[circleName]);
+			deleteCircle(scene, world, controls, object[circleName]);
 			console.log(circleArr);
 		}
 	}
