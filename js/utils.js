@@ -601,6 +601,7 @@ function moveFirstPersonCameraAll(userObject, camera, controls){
 	controls.target.set(ve.x, pacman_height, ve.z); //타겟 설정 - 얘를 중심으로 공전
 
 	userObject.body.angularDamping = 1; //계속 회전 방지
+	controls.update();
 }
 
 
@@ -611,7 +612,7 @@ function move2DCameraAll(camera, controls){
 	//1인칭 시점일 때만 작동함
 	camera.position.set(0, pacman_height2D, 0); //카메라 셋팅
 	controls.target.set(0, 0, 0); //타겟 설정 - 얘를 중심으로 공전
-	camera.lookAt(new THREE.Vector3(0, 1, 0));
+	controls.update();
 }
 
 /**
