@@ -548,7 +548,7 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 
 			// 먹는 모드일 경우
 			if(item4Flag) {
-				
+
 			}
 			// 아니면
 			else {
@@ -807,6 +807,9 @@ export function updatePhysics(world, camera, controls) {
 	selectCameraType(object['pacman'], camera, controls)
 
 	Object.keys(object).forEach(function(key) {
-		object[key].update();
+		if(object[key].mesh != undefined && object[key].body != undefined)
+			object[key].update();
+		else
+			delete object[key];
 	});
 }
