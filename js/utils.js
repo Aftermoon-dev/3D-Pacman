@@ -740,6 +740,15 @@ export function playAudio(audioName) {
 }
 
 /**
+ * 오디오 정지
+ * @param {Audio Name} audioName 
+ */
+export function stopAudio(audioName) {
+	audioList[audioName].currentTime = 0;
+	audioList[audioName].pause();
+}
+
+/**
  * Update Physical Engine 
  */
 export function updatePhysics(world, camera, controls) {
