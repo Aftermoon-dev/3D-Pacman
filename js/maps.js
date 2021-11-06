@@ -277,7 +277,7 @@ export function initBasicMap(scene, world, controls, camera) {
 		Utils.object['ground'].position(0, -200, 0);
 
 		// 팩맨
-		Utils.createPacman(scene, world, 0, -15, 0, 180);
+		Utils.createPacman(scene, world, 1000, -15, 0, 180);
 		Utils.setUserEvent(scene, world, Utils.object['pacman'], controls, camera);
 
 		Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
@@ -294,6 +294,9 @@ export function initBasicMap(scene, world, controls, camera) {
 
 		Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
 		Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500);
+
+		// 고스트
+		Utils.createGhost(scene, world, 'ghost1', 0, 300, 0, 0xFFFF00);
 	});
 
 

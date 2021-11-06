@@ -583,10 +583,10 @@ export function removeGlobalEventListener() {
  * Scene 초기화
  * @param {THREE.Scene} scene 
  */
-export function resetScene(scene, objList) {
+export function resetScene(scene) {
 	scene.remove.apply(scene, scene.children);
 	removeGlobalEventListener();
-	for (var item in objList) delete objList[item];
+	for (var item in Object.keys(object)) delete object[item];
 }
 
 /**
