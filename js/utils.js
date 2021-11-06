@@ -62,7 +62,7 @@ export const object = {};
 export const audioList = {
 	'teleport': new Audio("./audio/teleport.mp3"),
 	'gameclear': new Audio("./audio/gameclear.mp3"),
-	'gameover': new Audio("./audio/gameover.wav")
+	'gameover': new Audio("./audio/gameover.mp3")
 };
 
 /* Current Stage */ 
