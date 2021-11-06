@@ -31,7 +31,7 @@ export function initGachonMap(scene, world, controls, camera) {
 	scene.add(hlight);
 
 	// 화면에 Stage 글자 변경
-	document.getElementById("stageNum").innerHTML="STAGE 1";
+	Utils.updateStage(1);
 
     // 바닥 만들기
 	var groundBody = new CANNON.Body({
@@ -276,7 +276,7 @@ export function initBasicMap(scene, world, controls, camera) {
 		map: texture_wall,
 	});
 
-	document.getElementById("stageNum").innerHTML="STAGE 2";
+	Utils.updateStage(2);
 
     // 바닥 만들기
 	var groundBody = new CANNON.Body({

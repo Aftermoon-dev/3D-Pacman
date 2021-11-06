@@ -51,6 +51,9 @@ export const audioList = {
 	'gameover': new Audio("./audio/gameover.wav")
 };
 
+/* Current Stage */ 
+export let currentStage = 0;
+
 /**
  * Mesh Object Class
  */
@@ -344,6 +347,7 @@ export function deleteObject(scene, world, object) {
  * Item4 - Kill the Ghost
  */
 export function applyItem4Event() {
+	//changeGhostColor("ghost1", 0xFFFFFF);
 	item4Flag = true;
 
 	item4Timer = setTimeout(function(){
@@ -383,7 +387,7 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 	// Key를 올렸을 때
 	document.addEventListener("keydown", function(event) {
 		userObject.body.angularDamping = 1;
-		eatCircle(scene, world, controls, userObject);
+		eatCircle(scene, world, controls, camera, userObject);
 
 		switch(event.key) {
 			case "W":
@@ -449,8 +453,8 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 
 	// Key를 뗐을 때 
 	document.addEventListener("keyup", function(event) {
-		eatCircle(scene, world, controls, userObject);
-
+		eatCircle(scene, world, controls, camera, userObject);
+		console.log(event.key);
 		switch(event.key) {
 			case "W":
 			case "w":
@@ -683,7 +687,7 @@ export function createGhost(scene, world, objName, x, y, z, color) {
  * @param {OrbitControls} controls
  * @param {worldObj} object 
  */
- export function deleteCircle(scene, world, controls, object) {
+ export function deleteCircle(scene, world, controls, camera, object) {
 	score += 10;
 	document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
 
@@ -696,11 +700,12 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		}
 	}
 
-	if (score == 80) {  // Stage 1 Clear 점수 넣기!
+	if (score == 70) {  // Stage 1 Clear 점수 넣기!
 		// 두번째 맵으로 전환
 		// 아이템 및 동글이 초기화
 		itemArr = [];
 		circleArr = [];
+		Maps.initBasicMap(scene, world, controls, camera);
 	} else if (score == 160) { // Stage 2 Clear 점수 넣기!
 		// 세번째 맵으로 전환
 		itemArr = [];
@@ -709,6 +714,9 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		itemArr = [];
 		circleArr = [];
 		window.location.href = 'gameclear.html';
+	}
+	else {
+		console.log("Not Finished");
 	}
 }
 
@@ -719,13 +727,13 @@ export function createGhost(scene, world, objName, x, y, z, color) {
  * @param {OrbitControls} controls
  * @param {worldObj} userObject 
  */
- export function eatCircle(scene, world, controls, userObject) {
+ export function eatCircle(scene, world, controls, camera, userObject) {
 	for (var i = 0; i < circleArr.length; i++) {
 		var circleName = 'circle' + circleArr[i];
 		var collisionResult = circleCollisionCheck(userObject, object[circleName]); 
 
 		if (collisionResult == true) {
-			deleteCircle(scene, world, controls, object[circleName]);
+			deleteCircle(scene, world, controls, camera, object[circleName]);
 			console.log(circleArr);
 		}
 	}
@@ -746,6 +754,35 @@ export function playAudio(audioName) {
 export function stopAudio(audioName) {
 	audioList[audioName].currentTime = 0;
 	audioList[audioName].pause();
+}
+
+/**
+ * 스테이지 업데이트
+ * @param {Stage Number} newStage 
+ */
+export function updateStage(newStage) {
+	currentStage = newStage;
+	document.getElementById("stageNum").innerHTML="STAGE " + currentStage;
+}
+
+/**
+ * 고스트 색상 업데이트
+ * @param {object name} objectName 
+ * @param {color} color 
+ */
+export function changeGhostColor(objectName, color) {
+	object[objectName].mesh.traverse((ghost) => {
+		if (ghost.isMesh) {
+			// 눈 부분은 색 안바꾸게
+			if(ghost.material.color.r != 0 ||
+				ghost.material.color.g != 0 ||
+				ghost.material.color.b != 0) {
+					ghost.material.color.set(color);
+				}
+			
+		}
+	});
+	
 }
 
 /**
