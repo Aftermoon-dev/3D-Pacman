@@ -8,7 +8,6 @@ import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQ
 import { OrbitControls } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/controls/OrbitControls.js';
 import * as Utils from './js/utils.js';
 import * as Maps from './js/maps.js';
-import { calculateScore } from './js/utils.js';
 import CannonDebugRenderer from './js/CannonDebugRenderer.js';
 
 
@@ -24,7 +23,6 @@ window.onload = function() {
 	initThreeJS();
 	initCannon();
 	initObject();
-	calculateScore();
 	animate();
 }
 

@@ -13,7 +13,7 @@ import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVC
 /* Setting */
 const timeStep = 1/30;
 
-export var userSpeed = 500; //유저의 속도를 결정 -> 나중에 아이템에서 써먹을수있음
+export var userSpeed = 250; //유저의 속도를 결정
 export var pacman_height = 180; //팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
 export var pacman_height2D = 8000; //2D view height
 
@@ -23,6 +23,7 @@ export const loader = new GLTFLoader();
 export var useitem = true; //item 적용할꺼면 true로
 
 export var itemArr = [];
+export var circleArr = [];
 export var item1Flag = true;
 export var item1Timer;
 export var item2Timer;
@@ -30,6 +31,7 @@ export var item3Flag = 180; // 팩맨 크기 넣어주기
 export var item3Timer;
 export var item4Flag = true;
 export var item4Timer;
+export var item5Timer;
 
 /* Score Setting */
 export var score = 0;
@@ -178,7 +180,8 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 	});
 	
 	createNewObject(scene, world, 'pacman', pacmanMesh, pacmanBody);
-	object['pacman'].position(posx, posy, posz);}
+	object['pacman'].position(posx, posy, posz);
+}
 
 /**
  * 벽 생성
@@ -302,7 +305,7 @@ export function deleteObject(scene, world, object) {
 	} else if (itemName == 'item4') {
 		// applyItem4Event();
 	} else if (itemName == 'item5') {
-		// applyItem5Event();
+		applyItem5Event();
 	}
 }
 
@@ -326,13 +329,13 @@ export function deleteObject(scene, world, object) {
 	// Random Integer 값을 이용해 0 ~ 4 = Speed Down / 5 ~ 9 = Speed Up
 
 	if (speedFlag <= 4) {
-		userSpeed = 200;
+		userSpeed = 100;
 	} else {
-		userSpeed = 1000;
+		userSpeed = 500;
 	}
  
 	item2Timer = setTimeout(function(){
-		userSpeed = 500;
+		userSpeed = 250;
 	}, 8000)
 }
 
@@ -391,11 +394,11 @@ export function deleteObject(scene, world, object) {
  * Item5 - Change 3D -> 2D
  */
  export function applyItem5Event() {
-	/*
-	item5Timer = setTimeout(function(){
+	if2D = true;
 
-	}, 8000);
-	*/
+	item5Timer = setTimeout(function(){
+		if2D = false
+	}, 10000);
 }
 
 /**
@@ -405,7 +408,7 @@ export function deleteObject(scene, world, object) {
  * @param {OrbitControls} controls
  * @param {worldObj} userObject 
  */
- export function eatItem(scene, world, controls, userObject) {
+export function eatItem(scene, world, controls, userObject) {
 	if (useitem == true){
 		for (var i = 0; i < itemArr.length; i++) { // To Check the Collision with All items
 			var collisionResult = itemCollisionCheck(userObject, object[itemArr[i]]); // Check the Collision with item
@@ -423,7 +426,7 @@ export function deleteObject(scene, world, object) {
 /**
  * 적용된 아이템 확인
  */
- export function checkItemState() {
+export function checkItemState() {
 	 /*
 	console.log('Arror = ' + item1Flag); // Item1
 	console.log('Pacman Speed = ' + userSpeed); // Item2
@@ -441,7 +444,6 @@ export function deleteObject(scene, world, object) {
  * @param {OrbitControls} controls
  * @param {PerspectiveCamera} camera
  */
-
 export function setUserEvent(scene, world, userObject, controls, camera) {
 	userObject.body.velocity.set(0, 0, 0);
 	userObject.body.angularDamping = 1;
@@ -456,6 +458,7 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 	document.addEventListener("keydown", function(event) {
 		userObject.body.angularDamping = 1;
 		eatItem(scene, world, controls, userObject);
+		eatCircle(scene, world, userObject);
 
 		switch(event.key) {
 			case "W":
@@ -502,6 +505,7 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 				}
 				break;
 
+			// 이부분은 팩맨 커지는 아이템에 사용하면 될 듯
 			//임시로 넣어둔 부분! 누르면 팩맨 카메라 높이가 올라감
 			case "Z":
 			case "z":
@@ -515,24 +519,13 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 				if (if2D == false)
 					pacman_height -= 30;
 				break;
-
-			//임시로 넣어둔 부분! 누르면 팩맨 속도 증가
-			case "N":
-			case "n":
-				userSpeed += 100;
-				break;
-
-			//임시로 넣어둔 부분! 누르면 팩맨 속도 감소
-			case "M":
-			case "m":
-				userSpeed -= 100;
-				break;
 		}
 	});
 
 	// Key를 뗐을 때 
 	document.addEventListener("keyup", function(event) {
 		eatItem(scene, world, controls, userObject);
+		eatCircle(scene, world, userObject);
 
 		switch(event.key) {
 			case "W":
@@ -705,10 +698,78 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 }
 
 /**
- * Calculate Score
+ * 동글이 만들기
+ * @param {THREE.Scene} scene 
+ * @param {CANNON.World} world 
+ * @param {X} posx 
+ * @param {Y} posy 
+ * @param {Z} posz 
+ * @param {Integer} circleNumber
  */
-export function calculateScore() {
+ export function createCircle(scene, world, posx, posy, posz, circleNumber) {
+	var circleMesh = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd400 }))
+	var circleBody = new CANNON.Body({ 
+		shape: new CANNON.Sphere(40),
+		collisionFilterGroup: 128,
+	});
+
+	var circleName = 'circle' + circleNumber;
+	
+	createNewObject(scene, world, circleName, circleMesh, circleBody);
+	object[circleName].position(posx, posy, posz);
+	circleArr.push(circleNumber);
+}
+
+/**
+ * 동글이와 충돌 여부 확인 - Step (1)
+ * @param {worldObj} pacman 
+ * @param {worldObj} circle
+ */
+ export function circleCollisionCheck(pacman, circle) {
+	var distance = Math.pow((Math.pow((pacman.body.position.x - circle.body.position.x), 2) + Math.pow((pacman.body.position.z - circle.body.position.z), 2)), 1/2)
+
+	if (distance <= 200 + 60) // distance <= pacmanRadius + itemRadius (범위 좀 더 넓게)
+		return true;
+	else
+		return false;
+}
+
+/**
+ * 먹은 동글이 삭제 - Step (2)
+ * @param {THREE.Scene} scene 
+ * @param {CANNON.World} world 
+ * @param {worldObj} object 
+ */
+ export function deleteCircle(scene, world, object) {
+	score += 10;
 	document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
+
+	world.removeBody(object.body);
+	scene.remove(object.mesh);
+
+	for (var i = 0; i < circleArr.length; i++) {
+		if (circleArr[i] == object.objName.substr(6)) {
+			circleArr.splice(i, 1);
+		}
+	}
+}
+
+/**
+ * Eat Circle Final
+ * @param {THREE.Scene} scene
+ * @param {CANNON.World} world 
+ * @param {worldObj} userObject 
+ */
+ export function eatCircle(scene, world, userObject) {
+	for (var i = 0; i < circleArr.length; i++) {
+		var circleName = 'circle' + circleArr[i];
+		var collisionResult = circleCollisionCheck(userObject, object[circleName]); 
+
+		if (collisionResult == true) {
+			deleteCircle(scene, world, object[circleName]);
+			console.log(circleArr);
+		}
+	}
 }
 
 /**

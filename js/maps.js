@@ -207,8 +207,8 @@ export function initGachonMap(scene, world, controls, camera) {
 	// Math.random() * (맵크기 / 간격 + 1) * (간격 얼마나 줄건지) - (맵크기 / 2)
 
 	// 아이템 종류
-	//  -> 방향키 반대로 (빨강) / 팩맨 크기 커지는 것 (주황) / 3D -> 2D 시야 변경 (연두)
-	//  -> 유렁 먹을 수 있게 되는 것 (하늘) / 속도 빨라지거나 느려지게 하는 것 (분홍)
+	//  -> 방향키 반대로 (빨강) / 속도 빨라지거나 느려지게 하는 것 (주황) / 팩맨 크기 커지는 것 (연두)
+	//  -> 유령 먹을 수 있게 되는 것 (하늘) / 3D -> 2D 시야 변경 (분홍)
 
 	Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
 	Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500); 
@@ -224,6 +224,17 @@ export function initGachonMap(scene, world, controls, camera) {
 	
 	Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
 	Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+
+	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 1);
+	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 2);
+	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 3);
+	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 4);
+	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 5);
+	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 6);
+	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 7);
+	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 8);
+	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 9);
+	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500, 10);
 
 	// 텔레포트 구현
 	const obj1Pos = Utils.object['tpnorth'].body.position;
