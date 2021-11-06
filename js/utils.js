@@ -699,7 +699,7 @@ export function createGhost(scene, world, objName, x, y, z, color) {
  * @param {Integer} circleNumber
  */
  export function createCircle(scene, world, posx, posy, posz, circleNumber) {
-	var circleMesh = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd400 }))
+	var circleMesh = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 16), new THREE.MeshBasicMaterial({ color: 0xFFFF7D }))
 	var circleBody = new CANNON.Body({ 
 		shape: new CANNON.Sphere(40),
 		collisionFilterGroup: 128,
