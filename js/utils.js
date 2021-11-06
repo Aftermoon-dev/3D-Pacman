@@ -41,7 +41,7 @@ export var circleArr = [];
 export var item1Flag = true;
 export var item1Timer;
 export var item2Timer;
-export var item3Flag = 180; // 팩맨 크기 넣어주기
+export var item3Flag = 220; // 팩맨 크기 넣어주기
 export var item3Timer;
 export var item4Flag = false;
 export var item4Timer;
@@ -326,34 +326,30 @@ export function deleteObject(scene, world, object) {
  * @param {worldObj} userObject 
  * @param {OrbitControls} controls
  */
- export function applyItem3Event(scene, world, userObject, controls) {
+ export function applyItem3Event(scene, world, userObject, controls, camera) {
 	var x = userObject.body.position.x;
-	var y = userObject.body.position.y;
+	var y = userObject.body.position.y + 50;
 	var z = userObject.body.position.z;
 
-	createPacman(scene, world, x, y, z, 300);
-	setUserEvent(scene, world, object['pacman'], controls, camera);
-
-	item3Flag = 300;
-
-	//////////////////////////////////
-	// 물리엔진 body 없애기
-
-	// world.removeBody(userObject.body);
+	world.removeBody(userObject.body);
 	scene.remove(userObject.mesh);
 
+	createPacman(scene, world, x, y, z, item3Flag);
+	setUserEvent(scene, world, object['pacman'], controls, camera);
+	pacman_height += 30;
+
 	item3Timer = setTimeout(function(){
-	// world.removeBody(object['pacman'].body);
+		world.removeBody(object['pacman'].body);
 		scene.remove(object['pacman'].mesh);
 
 		var x = object['pacman'].body.position.x;
-		var y = object['pacman'].body.position.y;
+		var y = object['pacman'].body.position.y - 20;
 		var z = object['pacman'].body.position.z;
 
-		createPacman(scene, world, x, y, z, 180);
+		createPacman(scene, world, x, y, z, 180); // Default 180
 		setUserEvent(scene, world, object['pacman'], controls, camera);
 
-		item3Flag = 180;
+		pacman_height -= 30;
 	}, 8000);
 }
 
@@ -468,7 +464,6 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 	// Key를 뗐을 때 
 	document.addEventListener("keyup", function(event) {
 		eatCircle(scene, world, controls, camera, userObject);
-		console.log(event.key);
 		switch(event.key) {
 			case "W":
 			case "w":
@@ -507,7 +502,7 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 			applyItem2Event();
 			deleteObject(scene, world, object['item2']);
 		} else if (e.body.type == 103) {
-			// applyItem3Event(scene, world, userObject, controls);
+			applyItem3Event(scene, world, userObject, controls, camera);
 			deleteObject(scene, world, object['item3']);
 		} else if (e.body.type == 104) {
 			applyItem4Event();
