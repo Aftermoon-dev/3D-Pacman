@@ -12,9 +12,10 @@ import * as Maps from '../js/maps.js'
 /* Setting */
 const timeStep = 1/30;
 
-export var userSpeed = 250; //유저의 속도를 결정
+export var userSpeed = 500; //유저의 속도를 결정
 export var pacman_height = 180; //팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
 export var pacman_height2D = 8000; //2D view height
+export var ghostSpeed = 450; // 고스트 속도
 
 export const loader = new GLTFLoader();
  
@@ -291,13 +292,13 @@ export function deleteObject(scene, world, object) {
 	// Random Integer 값을 이용해 0 ~ 4 = Speed Down / 5 ~ 9 = Speed Up
 
 	if (speedFlag <= 4) {
-		userSpeed = 100;
+		userSpeed = 300;
 	} else {
-		userSpeed = 500;
+		userSpeed = 700;
 	}
  
 	item2Timer = setTimeout(function(){
-		userSpeed = 250;
+		userSpeed = 500;
 	}, 8000)
 }
 
