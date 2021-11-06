@@ -17,8 +17,22 @@ export var pacman_height = 180; //팩맨의 카메라 높이 결정  -> 나중�
 export var pacman_height2D = 8000; //2D view height
 export var ghostSpeed = 450; // 고스트 속도
 
-export const loader = new GLTFLoader();
- 
+export const loadManager = new THREE.LoadingManager();
+loadManager.onStart = () => {
+	document.getElementById("loading").style.visibility = "visible";
+	isloadingFinished = false;
+}
+
+loadManager.onLoad = () => {
+	document.getElementById("loading").style.visibility = "hidden";
+	console.log("Loading Finished");
+	isloadingFinished = true;
+};
+
+export const loader = new GLTFLoader(loadManager);
+export const textureLoader = new THREE.TextureLoader(loadManager);
+export let isloadingFinished = false; // 로딩 완료 여부 확인
+
 /* Item Setting */
 export var useitem = true; //item 적용할꺼면 true로
 
@@ -50,6 +64,9 @@ export const audioList = {
 	'gameclear': new Audio("./audio/gameclear.mp3"),
 	'gameover': new Audio("./audio/gameover.wav")
 };
+
+/* Current Stage */ 
+export let currentStage = 0;
 
 /**
  * Mesh Object Class
@@ -344,6 +361,7 @@ export function deleteObject(scene, world, object) {
  * Item4 - Kill the Ghost
  */
 export function applyItem4Event() {
+	//changeGhostColor("ghost1", 0xFFFFFF);
 	item4Flag = true;
 
 	item4Timer = setTimeout(function(){
@@ -383,7 +401,7 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 	// Key를 올렸을 때
 	document.addEventListener("keydown", function(event) {
 		userObject.body.angularDamping = 1;
-		eatCircle(scene, world, controls, userObject);
+		eatCircle(scene, world, controls, camera, userObject);
 
 		switch(event.key) {
 			case "W":
@@ -449,8 +467,8 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 
 	// Key를 뗐을 때 
 	document.addEventListener("keyup", function(event) {
-		eatCircle(scene, world, controls, userObject);
-
+		eatCircle(scene, world, controls, camera, userObject);
+		console.log(event.key);
 		switch(event.key) {
 			case "W":
 			case "w":
@@ -683,7 +701,7 @@ export function createGhost(scene, world, objName, x, y, z, color) {
  * @param {OrbitControls} controls
  * @param {worldObj} object 
  */
- export function deleteCircle(scene, world, controls, object) {
+ export function deleteCircle(scene, world, controls, camera, object) {
 	score += 10;
 	document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
 
@@ -696,11 +714,12 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		}
 	}
 
-	if (score == 80) {  // Stage 1 Clear 점수 넣기!
+	if (score == 70) {  // Stage 1 Clear 점수 넣기!
 		// 두번째 맵으로 전환
 		// 아이템 및 동글이 초기화
 		itemArr = [];
 		circleArr = [];
+		Maps.initBasicMap(scene, world, controls, camera);
 	} else if (score == 160) { // Stage 2 Clear 점수 넣기!
 		// 세번째 맵으로 전환
 		itemArr = [];
@@ -709,6 +728,9 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		itemArr = [];
 		circleArr = [];
 		window.location.href = 'gameclear.html';
+	}
+	else {
+		console.log("Not Finished");
 	}
 }
 
@@ -719,13 +741,13 @@ export function createGhost(scene, world, objName, x, y, z, color) {
  * @param {OrbitControls} controls
  * @param {worldObj} userObject 
  */
- export function eatCircle(scene, world, controls, userObject) {
+ export function eatCircle(scene, world, controls, camera, userObject) {
 	for (var i = 0; i < circleArr.length; i++) {
 		var circleName = 'circle' + circleArr[i];
 		var collisionResult = circleCollisionCheck(userObject, object[circleName]); 
 
 		if (collisionResult == true) {
-			deleteCircle(scene, world, controls, object[circleName]);
+			deleteCircle(scene, world, controls, camera, object[circleName]);
 			console.log(circleArr);
 		}
 	}
@@ -749,19 +771,50 @@ export function stopAudio(audioName) {
 }
 
 /**
+ * 스테이지 업데이트
+ * @param {Stage Number} newStage 
+ */
+export function updateStage(newStage) {
+	currentStage = newStage;
+	document.getElementById("stageNum").innerHTML="STAGE " + currentStage;
+}
+
+/**
+ * 고스트 색상 업데이트
+ * @param {object name} objectName 
+ * @param {color} color 
+ */
+export function changeGhostColor(objectName, color) {
+	object[objectName].mesh.traverse((ghost) => {
+		if (ghost.isMesh) {
+			// 눈 부분은 색 안바꾸게
+			if(ghost.material.color.r != 0 ||
+				ghost.material.color.g != 0 ||
+				ghost.material.color.b != 0) {
+					ghost.material.color.set(color);
+				}
+			
+		}
+	});
+	
+}
+
+/**
  * Update Physical Engine 
  */
 export function updatePhysics(world, camera, controls) {
-	// Step the physics world
-	world.step(timeStep);
+	if (isloadingFinished) {
+		// Step the physics world
+		world.step(timeStep);
 
-	//카메라 설정
-	selectCameraType(object['pacman'], camera, controls)
+		//카메라 설정
+		selectCameraType(object['pacman'], camera, controls)
 
-	Object.keys(object).forEach(function(key) {
-		if(object[key].mesh != undefined && object[key].body != undefined)
-			object[key].update();
-		else
-			delete object[key];
-	});
+		Object.keys(object).forEach(function(key) {
+			if(object[key].mesh != undefined && object[key].body != undefined)
+				object[key].update();
+			else
+				delete object[key];
+		});
+	}
 }

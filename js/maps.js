@@ -22,25 +22,23 @@ import * as Utils from './utils.js';
 
  */
 export function initGachonMap(scene, world, controls, camera) {
-	document.getElementById("loading").style.visibility = "visible";
-
-    // Scene 리셋
-    Utils.resetScene(scene);
+	// Scene 리셋
+	Utils.resetScene(scene);
 
 	const hlight = new THREE.AmbientLight(0x404040, 100);
 	scene.add(hlight);
 
 	// 화면에 Stage 글자 변경
-	document.getElementById("stageNum").innerHTML="STAGE 1";
+	Utils.updateStage(1);
 
-    // 바닥 만들기
+	// 바닥 만들기
 	var groundBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 500 / 2, 8000 / 2)),
 		collisionFilterGroup: 2,
 		collisionFilterMask: 1 | 64,
 		mass: 0
 	});
-	Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(10000, 500, 8000), new THREE.MeshBasicMaterial({ color: 0x808080})), groundBody);
+	Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(10000, 500, 8000), new THREE.MeshBasicMaterial({ color: 0x808080 })), groundBody);
 	Utils.object['ground'].position(0, -200, 0);
 
 	/** 벽 만들기 **/
@@ -233,7 +231,7 @@ export function initGachonMap(scene, world, controls, camera) {
 	const obj1Pos = Utils.object['tpnorth'].body.position;
 	const obj2Pos = Utils.object['tpsouth'].body.position;
 
-	Utils.object['tpnorth'].body.addEventListener("collide", function(e) {
+	Utils.object['tpnorth'].body.addEventListener("collide", function (e) {
 		if (e.body.type == 1) {
 			Utils.stopAudio('teleport');
 			Utils.playAudio('teleport');
@@ -241,7 +239,7 @@ export function initGachonMap(scene, world, controls, camera) {
 		}
 	});
 
-	Utils.object['tpsouth'].body.addEventListener("collide", function(e) {
+	Utils.object['tpsouth'].body.addEventListener("collide", function (e) {
 		if (e.body.type == 1) {
 			Utils.stopAudio('teleport');
 			Utils.playAudio('teleport');
@@ -252,167 +250,164 @@ export function initGachonMap(scene, world, controls, camera) {
 	// 팩맨
 	Utils.createPacman(scene, world, 600, 230, 0, 180);
 	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls, camera);
-	
+
 	// 고스트
 	Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
-	
-	document.getElementById("loading").style.visibility = "hidden";
-}	
+}
 
 export function initBasicMap(scene, world, controls, camera) {
-	document.getElementById("loading").style.visibility = "visible";
-
 	// Scene 리셋
-    Utils.resetScene(scene);
+	Utils.resetScene(scene);
+
+	Utils.updateStage(2);
 
 	// 바닥과 벽 택스쳐 가져오기
-	var textureLoader = new THREE.TextureLoader();
-	var texture_wall = textureLoader.load('textures/wall_texture_01.jpg');
-    var texture_ground = textureLoader.load('textures/ground_texture_02.jpg');
-	const ground_material = new THREE.MeshBasicMaterial({
-		map: texture_ground,
+	Utils.textureLoader.load('textures/ground_texture_02.jpg', (texture) => {
+		const ground_material = new THREE.MeshBasicMaterial({
+			map: texture,
+		});
+
+		// 바닥 만들기
+		var groundBody = new CANNON.Body({
+			shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 5 / 2, 8000 / 2)),
+			collisionFilterGroup: 2,
+			mass: 0
+		});
+		Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(7000, 5, 8000), ground_material), groundBody);
+		Utils.object['ground'].position(0, -200, 0);
+
+		// 팩맨
+		Utils.createPacman(scene, world, 0, 230, 0, 180);
+		Utils.setUserEvent(scene, world, Utils.object['pacman'], controls, camera);
+
+		Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
+		Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+
+		Utils.createItemObject(scene, world, 'item2', 0xffc000, 102);
+		Utils.object['item2'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+
+		Utils.createItemObject(scene, world, 'item3', 0x92d050, 103);
+		Utils.object['item3'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+
+		Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104);
+		Utils.object['item4'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+
+		Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
+		Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
 	});
-	const wall_material = new THREE.MeshBasicMaterial({
-		map: texture_wall,
+
+
+	Utils.textureLoader.load('textures/wall_texture_01.jpg', (texture) => {
+		const wall_material = new THREE.MeshBasicMaterial({
+			map: texture,
+		});
+
+		/** 벽 만들기 **/
+
+		// C (고스트 시작 위치)
+		Utils.createWallObject(scene, world, 'wall1', 0xFFFFFF, 100, 800, 1600);
+		Utils.object['wall1'].position(0, 0, -400); // x,y,z (오른쪽으로 얼마나 갈건지(음수면 왼쪽),위로 얼마나 올라갈건지(공중),하단으로 얼마나 갈건지(음수면 상단으로))
+		Utils.object['wall1'].rotateY(90);
+		Utils.createWallObject(scene, world, 'wall2', 0xFFFFFF, 100, 800, 800);
+		Utils.object['wall2'].position(-750, 0, 0);
+		Utils.createWallObject(scene, world, 'wall3', 0xFFFFFF, 100, 800, 1600);
+		Utils.object['wall3'].position(0, 0, 400);
+		Utils.object['wall3'].rotateY(90);
+		// Utils.createStartWallObject(scene, world, 'ghost_wall', 100, 600, 800); // Ghost 출발 벽
+		// Utils.object['ghost_wall'].position(750, 0, 0);
+
+		// 아래 튀어나온 Teleport 벽
+		Utils.createWallObject(scene, world, 'wall4', 0x333366, 800, 800, 1200);
+		Utils.object['wall4'].position(0, 0, 3400); // x,y,z 
+
+		// 위 튀어나온 Teleport 벽
+		Utils.createWallObject(scene, world, 'wall5', 0x333366, 800, 800, 1200);
+		Utils.object['wall5'].position(0, 0, -3400); // x,y,z 
+
+		// 왼쪽 하단 Teleport 벽
+		Utils.createWallObject(scene, world, 'wall6', 0x333366, 2300, 800, 300);
+		Utils.object['wall6'].position(-2350, 0, 2950); // x,y,z 
+
+		// 오른쪽 상단 Teleport 벽
+		Utils.createWallObject(scene, world, 'wall7', 0x333366, 2300, 800, 300);
+		Utils.object['wall7'].position(2350, 0, -2950); // x,y,z 
+
+		// 고스트 벽 바로 왼쪽 벽
+		Utils.createWallObject(scene, world, 'wall8', 0x330033, 200, 800, 1000);
+		Utils.object['wall8'].position(-1600, 0, 0); // x,y,z 
+
+		// 고스트 벽 바로 오른쪽 벽
+		Utils.createWallObject(scene, world, 'wall9', 0x330033, 200, 800, 1000);
+		Utils.object['wall9'].position(1600, 0, 0); // x,y,z 
+
+		// wall 8의 왼쪽 벽
+		Utils.createWallObject(scene, world, 'wall10', 0x330033, 200, 800, 2800);
+		Utils.object['wall10'].position(-2500, 0, 0); // x,y,z 
+
+		// wall 9의 오른쪽 벽
+		Utils.createWallObject(scene, world, 'wall11', 0x330033, 200, 800, 2800);
+		Utils.object['wall11'].position(2500, 0, 0); // x,y,z 
+
+		// wall 12
+		Utils.createWallObject(scene, world, 'wall12', 0x330033, 100, 800, 1600);
+		Utils.object['wall12'].position(-1800, 0, -2850); // x,y,z 
+		Utils.object['wall12'].rotateY(90);
+		// wall 13
+		Utils.createWallObject(scene, world, 'wall13', 0x330033, 100, 800, 1600);
+		Utils.object['wall13'].position(1800, 0, 2850); // x,y,z 
+		Utils.object['wall13'].rotateY(90);
+
+		// wall 14
+		Utils.createWallObject(scene, world, 'wall14', 0x330033, 100, 800, 1600);
+		Utils.object['wall14'].position(-1800, 0, -2100); // x,y,z 
+		Utils.object['wall14'].rotateY(90);
+		// wall 15
+		Utils.createWallObject(scene, world, 'wall15', 0x330033, 100, 800, 1600);
+		Utils.object['wall15'].position(1800, 0, 2100); // x,y,z 
+		Utils.object['wall15'].rotateY(90);
+		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+		// wall 16
+		Utils.createWallObject(scene, world, 'wall16', 0x330033, 200, 800, 1000);
+		Utils.object['wall16'].position(-1600, 0, -1600); // x,y,z 
+		// wall 17
+		Utils.createWallObject(scene, world, 'wall17', 0x330033, 200, 800, 1000);
+		Utils.object['wall17'].position(1600, 0, 1600); // x,y,z 
+
+		// wall 18
+		Utils.createWallObject(scene, world, 'wall18', 0x330033, 100, 800, 2800);
+		Utils.object['wall18'].position(1200, 0, -2100); // x,y,z 
+		Utils.object['wall18'].rotateY(90);
+		// wall 19
+		Utils.createWallObject(scene, world, 'wall19', 0x330033, 100, 800, 2800);
+		Utils.object['wall19'].position(-1200, 0, 2100); // x,y,z 
+		Utils.object['wall19'].rotateY(90);
+
+		// wall 20
+		Utils.createWallObject(scene, world, 'wall20', 0x330033, 100, 800, 1100);
+		Utils.object['wall20'].position(1100, 0, -1150); // x,y,z 
+		Utils.object['wall20'].rotateY(90);
+		// wall 21
+		Utils.createWallObject(scene, world, 'wall21', 0x330033, 100, 800, 1100);
+		Utils.object['wall21'].position(-1100, 0, 1150); // x,y,z 
+		Utils.object['wall21'].rotateY(90);
+
+		// wall 22
+		Utils.createWallObject(scene, world, 'wall22', 0x330033, 200, 800, 1000);
+		Utils.object['wall22'].position(-100, 0, -1600); // x,y,z 
+		// wall 23
+		Utils.createWallObject(scene, world, 'wall23', 0x330033, 200, 800, 1000);
+		Utils.object['wall23'].position(100, 0, 1600); // x,y,z 
+
+		// 맵 감싸는 벽
+		Utils.createWallObjectWithTexture(scene, world, 'wall24', 0xFF0033, 300, 800, 7800, wall_material);
+		Utils.object['wall24'].position(0, 0, -4000);
+		Utils.object['wall24'].rotateY(90);
+		Utils.createWallObjectWithTexture(scene, world, 'wall25', 0xFF0033, 300, 800, 7800, wall_material);
+		Utils.object['wall25'].position(0, 0, 4000);
+		Utils.object['wall25'].rotateY(90);
+		Utils.createWallObjectWithTexture(scene, world, 'wall26', 0xFF0033, 300, 800, 7800, wall_material);
+		Utils.object['wall26'].position(3500, 0, 0);
+		Utils.createWallObjectWithTexture(scene, world, 'wall27', 0xFF0033, 300, 800, 7800, wall_material);
+		Utils.object['wall27'].position(-3500, 0, 0);
 	});
-
-	document.getElementById("stageNum").innerHTML="STAGE 2";
-
-    // 바닥 만들기
-	var groundBody = new CANNON.Body({
-		shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 5 / 2, 8000 / 2)),
-		collisionFilterGroup: 2,
-		mass: 0
-	});
-	Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(7000, 5, 8000), ground_material), groundBody);
-	Utils.object['ground'].position(0, -200, 0);
-
-	/** 벽 만들기 **/
-
-	// C (고스트 시작 위치)
-	Utils.createWallObject(scene, world, 'wall1', 0xFFFFFF, 100, 800, 1600);
-	Utils.object['wall1'].position(0, 0, -400); // x,y,z (오른쪽으로 얼마나 갈건지(음수면 왼쪽),위로 얼마나 올라갈건지(공중),하단으로 얼마나 갈건지(음수면 상단으로))
-	Utils.object['wall1'].rotateY(90);
-	Utils.createWallObject(scene, world, 'wall2', 0xFFFFFF, 100, 800, 800);
-	Utils.object['wall2'].position(-750, 0, 0);
-	Utils.createWallObject(scene, world, 'wall3', 0xFFFFFF, 100, 800, 1600);
-	Utils.object['wall3'].position(0, 0, 400);
-	Utils.object['wall3'].rotateY(90);
-	// Utils.createStartWallObject(scene, world, 'ghost_wall', 100, 600, 800); // Ghost 출발 벽
-	// Utils.object['ghost_wall'].position(750, 0, 0);
-
-	// 아래 튀어나온 Teleport 벽
-	Utils.createWallObject(scene, world, 'wall4', 0x333366, 800, 800, 1200);
-	Utils.object['wall4'].position(0, 0, 3400); // x,y,z 
-
-	// 위 튀어나온 Teleport 벽
-	Utils.createWallObject(scene, world, 'wall5', 0x333366, 800, 800, 1200);
-	Utils.object['wall5'].position(0, 0, -3400); // x,y,z 
-	
-	// 왼쪽 하단 Teleport 벽
-	Utils.createWallObject(scene, world, 'wall6', 0x333366, 2300, 800, 300);
-	Utils.object['wall6'].position(-2350, 0, 2950); // x,y,z 
-
-	// 오른쪽 상단 Teleport 벽
-	Utils.createWallObject(scene, world, 'wall7', 0x333366, 2300, 800, 300);
-	Utils.object['wall7'].position(2350, 0, -2950); // x,y,z 
-
-	// 고스트 벽 바로 왼쪽 벽
-	Utils.createWallObject(scene, world, 'wall8', 0x330033, 200, 800, 1000);
-	Utils.object['wall8'].position(-1600, 0, 0); // x,y,z 
-
-	// 고스트 벽 바로 오른쪽 벽
-	Utils.createWallObject(scene, world, 'wall9', 0x330033, 200, 800, 1000);
-	Utils.object['wall9'].position(1600, 0, 0); // x,y,z 
-
-	// wall 8의 왼쪽 벽
-	Utils.createWallObject(scene, world, 'wall10', 0x330033, 200, 800, 2800);
-	Utils.object['wall10'].position(-2500, 0, 0); // x,y,z 
-
-	// wall 9의 오른쪽 벽
-	Utils.createWallObject(scene, world, 'wall11', 0x330033, 200, 800, 2800);
-	Utils.object['wall11'].position(2500, 0, 0); // x,y,z 
-
-	// wall 12
-	Utils.createWallObject(scene, world, 'wall12', 0x330033, 100, 800, 1600);
-	Utils.object['wall12'].position(-1800, 0, -2850); // x,y,z 
-	Utils.object['wall12'].rotateY(90);
-	// wall 13
-	Utils.createWallObject(scene, world, 'wall13', 0x330033, 100, 800, 1600);
-	Utils.object['wall13'].position(1800, 0, 2850); // x,y,z 
-	Utils.object['wall13'].rotateY(90);
-
-	// wall 14
-	Utils.createWallObject(scene, world, 'wall14', 0x330033, 100, 800, 1600);
-	Utils.object['wall14'].position(-1800, 0, -2100); // x,y,z 
-	Utils.object['wall14'].rotateY(90);
-	// wall 15
-	Utils.createWallObject(scene, world, 'wall15', 0x330033, 100, 800, 1600);
-	Utils.object['wall15'].position(1800, 0, 2100); // x,y,z 
-	Utils.object['wall15'].rotateY(90);
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	// wall 16
-	Utils.createWallObject(scene, world, 'wall16', 0x330033, 200, 800, 1000);
-	Utils.object['wall16'].position(-1600, 0, -1600); // x,y,z 
-	// wall 17
-	Utils.createWallObject(scene, world, 'wall17', 0x330033, 200, 800, 1000);
-	Utils.object['wall17'].position(1600, 0, 1600); // x,y,z 
-
-	// wall 18
-	Utils.createWallObject(scene, world, 'wall18', 0x330033, 100, 800, 2800);
-	Utils.object['wall18'].position(1200, 0, -2100); // x,y,z 
-	Utils.object['wall18'].rotateY(90);
-	// wall 19
-	Utils.createWallObject(scene, world, 'wall19', 0x330033, 100, 800, 2800);
-	Utils.object['wall19'].position(-1200, 0, 2100); // x,y,z 
-	Utils.object['wall19'].rotateY(90);
-
-	// wall 20
-	Utils.createWallObject(scene, world, 'wall20', 0x330033, 100, 800, 1100);
-	Utils.object['wall20'].position(1100, 0, -1150); // x,y,z 
-	Utils.object['wall20'].rotateY(90);
-	// wall 21
-	Utils.createWallObject(scene, world, 'wall21', 0x330033, 100, 800, 1100);
-	Utils.object['wall21'].position(-1100, 0, 1150); // x,y,z 
-	Utils.object['wall21'].rotateY(90);
-
-	// wall 22
-	Utils.createWallObject(scene, world, 'wall22', 0x330033, 200, 800, 1000);
-	Utils.object['wall22'].position(-100, 0, -1600); // x,y,z 
-	// wall 23
-	Utils.createWallObject(scene, world, 'wall23', 0x330033, 200, 800, 1000);
-	Utils.object['wall23'].position(100, 0, 1600); // x,y,z 
-
-	// 맵 감싸는 벽
-	Utils.createWallObjectWithTexture(scene, world, 'wall24', 0xFF0033, 300, 800, 7800, wall_material);
-	Utils.object['wall24'].position(0, 0, -4000);
-	Utils.object['wall24'].rotateY(90);
-	Utils.createWallObjectWithTexture(scene, world, 'wall25', 0xFF0033, 300, 800, 7800,wall_material);
-	Utils.object['wall25'].position(0, 0, 4000);
-	Utils.object['wall25'].rotateY(90);
-	Utils.createWallObjectWithTexture(scene, world, 'wall26', 0xFF0033, 300, 800, 7800,wall_material);
-	Utils.object['wall26'].position(3500, 0, 0);
-	Utils.createWallObjectWithTexture(scene, world, 'wall27', 0xFF0033, 300, 800, 7800,wall_material);
-	Utils.object['wall27'].position(-3500, 0, 0);
-
-	// 팩맨
-	Utils.createPacman(scene, world, 0, 230, 0, 180);
-	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls, camera);
-
-	Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
-	Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500); 
-
-	Utils.createItemObject(scene, world, 'item2', 0xffc000, 102);
-	Utils.object['item2'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
-	
-	Utils.createItemObject(scene, world, 'item3', 0x92d050, 103);
-	Utils.object['item3'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
-	
-	Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104);
-	Utils.object['item4'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
-	
-	Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
-	Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
-
-	document.getElementById("loading").style.visibility = "hidden";
-}	
+}
