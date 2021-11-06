@@ -751,7 +751,7 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		}
 	}
 
-	if (score == 80) {  // Stage 1 Clear 점수 넣기!
+	if (score == 20) {  // Stage 1 Clear 점수 넣기!
 		// 두번째 맵으로 전환
 		// 아이템 및 동글이 초기화
 		itemArr = [];
@@ -764,13 +764,7 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		// 게임 마무리 창? 띄우기
 		itemArr = [];
 		circleArr = [];
-		window.open('gameclear.html');
-		playAudio('gameclear');
-		// 나중에 고스트 만들고 난 이후에 위치 옮기기!
-		/*
-		window.open('gameover.html');
-		playAudio('gameover');
-		*/
+		window.location.href = 'gameclear.html';
 	}
 }
 
