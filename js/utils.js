@@ -771,6 +771,14 @@ export function stopAudio(audioName) {
 }
 
 /**
+ * 팩맨 카메라 높이 변경
+ * @param {Pacman height} height 
+ */
+ export function ChangePacmanHeight(height){
+	pacman_height = height;
+}
+
+/**
  * 스테이지 업데이트
  * @param {Stage Number} newStage 
  */

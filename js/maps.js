@@ -260,7 +260,7 @@ export function initBasicMap(scene, world, controls, camera) {
 	Utils.resetScene(scene);
 
 	Utils.updateStage(2);
-
+	Utils.ChangePacmanHeight(80);
 	// 바닥과 벽 택스쳐 가져오기
 	Utils.textureLoader.load('textures/ground_texture_02.jpg', (texture) => {
 		const ground_material = new THREE.MeshBasicMaterial({
@@ -277,23 +277,23 @@ export function initBasicMap(scene, world, controls, camera) {
 		Utils.object['ground'].position(0, -200, 0);
 
 		// 팩맨
-		Utils.createPacman(scene, world, 0, 230, 0, 180);
+		Utils.createPacman(scene, world, 0, -15, 0, 180);
 		Utils.setUserEvent(scene, world, Utils.object['pacman'], controls, camera);
 
 		Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
-		Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+		Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500);
 
 		Utils.createItemObject(scene, world, 'item2', 0xffc000, 102);
-		Utils.object['item2'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+		Utils.object['item2'].position(Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500);
 
 		Utils.createItemObject(scene, world, 'item3', 0x92d050, 103);
-		Utils.object['item3'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+		Utils.object['item3'].position(Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500);
 
 		Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104);
-		Utils.object['item4'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+		Utils.object['item4'].position(Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500);
 
 		Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
-		Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+		Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500);
 	});
 
 
