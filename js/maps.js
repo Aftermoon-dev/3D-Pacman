@@ -22,6 +22,8 @@ import * as Utils from './utils.js';
 
  */
 export function initGachonMap(scene, world, controls, camera) {
+	document.getElementById("loading").style.visibility = "visible";
+
     // Scene 리셋
     Utils.resetScene(scene);
 
@@ -251,9 +253,13 @@ export function initGachonMap(scene, world, controls, camera) {
 			Utils.object['pacman'].position(obj1Pos.x, 230, obj1Pos.z + 800);
 		}
 	});
+	
+	document.getElementById("loading").style.visibility = "hidden";
 }	
 
 export function initBasicMap(scene, world, controls, camera) {
+	document.getElementById("loading").style.visibility = "visible";
+
 	// Scene 리셋
     Utils.resetScene(scene);
 
@@ -405,4 +411,6 @@ export function initBasicMap(scene, world, controls, camera) {
 	
 	Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
 	Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 180, Math.floor(Math.random() * 31) * 100 - 1500);
+
+	document.getElementById("loading").style.visibility = "hidden";
 }	
