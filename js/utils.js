@@ -746,7 +746,7 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		}
 	}
 
-	if (score == 20) {  // Stage 1 Clear 점수 넣기!
+	if (score == 80) {  // Stage 1 Clear 점수 넣기!
 		// 두번째 맵으로 전환
 		// 아이템 및 동글이 초기화
 		itemArr = [];
