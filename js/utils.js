@@ -38,8 +38,6 @@ export var score = 0;
 
 /* camera control variable */
 export var if2D = false;
-export var currentCameraType = 1; //1 - 1인칭, 2 - 2D (ㅎ)
-
 export var developerMode = true; //개발자 모드 ON!
 
 
@@ -566,23 +564,16 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
  */
 function selectCameraType(userObject, camera, controls){
 	//1인칭 시점일 때만 작동함
-	if (if2D == false && currentCameraType == 1){
-		moveFirstPersonCameraAll(userObject, camera, controls)
-	}
-	else if(if2D == false && currentCameraType == 2){
+	if (if2D == false){
 		controls.minPolarAngle =  Math.PI * 0.5;
 		controls.maxPolarAngle =  Math.PI * 0.5;
 		controls.rotateSpeed = 1;
-
-		currentCameraType = 1;
 		moveFirstPersonCameraAll(userObject, camera, controls)
 	}
-	else if(if2D == true && currentCameraType == 1){
+	else if(if2D == true){
 		controls.minPolarAngle =  0;
 		controls.maxPolarAngle =  0;
 		controls.rotateSpeed = 0;
-
-		currentCameraType = 2;
 		move2DCameraAll(camera, controls);
 	}
 }
