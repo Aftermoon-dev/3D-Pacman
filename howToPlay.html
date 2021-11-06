@@ -14,17 +14,45 @@
         
         <!-- 여러 가지 적용 -->
         <style>
-            #button {
-                background-color: #000000;
-                height: 55px;
-                text-align: left;
+            .buttonTitle {
                 width: 100%;
+                height: 30px;
+                margin-bottom: 16px;
+            }
+
+            .leftButton {
+                width: 50%;
+                float: left;
+                text-align: right;
+                background: #000000;
+            }
+
+            .rightButton {
+                width: 50%;
+                float: right;
+                background: #000000;
             }
 
             .button {
-                width: 125px;
-                height: 60px;
+                background-color: rgb(122, 241, 92);
+                border: none;
+                color: black;
+                font-family: "bing";
+                font-size: 30px;
+                padding: 0px 50px;
+                text-align: center;
+                text-decoration: none;
+                cursor: pointer;
+                margin-left: 10px;
+                margin-right: 10px;
             }
+
+            .button:active {
+                background-color: #3e8e41;
+                box-shadow: 0 5px #666;
+                transform: translateY(4px);
+            }
+            .button:hover {background-color: tomato}
 
             #title {
                 color: #000000;
@@ -64,14 +92,10 @@
     </head>
 
 	<body>
-        <div id = "button">
-            <input type = "image" class = "button" src = "image/backButton.png" onClick="location.href='start.html'"></button>
-        </div> 
-        
         <div id = "title" style = "text-align: center; background-color: white;"> <span>How to Play</span> </div>
 
-        <div style = "width: 100%; margin-top: 20px;">
-            <div style = "width: 50%; float:left; text-align: center;">
+        <div style = "width: 100%; margin-top: 15px;">
+            <div style = "width: 50%; float:left; text-align: center; margin-bottom: 8px;">
                 <table width="50%">
                     <th colspan = "2">
                         <div id = "th"> <span>INTRODUCTION</span> </div>
@@ -91,7 +115,7 @@
                 </table>
             </div>
 
-            <div style = "width: 50%; float:left; text-align: center;">
+            <div style = "width: 50%; float:left; text-align: center; margin-bottom: 8px;">
                 <table>
                     <th colspan = "2">
                         <div id = "th"> <span>ITEM & EFFECT</span> </div>
@@ -117,6 +141,15 @@
                         <td align=left style = "font-family: bing">The camera view changes 3D to 2D.</td>
                     </tr>
                 </table>
+            </div>
+        </div>
+
+        <div class = "buttonTitle">
+            <div class = "leftButton">
+                <input type = "button" value= "Back" class = "button" style = "font-size: 2em" onClick="location.href='start.html'"></button>
+            </div>
+            <div class = "rightButton">
+                <input type = "button" value = "Start" class = "button" style = "font-size: 2em" onClick="location.href='index.html'"></button>
             </div>
         </div>
     </body>
