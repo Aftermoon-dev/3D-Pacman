@@ -249,7 +249,7 @@ export function initGachonMap(scene, world, controls, camera) {
 
 	// 팩맨
 	Utils.createPacman(scene, world, 600, 230, 0, 180);
-	Utils.setUserEvent(scene, world, Utils.object['pacman'], controls, camera);
+	Utils.setUserEvent(scene, world, controls, camera);
 
 	// 고스트
 	Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
@@ -261,6 +261,7 @@ export function initBasicMap(scene, world, controls, camera) {
 
 	Utils.updateStage(2);
 	Utils.ChangePacmanHeight(80);
+
 	// 바닥과 벽 택스쳐 가져오기
 	Utils.textureLoader.load('textures/ground_texture_02.jpg', (texture) => {
 		const ground_material = new THREE.MeshBasicMaterial({
@@ -269,16 +270,20 @@ export function initBasicMap(scene, world, controls, camera) {
 
 		// 바닥 만들기
 		var groundBody = new CANNON.Body({
-			shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 5 / 2, 8000 / 2)),
+			shape: new CANNON.Box(new CANNON.Vec3(7000 / 2, 5 / 2, 8000 / 2)),
 			collisionFilterGroup: 2,
+			collisionFilterMask: 1 | 64,
 			mass: 0
 		});
 		Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(7000, 5, 8000), ground_material), groundBody);
 		Utils.object['ground'].position(0, -200, 0);
 
 		// 팩맨
-		Utils.createPacman(scene, world, 500, -15, 0, 180);
-		Utils.setUserEvent(scene, world, Utils.object['pacman'], controls, camera);
+		Utils.createPacman(scene, world, 600, 0, 0, 180);
+		Utils.setUserEvent(scene, world, controls, camera);
+		
+		// 고스트
+		Utils.createGhost(scene, world, 'ghost1', 0, 250, 0, 0xFFFF00);
 
 		Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
 		Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500);
@@ -295,8 +300,7 @@ export function initBasicMap(scene, world, controls, camera) {
 		Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
 		Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500);
 
-		// 고스트
-		Utils.createGhost(scene, world, 'ghost1', 0, 220, 0, 0xFFFF00);
+
 	});
 
 

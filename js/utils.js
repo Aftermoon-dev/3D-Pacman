@@ -52,7 +52,6 @@ export var score = 0;
 export var if2D = false;
 export var developerMode = true; //개발자 모드 ON!
 
-
 /* Object Dictonary */
 export const object = {};
 
@@ -65,6 +64,12 @@ export const audioList = {
 
 /* Current Stage */ 
 export let currentStage = 0;
+
+/* Event Callback */
+let userObjectCollide = undefined;
+let keyUpCallback = undefined;
+let keyDownCallback = undefined;
+let mouseMoveCallback = undefined;
 
 /**
  * Mesh Object Class
@@ -164,7 +169,9 @@ export class worldObj {
 	// 객체 삭제 - 수행 후 object dict에서도 지워줄 것
 	delete(scene, world) {
 		scene.remove(this.mesh);
+		this.mesh = undefined;
 		world.removeBody(this.body);
+		this.body = undefined;
 	}
 }
 
@@ -275,26 +282,6 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber) 
 }
 
 /**
- * 먹은 Item 삭제
- * @param {THREE.Scene} scene 
- * @param {CANNON.World} world 
- * @param {worldObj} object 
- */
-export function deleteObject(scene, world, obj) {
-	obj.delete(scene, world);
-	
-	// itemArr에서 이미 먹은 아이템들을 제거
-	for (var i = 0; i < itemArr.length; i++) {
-		if (itemArr[i] === obj.objName) {
-			itemArr.splice(i, 1);
-			i--;
-		}
-	}
-
-	delete object[obj.objName]
-}
-
-/**
  * Item1 - 방향키 반대로
  */
  export function applyItem1Event() {
@@ -336,24 +323,29 @@ export function deleteObject(scene, world, obj) {
 	var y = object['pacman'].body.position.y + 50;
 	var z = object['pacman'].body.position.z;
 
+	object['pacman'].body.removeEventListener(userObjectCollide);
 	object['pacman'].delete(scene, world);
 	delete object['pacman'];
 
-	pacman_height += 30;
+	removeGlobalEventListener()
 	createPacman(scene, world, x, y, z, item3Flag);
-	setUserEvent(scene, world, object['pacman'], controls, camera);
+	setUserEvent(scene, world, controls, camera);
+	pacman_height += 30;
 	
 	item3Timer = setTimeout(function(){
 		var x = object['pacman'].body.position.x;
 		var y = object['pacman'].body.position.y - 20;
 		var z = object['pacman'].body.position.z;
 
+		object['pacman'].body.removeEventListener(userObjectCollide);
 		object['pacman'].delete(scene, world);
 		delete object['pacman'];
 
-		pacman_height -= 30;
 		createPacman(scene, world, x, y, z, 180); // Default 180
-		setUserEvent(scene, world, object['pacman'], controls, camera);
+		removeGlobalEventListener()
+		setUserEvent(scene, world, controls, camera);
+		pacman_height -= 30;
+		
 	}, 8000);
 }
 
@@ -384,11 +376,12 @@ export function applyItem5Event() {
  * User Event Listener 등록
  * @param {THREE.Scene} scene
  * @param {CANNON.World} world 
- * @param {worldObj} userObject 
  * @param {OrbitControls} controls
  * @param {PerspectiveCamera} camera
  */
-export function setUserEvent(scene, world, userObject, controls, camera) {
+export function setUserEvent(scene, world, controls, camera) {
+	const userObject = object['pacman'];
+
 	userObject.body.velocity.set(0, 0, 0);
 	userObject.body.angularDamping = 1;
 
@@ -399,7 +392,7 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 		controls.enabled = false;
 
 	// Key를 올렸을 때
-	document.addEventListener("keydown", function(event) {
+	keyDownCallback = function(event) {
 		userObject.body.angularDamping = 1;
 
 		switch(event.key) {
@@ -434,8 +427,6 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 				else
 					userObject.setVelocity(3);
 				break;
-
-
 			//임시로 넣어둔 부분! 누르면 1인칭 <-> 3인칭
 			case "C":
 			case "c":
@@ -447,25 +438,26 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 				}
 				break;
 
-			// 이부분은 팩맨 커지는 아이템에 사용하면 될 듯
-			//임시로 넣어둔 부분! 누르면 팩맨 카메라 높이가 올라감
-			case "Z":
-			case "z":
-				if (if2D == false)
-					pacman_height += 30;
-				break;
+			// // 이부분은 팩맨 커지는 아이템에 사용하면 될 듯
+			// //임시로 넣어둔 부분! 누르면 팩맨 카메라 높이가 올라감
+			// case "Z":
+			// case "z":
+			// 	if (if2D == false)
+			// 		pacman_height += 30;
+			// 	break;
 
-			//임시로 넣어둔 부분! 누르면 팩맨 카메라 높이가 내려감
-			case "X":
-			case "x":
-				if (if2D == false)
-					pacman_height -= 30;
-				break;
+			// //임시로 넣어둔 부분! 누르면 팩맨 카메라 높이가 내려감
+			// case "X":
+			// case "x":
+			// 	if (if2D == false)
+			// 		pacman_height -= 30;
+			// 	break;
 		}
-	});
+	};
+	document.addEventListener("keydown", keyDownCallback);
 
 	// Key를 뗐을 때 
-	document.addEventListener("keyup", function(event) {
+	keyUpCallback = function(event) {
 		switch(event.key) {
 			case "W":
 			case "w":
@@ -478,17 +470,29 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 				userObject.setVelocity(0);
 				break;
 		}
-	});
+	};
+	document.addEventListener("keyup", keyUpCallback);
+
+	// mouse로 카메라 움직일 때
+	mouseMoveCallback = function (event) {
+		const toangle = controls.getAzimuthalAngle() * (180 / Math.PI);
+		//1인칭 시점일 때만 작동함
+		if (if2D == false && userObject != undefined)
+			userObject.rotateY(toangle); //카메라 보는 각도가 정면이 되도록 팩맨을 돌림
+
+	};
+	document.addEventListener("mousemove", mouseMoveCallback);
 
 	// Collide Event
-	userObject.body.addEventListener("collide", function(e) {
+	userObjectCollide = function(e) {
+		let output = Object.fromEntries(Object.entries(object).filter(([k,v]) => v.body == e.body));
+
 		// 고스트랑 닿을 경우
 		if (e.body.type == 3) {
 			console.log("Meet the Ghost!" + item4Flag);
 
 			// 먹는 모드일 경우
 			if(item4Flag) {
-				let output = Object.fromEntries(Object.entries(object).filter(([k,v]) => v.body == e.body));
 				output[Object.keys(output)[0]].delete(scene, world);
 				delete object[output[Object.keys(output)[0]].objName];
 			}
@@ -500,12 +504,10 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 			score += 10;
 			document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
 			
-			let output = Object.fromEntries(Object.entries(object).filter(([k,v]) => v.body == e.body));
-
 			output[Object.keys(output)[0]].delete(scene, world);
 			delete object[output[Object.keys(output)[0]].objName];
 		
-			if (score == 70) {  // Stage 1 Clear 점수 넣기!
+			if (score == 20) {  // Stage 1 Clear 점수 넣기!
 				// 두번째 맵으로 전환
 				// 아이템 및 동글이 초기화
 				Maps.initBasicMap(scene, world, controls, camera);
@@ -516,29 +518,27 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 			}
 		} else if (e.body.type == 101) {
 			applyItem1Event();
-			deleteObject(scene, world, object['item1']);
+			output[Object.keys(output)[0]].delete(scene, world);
+			delete object[output[Object.keys(output)[0]].objName];
 		} else if (e.body.type == 102) {
 			applyItem2Event();
-			deleteObject(scene, world, object['item2']);
+			output[Object.keys(output)[0]].delete(scene, world);
+			delete object[output[Object.keys(output)[0]].objName];
 		} else if (e.body.type == 103) {
-			applyItem3Event(scene, world, userObject, controls, camera);
-			deleteObject(scene, world, object['item3']);
+			applyItem3Event(scene, world, controls, camera);
+			output[Object.keys(output)[0]].delete(scene, world);
+			delete object[output[Object.keys(output)[0]].objName];
 		} else if (e.body.type == 104) {
 			applyItem4Event();
-			deleteObject(scene, world, object['item4']);
+			output[Object.keys(output)[0]].delete(scene, world);
+			delete object[output[Object.keys(output)[0]].objName];
 		} else if (e.body.type == 105) {
 			applyItem5Event();
-			deleteObject(scene, world, object['item5']);
+			output[Object.keys(output)[0]].delete(scene, world);
+			delete object[output[Object.keys(output)[0]].objName];
 		}
-	});
-
-	// mouse로 카메라 움직일 때
-	document.addEventListener("mousemove", function(event) {
-		const toangle = controls.getAzimuthalAngle() * (180 / Math.PI);
-			//1인칭 시점일 때만 작동함
-		if (if2D == false)
-			userObject.rotateY(toangle); //카메라 보는 각도가 정면이 되도록 팩맨을 돌림
-	});
+	};
+	userObject.body.addEventListener("collide", userObjectCollide);
 }
 
 /**
@@ -594,8 +594,9 @@ function move2DCameraAll(camera, controls){
  * Global Event Listener 삭제
  */
 export function removeGlobalEventListener() {
-	document.onkeydown = null;
-	document.onkeyup = null;
+	document.removeEventListener("keydown", keyDownCallback);
+	document.removeEventListener("keyup", keyUpCallback);
+	document.removeEventListener("mousemove", mouseMoveCallback);
 }
 
 /**
@@ -604,8 +605,14 @@ export function removeGlobalEventListener() {
  */
 export function resetScene(scene, world) {
 	removeGlobalEventListener();
-	if(scene.children != undefined) scene.remove.apply(scene, scene.children);
-	if(scene.bodies != undefined) world.removeBody.apply(world, scene.bodies);
+
+	Object.keys(object).forEach(element => {
+		if(element == "pacman") {
+			object[element].body.removeEventListener(userObjectCollide);
+		}
+		object[element].delete(scene, world);
+		delete object[element];
+	});
 }
 
 /**
@@ -690,7 +697,6 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 	});
 
 	var circleName = 'circle' + circleNumber;
-	
 	createNewObject(scene, world, circleName, circleMesh, circleBody);
 	object[circleName].position(posx, posy, posz);
 }
@@ -761,10 +767,7 @@ export function updatePhysics(world, camera, controls) {
 		if(object['pacman'] != undefined) selectCameraType(object['pacman'], camera, controls)
 
 		Object.keys(object).forEach(function(key) {
-			if(object[key].mesh != undefined && object[key].body != undefined)
-				object[key].update();
-			else
-				delete object[key];
+			object[key].update();
 		});
 	}
 }
