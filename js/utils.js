@@ -36,8 +36,6 @@ export let isloadingFinished = false; // 로딩 완료 여부 확인
 /* Item Setting */
 export var useitem = true; //item 적용할꺼면 true로
 
-export var itemArr = [];
-export var circleArr = [];
 export var item1Flag = true;
 export var item1Timer;
 export var item2Timer;
@@ -197,7 +195,7 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 		shape: new CANNON.Sphere(radius),
 		collisionFilterGroup: 1,
 		angularDamping: 1,
-		collisionFilterMask: 2 | 4 | 8 | 16 | 32 | 64, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥 64 고스트
+		collisionFilterMask: 2 | 4 | 8 | 16 | 32 | 64 | 128, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥 64 고스트
 		mass: 3,
 		type: 1
 	});
@@ -274,7 +272,6 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber) 
 	});
 	
 	createNewObject(scene, world, itemName, itemMesh, itemBody);
-	itemArr.push(itemName);
 }
 
 /**
@@ -404,7 +401,6 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 	// Key를 올렸을 때
 	document.addEventListener("keydown", function(event) {
 		userObject.body.angularDamping = 1;
-		eatCircle(scene, world, controls, camera, userObject);
 
 		switch(event.key) {
 			case "W":
@@ -470,7 +466,6 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 
 	// Key를 뗐을 때 
 	document.addEventListener("keyup", function(event) {
-		eatCircle(scene, world, controls, camera, userObject);
 		switch(event.key) {
 			case "W":
 			case "w":
@@ -494,13 +489,30 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 			// 먹는 모드일 경우
 			if(item4Flag) {
 				let output = Object.fromEntries(Object.entries(object).filter(([k,v]) => v.body == e.body));
-            	console.log(output[Object.keys(output)[0]]);
 				output[Object.keys(output)[0]].delete(scene, world);
 				delete object[output[Object.keys(output)[0]].objName];
 			}
 			// 아니면
 			else {
 				document.location.href = "./gameover.html";
+			}
+		} else if (e.body.type == 4) { // Point
+			score += 10;
+			document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
+			
+			let output = Object.fromEntries(Object.entries(object).filter(([k,v]) => v.body == e.body));
+
+			output[Object.keys(output)[0]].delete(scene, world);
+			delete object[output[Object.keys(output)[0]].objName];
+		
+			if (score == 70) {  // Stage 1 Clear 점수 넣기!
+				// 두번째 맵으로 전환
+				// 아이템 및 동글이 초기화
+				Maps.initBasicMap(scene, world, controls, camera);
+			} else if (score == 160) { // Stage 2 Clear 점수 넣기!
+				// 세번째 맵으로 전환
+			} else if (score == 240) { // Stage 3 Clear 점수 넣기!
+				window.location.href = 'gameclear.html';
 			}
 		} else if (e.body.type == 101) {
 			applyItem1Event();
@@ -673,83 +685,14 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 	var circleBody = new CANNON.Body({ 
 		shape: new CANNON.Sphere(40),
 		collisionFilterGroup: 128,
+		collisionFilterMask: 1,
+		type: 4
 	});
 
 	var circleName = 'circle' + circleNumber;
 	
 	createNewObject(scene, world, circleName, circleMesh, circleBody);
 	object[circleName].position(posx, posy, posz);
-	circleArr.push(circleNumber);
-}
-
-/**
- * 동글이와 충돌 여부 확인 - Step (1)
- * @param {worldObj} pacman 
- * @param {worldObj} circle
- */
- export function circleCollisionCheck(pacman, circle) {
-	var distance = Math.pow((Math.pow((pacman.body.position.x - circle.body.position.x), 2) + Math.pow((pacman.body.position.z - circle.body.position.z), 2)), 1/2)
-
-	if (distance <= 200 + 60) // distance <= pacmanRadius + itemRadius (범위 좀 더 넓게)
-		return true;
-	else
-		return false;
-}
-
-/**
- * 먹은 동글이 삭제 - Step (2)
- * @param {THREE.Scene} scene 
- * @param {CANNON.World} world 
- * @param {OrbitControls} controls
- * @param {worldObj} object 
- */
- export function deleteCircle(scene, world, controls, camera, object) {
-	score += 10;
-	document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
-
-	world.removeBody(object.body);
-	scene.remove(object.mesh);
-
-	for (var i = 0; i < circleArr.length; i++) {
-		if (circleArr[i] == object.objName.substr(6)) {
-			circleArr.splice(i, 1);
-		}
-	}
-
-	if (score == 70) {  // Stage 1 Clear 점수 넣기!
-		// 두번째 맵으로 전환
-		// 아이템 및 동글이 초기화
-		itemArr = [];
-		circleArr = [];
-		Maps.initBasicMap(scene, world, controls, camera);
-	} else if (score == 160) { // Stage 2 Clear 점수 넣기!
-		// 세번째 맵으로 전환
-		itemArr = [];
-		circleArr = [];
-	} else if (score == 240) { // Stage 3 Clear 점수 넣기!
-		itemArr = [];
-		circleArr = [];
-		window.location.href = 'gameclear.html';
-	}
-}
-
-/**
- * Eat Circle Final
- * @param {THREE.Scene} scene
- * @param {CANNON.World} world 
- * @param {OrbitControls} controls
- * @param {worldObj} userObject 
- */
- export function eatCircle(scene, world, controls, camera, userObject) {
-	for (var i = 0; i < circleArr.length; i++) {
-		var circleName = 'circle' + circleArr[i];
-		var collisionResult = circleCollisionCheck(userObject, object[circleName]); 
-
-		if (collisionResult == true) {
-			deleteCircle(scene, world, controls, camera, object[circleName]);
-			console.log(circleArr);
-		}
-	}
 }
 
 /**
