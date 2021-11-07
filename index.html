@@ -5,6 +5,7 @@
     <link rel="shortcut icon" href="favicon.png">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
     <script type="module" src="3d-pacman.js"></script>
+    <script type = "text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <style type="text/css">
         body {
@@ -35,20 +36,25 @@
         #stage {
             text-align: left;
             float: left;
+            width: 33.3%;
             margin-top: 12px;
-            margin-left: 15px;
-            margin-right: 15px;
             margin-bottom: 8px;
             color: #ffd400;
             font-size: 2em;
         }
 
+        #timer {
+            margin-top: 7px;
+            text-align: center;
+            float: left;
+            width: 33.3%;
+        }
+
         #score {
             text-align: right;
-            float: right;
+            float: left;
+            width: 33.3%;
             margin-top: 12px;
-            margin-left: 15px;
-            margin-right: 15px;
             margin-bottom: 8px;
             color: #ffd400;
             font-size: 2em;
@@ -118,8 +124,13 @@
 </head>
 
 <body>
-    <div id="stage"> <span id="stageNum">STAGE 1</span> </div>
-    <div id="score"> <span id="scoreNum">SCORE 0</span> </div>
+    <div id="stage"> <span id="stageNum" style = "padding-left: 10px">STAGE 1</span> </div>
+
+    <div id = "timer">
+        <img id="timerimage" src = "./image/timerStartEnd.png" style="width: 50; height: 50;">
+    </div>
+
+    <div id="score"> <span id="scoreNum" style = "padding-right: 10px">SCORE 0</span> </div>
     <div id="loading" hidden>
         <div class="lds-facebook"><div></div><div></div><div></div></div>
     </div>
