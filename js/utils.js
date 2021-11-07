@@ -162,6 +162,12 @@ export class worldObj {
 
 		this.body.velocity.set(directionVector.x, 0, directionVector.z);
 	}
+
+	// 객체 삭제 - 수행 후 object dict에서도 지워줄 것
+	delete(scene, world) {
+		scene.remove(this.mesh);
+		world.removeBody(this.body);
+	}
 }
 
 /**
@@ -219,6 +225,7 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 	});
 	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color: wallcolor})), wallBody);
 }
+
 export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x, y, z, material) {
 	var wallBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
@@ -276,17 +283,18 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber) 
  * @param {CANNON.World} world 
  * @param {worldObj} object 
  */
-export function deleteObject(scene, world, object) {
-	world.removeBody(object.body);
-	scene.remove(object.mesh);
- 
+export function deleteObject(scene, world, obj) {
+	obj.delete(scene, world);
+	
 	// itemArr에서 이미 먹은 아이템들을 제거
 	for (var i = 0; i < itemArr.length; i++) {
-		if (itemArr[i] === object.objName) {
+		if (itemArr[i] === obj.objName) {
 			itemArr.splice(i, 1);
 			i--;
 		}
 	}
+
+	delete object[obj.objName]
 }
 
 /**
@@ -323,33 +331,32 @@ export function deleteObject(scene, world, object) {
  * Item3 - 팩맨 Size Up
  * @param {THREE.Scene} scene
  * @param {CANNON.World} world 
- * @param {worldObj} userObject 
  * @param {OrbitControls} controls
+ * @param {THREE.PerspectiveCamera} camera
  */
- export function applyItem3Event(scene, world, userObject, controls, camera) {
-	var x = userObject.body.position.x;
-	var y = userObject.body.position.y + 50;
-	var z = userObject.body.position.z;
+ export function applyItem3Event(scene, world, controls, camera) {
+	var x = object['pacman'].body.position.x;
+	var y = object['pacman'].body.position.y + 50;
+	var z = object['pacman'].body.position.z;
 
-	world.removeBody(userObject.body);
-	scene.remove(userObject.mesh);
+	object['pacman'].delete(scene, world);
+	delete object['pacman'];
 
+	pacman_height += 30;
 	createPacman(scene, world, x, y, z, item3Flag);
 	setUserEvent(scene, world, object['pacman'], controls, camera);
-	pacman_height += 30;
-
+	
 	item3Timer = setTimeout(function(){
-		world.removeBody(object['pacman'].body);
-		scene.remove(object['pacman'].mesh);
-
 		var x = object['pacman'].body.position.x;
 		var y = object['pacman'].body.position.y - 20;
 		var z = object['pacman'].body.position.z;
 
-		createPacman(scene, world, x, y, z, 180); // Default 180
-		setUserEvent(scene, world, object['pacman'], controls, camera);
+		object['pacman'].delete(scene, world);
+		delete object['pacman'];
 
 		pacman_height -= 30;
+		createPacman(scene, world, x, y, z, 180); // Default 180
+		setUserEvent(scene, world, object['pacman'], controls, camera);
 	}, 8000);
 }
 
@@ -488,8 +495,8 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 			if(item4Flag) {
 				let output = Object.fromEntries(Object.entries(object).filter(([k,v]) => v.body == e.body));
             	console.log(output[Object.keys(output)[0]]);
-            	world.removeBody(e.body);
-            	scene.remove(output[Object.keys(output)[0]].mesh);
+				output[Object.keys(output)[0]].delete(scene, world);
+				delete object[output[Object.keys(output)[0]].objName];
 			}
 			// 아니면
 			else {
@@ -519,7 +526,7 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 			//1인칭 시점일 때만 작동함
 		if (if2D == false)
 			userObject.rotateY(toangle); //카메라 보는 각도가 정면이 되도록 팩맨을 돌림
-	})
+	});
 }
 
 /**
@@ -724,9 +731,6 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		circleArr = [];
 		window.location.href = 'gameclear.html';
 	}
-	else {
-		console.log("Not Finished");
-	}
 }
 
 /**
@@ -811,7 +815,7 @@ export function updatePhysics(world, camera, controls) {
 		world.step(timeStep);
 
 		//카메라 설정
-		selectCameraType(object['pacman'], camera, controls)
+		if(object['pacman'] != undefined) selectCameraType(object['pacman'], camera, controls)
 
 		Object.keys(object).forEach(function(key) {
 			if(object[key].mesh != undefined && object[key].body != undefined)
