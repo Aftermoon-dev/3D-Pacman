@@ -738,6 +738,7 @@ export function stopAudio(audioName) {
  * @param {Stage Number} newStage 
  */
 export function updateStage(newStage) {
+	score = 0;
 	currentStage = newStage;
 	document.getElementById("stageNum").innerHTML="STAGE " + currentStage;
 }
