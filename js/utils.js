@@ -506,15 +506,22 @@ export function setUserEvent(scene, world, controls, camera) {
 			
 			output[Object.keys(output)[0]].delete(scene, world);
 			delete object[output[Object.keys(output)[0]].objName];
-		
-			if (score == 20) {  // Stage 1 Clear 점수 넣기!
-				// 두번째 맵으로 전환
-				// 아이템 및 동글이 초기화
-				Maps.initBasicMap(scene, world, controls, camera);
-			} else if (score == 160) { // Stage 2 Clear 점수 넣기!
-				// 세번째 맵으로 전환
-			} else if (score == 240) { // Stage 3 Clear 점수 넣기!
-				window.location.href = 'gameclear.html';
+			
+			// 현재 스테이지에 따라 다음 동작 정의
+			if(currentStage == 1) {
+				if (score == 60) {  // Stage 1 Clear 점수 넣기!
+					Maps.initBasicMap(scene, world, controls, camera); // Next Map
+				}
+			}
+			else if (currentStage == 2) {
+				if (score == 120) {  // Stage 2 Clear 점수 넣기!
+					Maps.initBasicMap(scene, world, controls, camera); // Next Map
+				}
+			}
+			else if (currentStage == 3) {
+				if (score == 180) {  // Stage 3 Clear 점수 넣기!
+					window.location.href = 'gameclear.html'; // Clear Page
+				}
 			}
 		} else if (e.body.type == 101) {
 			applyItem1Event();
