@@ -285,6 +285,7 @@ export function initBasicMap(scene, world, controls, camera) {
 		// 고스트
 		Utils.createGhost(scene, world, 'ghost1', 0, 250, 0, 0xFFFF00);
 
+		// 아이템
 		Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
 		Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500);
 
@@ -300,7 +301,15 @@ export function initBasicMap(scene, world, controls, camera) {
 		Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
 		Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500);
 
-
+		// 동글이들
+		Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500, 1);
+		Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500, 2);
+		Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500, 3);
+		Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500, 4);
+		Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500, 5);
+		Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500, 6);
+		Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500, 7);
+		Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 50, Math.floor(Math.random() * 31) * 100 - 1500, 8);
 	});
 
 
