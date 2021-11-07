@@ -8,7 +8,6 @@ import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQ
 import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/loaders/GLTFLoader.js';
 import * as Maps from '../js/maps.js'
 
-
 /* Setting */
 const timeStep = 1/30;
 
@@ -46,6 +45,8 @@ export var item3Timer;
 export var item4Flag = false;
 export var item4Timer;
 export var item5Timer;
+export var imageArray = [];
+export var timer;
 
 /* Score Setting */
 export var score = 0;
@@ -53,7 +54,6 @@ export var score = 0;
 /* camera control variable */
 export var if2D = false;
 export var developerMode = true; //개발자 모드 ON!
-
 
 /* Object Dictonary */
 export const object = {};
@@ -501,18 +501,28 @@ export function setUserEvent(scene, world, userObject, controls, camera) {
 				document.location.href = "./gameover.html";
 			}
 		} else if (e.body.type == 101) {
+			stopTimer(timer);
+			startTimer(1);
 			applyItem1Event();
 			deleteObject(scene, world, object['item1']);
 		} else if (e.body.type == 102) {
+			stopTimer(timer);
+			startTimer(2);
 			applyItem2Event();
 			deleteObject(scene, world, object['item2']);
 		} else if (e.body.type == 103) {
+			stopTimer(timer);
+			startTimer(3);
 			// applyItem3Event(scene, world, userObject, controls);
 			deleteObject(scene, world, object['item3']);
 		} else if (e.body.type == 104) {
+			stopTimer(timer);
+			startTimer(4);
 			applyItem4Event();
 			deleteObject(scene, world, object['item4']);
 		} else if (e.body.type == 105) {
+			stopTimer(timer);
+			startTimer(5);
 			applyItem5Event();
 			deleteObject(scene, world, object['item5']);
 		}
@@ -545,8 +555,6 @@ function selectCameraType(userObject, camera, controls){
 		move2DCameraAll(camera, controls);
 	}
 }
-
-
 
 /**
  * orbitcontrol을 first person 시점으로 사용
@@ -751,6 +759,57 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 			console.log(circleArr);
 		}
 	}
+}
+
+/**
+ * Item Timer
+ * @param {Integer} ItemNumber 
+ */
+export function startTimer(ItemNumber) {
+	var timerImage = document.getElementById("timerimage");
+	stopTimer(timer);
+
+	if (ItemNumber == 1) {
+		timerImage.setAttribute("src", "./image/timer1/item1-8.png");
+		imageArray=["./image/timer1/item1-7.png", "./image/timer1/item1-6.png", "./image/timer1/item1-5.png", "./image/timer1/item1-4.png",
+		"./image/timer1/item1-3.png", "./image/timer1/item1-2.png", "./image/timer1/item1-1.png", "./image/timer1/item1-0.png", "./image/timerStartEnd.png"];
+	} else if (ItemNumber == 2) {
+		timerImage.setAttribute("src", "./image/timer2/item2-8.png");
+		imageArray=["./image/timer2/item2-7.png", "./image/timer2/item2-6.png", "./image/timer2/item2-5.png", "./image/timer2/item2-4.png", 
+		"./image/timer2/item2-3.png", "./image/timer2/item2-2.png", "./image/timer2/item2-1.png", "./image/timer2/item2-0.png", "./image/timerStartEnd.png"];
+	} else if (ItemNumber == 3) {
+		timerImage.setAttribute("src", "./image/timer3/item3-8.png");
+		imageArray=["./image/timer3/item3-7.png", "./image/timer3/item3-6.png", "./image/timer3/item3-5.png", "./image/timer3/item3-4.png", 
+		"./image/timer3/item3-3.png", "./image/timer3/item3-2.png", "./image/timer3/item3-1.png", "./image/timer3/item3-0.png", "./image/timerStartEnd.png"];
+	} else if (ItemNumber == 4) {
+		timerImage.setAttribute("src", "./image/timer4/item4-8.png");
+		imageArray=["./image/timer4/item4-7.png", "./image/timer4/item4-6.png", "./image/timer4/item4-5.png", "./image/timer4/item4-4.png", 
+		"./image/timer4/item4-3.png", "./image/timer4/item4-2.png", "./image/timer4/item4-1.png", "./image/timer4/item4-0.png", "./image/timerStartEnd.png"];
+	} else if (ItemNumber == 5) {
+		timerImage.setAttribute("src", "./image/timer5/item5-5.png");
+		imageArray = ["./image/timer5/item5-4.png", "./image/timer5/item5-3.png", "./image/timer5/item5-2.png", 
+		"./image/timer5/item5-1.png", "./image/timer5/item5-0.png", "./image/timerStartEnd.png"];
+	}
+	
+	var imageIndex = 0;
+	timer = setInterval(changeImage, 1000);
+
+	function changeImage(){
+		timerImage.setAttribute("src", imageArray[imageIndex]);
+		imageIndex++;
+		console.log(imageArray);
+		if (imageIndex >= imageArray.length){
+			clearInterval(timer);
+		}
+	}
+}
+
+/**
+ * Stop Timer
+ * @param {Timer} timer 
+ */
+export function stopTimer(timer) {
+	clearInterval(timer);
 }
 
 /**
