@@ -803,6 +803,7 @@ export function stopAudio(audioName) {
  * @param {Stage Number} newStage 
  */
 export function updateStage(newStage) {
+	score = 0;
 	document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
 	currentStage = newStage;
 	document.getElementById("stageNum").innerHTML="STAGE " + currentStage;
