@@ -45,6 +45,7 @@ export var item4Timer;
 export var item5Timer;
 export var imageArray = [];
 export var timer;
+export var timerImage;
 
 /* Score Setting */
 export var score = 0;
@@ -524,12 +525,16 @@ export function setUserEvent(scene, world, controls, camera) {
 			// 현재 스테이지에 따라 다음 동작 정의
 			if(currentStage == 1) {
 				if (score == 60) {  // Stage 1 Clear 점수 넣기!
+					stopTimer(timer); // 아이템 타이머 초기화!
 					Maps.initBasicMap(scene, world, controls, camera); // Next Map
+					timerImage.setAttribute("src", "./image/timerStartEnd.png");
 				}
 			}
 			else if (currentStage == 2) {
 				if (score == 120) {  // Stage 2 Clear 점수 넣기!
+					stopTimer(timer); // 아이템 타이머 초기화!
 					Maps.initBasicMap(scene, world, controls, camera); // Next Map
+					timerImage.setAttribute("src", "./image/timerStartEnd.png");
 				}
 			}
 			else if (currentStage == 3) {
@@ -767,7 +772,7 @@ export function createGhost(scene, world, objName, x, y, z, color) {
  * @param {Integer} ItemNumber 
  */
 export function startTimer(ItemNumber) {
-	var timerImage = document.getElementById("timerimage");
+	timerImage = document.getElementById("timerimage");
 	stopTimer(timer);
 
 	if (ItemNumber == 1) {
@@ -862,7 +867,7 @@ export function changeGhostColor(objectName, color) {
 				ghost.material.color.g != 0 ||
 				ghost.material.color.b != 0) {
 					ghost.material.color.set(color);
-				}
+			}
 			
 		}
 	});
