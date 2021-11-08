@@ -16,3 +16,8 @@
 |Name|<a href="https://github.com/JM2308">Jimin Ko<a>|<a href="https://github.com/catsaveearth">Suhyeon Kim</a>|<a href="https://github.com/Taehyuny">Taehyun Park</a>|<a href="https://github.com/Aftermoon-dev">Minjae Seon</a>|
 |:--|:--:|:--:|:--:|:--:|
 |**Role**|Item Algorithm|Cameras & Ghost Algorithm|Maps|Structure & Maps|
+
+## Licenses
+ - Coming Soon..
+## Third-Party License
+ - Coming Soon..
