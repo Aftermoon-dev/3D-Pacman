@@ -49,7 +49,7 @@ export var timerImage;
 
 /* Score Setting */
 export var score = 0;
-export var totalScore = 0;
+export var totalScore = 0;   
 
 /* camera control variable */
 export var if2D = false;
