@@ -49,6 +49,7 @@ export var timerImage;
 
 /* Score Setting */
 export var score = 0;
+export var totalScore = 0;
 
 /* camera control variable */
 export var if2D = false;
@@ -517,6 +518,7 @@ export function setUserEvent(scene, world, controls, camera) {
 			}
 		} else if (e.body.type == 4) { // Point
 			score += 10;
+			totalScore += 10;
 			document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
 			
 			output[Object.keys(output)[0]].delete(scene, world);
@@ -524,21 +526,21 @@ export function setUserEvent(scene, world, controls, camera) {
 			
 			// 현재 스테이지에 따라 다음 동작 정의
 			if(currentStage == 1) {
-				if (score == 60) {  // Stage 1 Clear 점수 넣기!
+				if (totalScore == 60) {  // Stage 1 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
 					Maps.initBasicMap(scene, world, controls, camera); // Next Map
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
 				}
 			}
 			else if (currentStage == 2) {
-				if (score == 120) {  // Stage 2 Clear 점수 넣기!
+				if (totalScore == 120) {  // Stage 2 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
 					Maps.initBasicMap(scene, world, controls, camera); // Next Map
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
 				}
 			}
 			else if (currentStage == 3) {
-				if (score == 180) {  // Stage 3 Clear 점수 넣기!
+				if (totalScore == 180) {  // Stage 3 Clear 점수 넣기!
 					window.location.href = 'gameclear.html'; // Clear Page
 				}
 			}
