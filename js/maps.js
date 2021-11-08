@@ -129,9 +129,33 @@ export function initGachonMap(scene, world, controls, camera) {
 	Utils.object['wall42'].position(1200, 0, -500);
 
 	// 왼쪽 사각형
-	Utils.createWallObject(scene, world, 'wall22', 0x1200ff, 1800, 800, 1500);
-	Utils.object['wall22'].position(-3500, 0, 0);
-	Utils.object['wall22'].rotateY(90);
+	Utils.textureLoader.load('textures/gachonlogo_texture.jpg', (texture) => {
+		const gachonMaterial = new THREE.MeshPhongMaterial({
+			map: texture,
+		});
+
+		var wallBody = new CANNON.Body({
+			shape: new CANNON.Box(new CANNON.Vec3(1800 / 2, 800 / 2, 1500 / 2)),
+			collisionFilterGroup: 4,
+			mass: 0,
+			type: 1000
+		});
+	
+		let leftSquareMaterialArray = [];
+		leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
+		leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
+		leftSquareMaterialArray.push(gachonMaterial);
+		leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
+		leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
+		leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
+	
+		Utils.createNewObject(scene, world, 'wall22', new THREE.Mesh(new THREE.BoxGeometry(1800, 800, 1500), leftSquareMaterialArray), wallBody);
+		Utils.object['wall22'].position(-3500, 0, 0);
+		Utils.object['wall22'].rotateY(90);
+
+		
+	});
+
 
 	// O
 	Utils.createWallObject(scene, world, 'wall23', 0x00b9f2, 1800, 800, 200);
