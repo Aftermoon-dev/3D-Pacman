@@ -137,13 +137,18 @@ export function initGachonMap(scene, world, controls, camera) {
 	Utils.createWallObject(scene, world, 'wall23', 0x00b9f2, 1800, 800, 200);
 	Utils.object['wall23'].position(2800, 0, 0);
 	Utils.object['wall23'].rotateY(90);
-	Utils.createWallObject(scene, world, 'wall24', 0x00b9f2, 1600, 800, 200);
-	Utils.object['wall24'].position(3500, 0, -800);
+	Utils.createWallObject(scene, world, 'wall24', 0x00b9f2, 500, 800, 200);
+	Utils.object['wall24'].position(3100, 0, -800);
+	Utils.createWallObject(scene, world, 'wall42', 0x00b9f2, 500, 800, 200);
+	Utils.object['wall42'].position(4000, 0, -800);
+
 	Utils.createWallObject(scene, world, 'wall25', 0x00b9f2, 1800, 800, 200);
 	Utils.object['wall25'].position(4300, 0, 0);
 	Utils.object['wall25'].rotateY(90);
-	Utils.createWallObject(scene, world, 'wall26', 0x00b9f2, 1600, 800, 200);
-	Utils.object['wall26'].position(3500, 0, 800);
+	Utils.createWallObject(scene, world, 'wall26', 0x00b9f2, 500, 800, 200);
+	Utils.object['wall26'].position(3100, 0, 800);
+	Utils.createWallObject(scene, world, 'wall43', 0x00b9f2, 500, 800, 200);
+	Utils.object['wall43'].position(4000, 0, 800);
 
 	// G
 	Utils.createWallObject(scene, world, 'wall27', 0x004e96, 2000, 800, 200);
