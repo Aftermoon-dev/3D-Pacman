@@ -868,10 +868,8 @@ export function changeGhostColor(objectName, color) {
 				ghost.material.color.b != 0) {
 					ghost.material.color.set(color);
 			}
-			
 		}
 	});
-	
 }
 
 /**
