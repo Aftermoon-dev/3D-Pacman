@@ -51,7 +51,7 @@ export var score = 0;
 
 /* camera control variable */
 export var if2D = false;
-export var developerMode = true; //개발자 모드 ON!
+export var developerMode = false; //개발자 모드 ON!
 
 /* Object Dictonary */
 export const object = {};
@@ -71,6 +71,10 @@ let userObjectCollide = undefined;
 let keyUpCallback = undefined;
 let keyDownCallback = undefined;
 let mouseMoveCallback = undefined;
+
+/* Light */
+let userLight = undefined;
+let ambientLight = undefined;
 
 /**
  * Mesh Object Class
@@ -198,7 +202,10 @@ export function createNewObject(scene, world, objName, mesh, body) {
  * @param {Integer} radius 
  */
 export function createPacman(scene, world, posx, posy, posz, radius) {
-	var pacmanMesh = new THREE.Mesh(new THREE.SphereGeometry(radius, 32, 16), new THREE.MeshBasicMaterial({ color: 0xffd400 }))
+	var pacmanMesh = new THREE.Mesh(new THREE.SphereGeometry(radius, 256, 128), new THREE.MeshPhongMaterial({ 
+		color: 0xffd400,
+		flatShading: true
+	}));
 	var pacmanBody = new CANNON.Body({ 
 		shape: new CANNON.Sphere(radius),
 		collisionFilterGroup: 1,
@@ -229,7 +236,7 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 		mass: 0,
 		type: 1000
 	});
-	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color: wallcolor})), wallBody);
+	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshPhongMaterial({ color: wallcolor})), wallBody);
 }
 
 export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x, y, z, material) {
@@ -258,7 +265,10 @@ export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x
 		mass: 0,
 		type: 1000
 	});
-	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial({ color: 0xffd400})), wallBody);
+	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshPhongMaterial({ 
+		color: 0xffd400,
+		flatShading: true
+	})), wallBody);
 }
 
 /**
@@ -270,7 +280,10 @@ export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x
  * @param {Integer} itemNumber
  */
 export function createItemObject(scene, world, itemName, itemColor, itemNumber) { // item 번호 붙여서 번호마다 기능 다르게 넣기
-	var itemMesh = new THREE.Mesh(new THREE.SphereGeometry(80, 32, 16), new THREE.MeshBasicMaterial({ color: itemColor}));
+	var itemMesh = new THREE.Mesh(new THREE.SphereGeometry(80, 256, 128), new THREE.MeshPhongMaterial({ 
+		color: itemColor,
+		flatShading: true
+	}));
 	var itemBody = new CANNON.Body({ 
 		shape: new CANNON.Sphere(80),
 		collisionFilterGroup: 16,
@@ -562,26 +575,26 @@ export function setUserEvent(scene, world, controls, camera) {
 /**
  *  카메라 선택
  */
-function selectCameraType(userObject, camera, controls){
+function selectCameraType(scene, userObject, camera, controls){
 	//1인칭 시점일 때만 작동함
 	if (if2D == false){
 		controls.minPolarAngle =  Math.PI * 0.5;
 		controls.maxPolarAngle =  Math.PI * 0.5;
 		controls.rotateSpeed = 1;
-		moveFirstPersonCameraAll(userObject, camera, controls)
+		moveFirstPersonCameraAll(scene, userObject, camera, controls)
 	}
 	else if(if2D == true){
 		controls.minPolarAngle = 0;
 		controls.maxPolarAngle = 0;
 		controls.rotateSpeed = 0;
-		move2DCameraAll(camera, controls);
+		move2DCameraAll(scene, camera, controls);
 	}
 }
 
 /**
  * orbitcontrol을 first person 시점으로 사용
  */
-function moveFirstPersonCameraAll(userObject, camera, controls){
+function moveFirstPersonCameraAll(scene, userObject, camera, controls){
 	userObject.body.angularDamping = 1; //계속 회전 방지
 
 	var ve = userObject.getPosition(); //현재 팩맨 중심좌표
@@ -593,17 +606,42 @@ function moveFirstPersonCameraAll(userObject, camera, controls){
 
 	userObject.body.angularDamping = 1; //계속 회전 방지
 	controls.update();
-}
 
+	// AmbientLight 있었으면 없애기
+	if(ambientLight != undefined) {
+		removeAmbientLight(scene);
+	}
+
+	// 기존에 사용자 Light 없으면
+	if(userLight == undefined) {
+		// 좌표에 따른 새 광원 생성
+		addPointLight(scene, 0xFFFFFF, 1, 0, ve.x + 10 * direct.x, pacman_height + 30, ve.z + 10 * direct.z);
+	}
+	// 있으면 좌표 변경
+	else {
+		userLight.position.set(ve.x + 10 * direct.x, pacman_height, ve.z + 10 * direct.z);
+	}
+	
+}
 
 /**
  * orbitcontrol을 3인칭 시점(2D)으로 사용
  */
-function move2DCameraAll(camera, controls){
+function move2DCameraAll(scene, camera, controls){
 	//1인칭 시점일 때만 작동함
 	camera.position.set(0, pacman_height2D, 0); //카메라 셋팅
 	controls.target.set(0, 0, 0); //타겟 설정 - 얘를 중심으로 공전
 	controls.update();
+
+	// PointLight 있었으면 없애기
+	if(userLight != undefined) {
+		removePointLight(scene);
+	}
+
+	// AmbientLight 없으면 생성
+	if(ambientLight == undefined) {
+		addAmbientLight(scene, 0xFFFFFF, 1);
+	}
 }
 
 /**
@@ -649,7 +687,10 @@ export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterG
 	   collisionFilterGroup: collisionFilterGroup_val,
 	   mass: mass_val
 	});
-	createNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshBasicMaterial ({ color: sur_color})), boxBody);
+	createNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshPhongMaterial ({ 
+		color: sur_color,
+		flatShading: true
+	})), boxBody);
 }
 
 /**
@@ -704,7 +745,11 @@ export function createGhost(scene, world, objName, x, y, z, color) {
  * @param {Integer} circleNumber
  */
  export function createCircle(scene, world, posx, posy, posz, circleNumber) {
-	var circleMesh = new THREE.Mesh(new THREE.SphereGeometry(40, 32, 16), new THREE.MeshBasicMaterial({ color: 0xFFFF7D }))
+	var circleMesh = new THREE.Mesh(new THREE.SphereGeometry(40, 256, 128), new THREE.MeshPhongMaterial({ 
+		color: 0xFFFF7D,
+		flatShading: true 
+	}));
+
 	var circleBody = new CANNON.Body({ 
 		shape: new CANNON.Sphere(40),
 		collisionFilterGroup: 128,
@@ -825,15 +870,71 @@ export function changeGhostColor(objectName, color) {
 }
 
 /**
+ * AmbientLight를 추가한다
+ * @param {THREE.Scene} scene 
+ * @param {HEX} color 
+ * @param {Int} intensity 
+ */
+function addAmbientLight(scene, color, intensity) {
+	if (ambientLight != undefined) removeAmbientLight(scene);
+
+	ambientLight = new THREE.AmbientLight(color, intensity);
+	scene.add(ambientLight);
+}
+
+/**
+ * AmbientLight를 제거한다
+ * @param {THREE.Scene} scene 
+ */
+function removeAmbientLight(scene) {
+	if(ambientLight != undefined) {
+		scene.remove(ambientLight);
+		ambientLight = undefined;
+	}
+}
+
+/**
+ * PointLight를 추가한다
+ * @param {THREE.Scene} scene 
+ * @param {HEX} color 
+ * @param {Int} intensity 
+ * @param {Int} distance 
+ * @param {Int} x 
+ * @param {Int} y 
+ * @param {Int} z 
+ */
+function addPointLight(scene, color, intensity, distance, x, y, z) {
+	if (userLight != undefined) removePointLight(scene);
+
+	userLight = new THREE.PointLight(color, intensity, distance);
+	userLight.position.set(x, y, z);
+	scene.add(userLight);
+}
+
+/**
+ * PointLight를 제거한다
+ * @param {THREE.Scene} scene 
+ */
+function removePointLight(scene) {
+	if(userLight != undefined) {
+		scene.remove(userLight);
+		userLight = undefined;
+	}
+}
+
+/**
  * Update Physical Engine 
  */
-export function updatePhysics(world, camera, controls) {
+export function updatePhysics(scene, world, camera, controls) {
 	if (isloadingFinished) {
 		// Step the physics world
 		world.step(timeStep);
 
-		//카메라 설정
-		if(object['pacman'] != undefined) selectCameraType(object['pacman'], camera, controls)
+		if(object['pacman'] != undefined) {
+			// 카메라 설정
+			selectCameraType(scene, object['pacman'], camera, controls);
+		}
+
 
 		Object.keys(object).forEach(function(key) {
 			object[key].update();

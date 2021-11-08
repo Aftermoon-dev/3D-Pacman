@@ -25,9 +25,6 @@ export function initGachonMap(scene, world, controls, camera) {
 	// Scene 리셋
 	Utils.resetScene(scene, world);
 
-	const hlight = new THREE.AmbientLight(0x404040, 100);
-	scene.add(hlight);
-
 	// 화면에 Stage 글자 변경
 	Utils.updateStage(1);
 
