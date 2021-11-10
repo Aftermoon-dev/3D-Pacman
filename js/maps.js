@@ -1083,7 +1083,7 @@ export function initSpaceMap(scene, world, controls, camera) {
 	Utils.setUserEvent(scene, world, controls, camera);
 
 	// 고스트
-	Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
+	Utils.createGhost(scene, world, 'ghost1', 0, 360, 0, 0xFFFF00);
 
 	// 동글이들
 	// 제일 왼쪽 세로줄
@@ -1254,7 +1254,6 @@ export function initSpaceMap(scene, world, controls, camera) {
 	Utils.createCircle(scene, world, 1625, 140, -575);
 	Utils.createCircle(scene, world, 1525, 140, 575);
 	
-
 	// H 윗부분
 	Utils.createCircle(scene, world, 3300, 140, -3225);
 	Utils.createCircle(scene, world, 3300, 140, -2775);
