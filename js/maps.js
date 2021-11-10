@@ -289,7 +289,7 @@ export function initGachonMap(scene, world, controls, camera) {
 	Utils.setUserEvent(scene, world, controls, camera);
 
 	// 고스트
-	Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
+	Utils.createGhost(scene, world, 'ghost1', 0, 360, 0, 0xFFFF00);
 
 	// 동글이들
 	// 제일 왼쪽 세로줄

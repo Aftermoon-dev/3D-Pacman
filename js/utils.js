@@ -235,14 +235,14 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 		shape: new CANNON.Sphere(radius),
 		collisionFilterGroup: 1,
 		angularDamping: 1,
-		collisionFilterMask: 2 | 4 | 8 | 16 | 32 | 64, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥 64 고스트
+		collisionFilterMask: 2 | 4, // 바닥 및 벽
 		mass: 3,
 	});
 
 	pacman_item = new CANNON.Body({ 
 		shape: new CANNON.Sphere(radius),
 		angularDamping: 1,
-		collisionFilterMask: 2 | 128, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥 64 고스트
+		collisionFilterMask: 2 | 16 | 32 | 64 | 128, // 바닥, 벽, 아이템, 텔레포트, 고스트
 		mass: 0,
 		type: 1
 	});
@@ -251,6 +251,7 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 	world.add(pacman_item);
 	
 	object['pacman'].position(posx, posy, posz);
+	pacman_item.position.set(posx, posy, posz);
 }
 
 /**
@@ -820,11 +821,10 @@ export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterG
  */
 export function createGhost(scene, world, objName, x, y, z, color) {
 	var ghostBody = new CANNON.Body({
-		shape: new CANNON.Box(new CANNON.Vec3(150, 400, 150)),
+		shape: new CANNON.Box(new CANNON.Vec3(150, 200, 150)),
 		collisionFilterGroup: 64,
 		angularDamping: 1,
 		collisionFilterMask: 1 | 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥
-		position: new CANNON.Vec3(x, y, z),
 		mass: 0,
 		type: 3
 	});
