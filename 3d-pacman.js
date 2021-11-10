@@ -17,8 +17,6 @@ import CannonDebugRenderer from './js/CannonDebugRenderer.js';
 var world, canvas, camera, scene, renderer;
 var debug;
 var controls;
-var polyfill;
-let isXREnable = false;
 
 /**
  * Window OnLoad Event
@@ -91,15 +89,9 @@ function onWindowResize() {
  * Animate
  */
 function animate() {
-	requestAnimationFrame(animate);
 	Utils.updatePhysics(scene, world, camera, controls);
 	TWEEN.update();
 	if(Utils.developerMode) debug.update();
 	renderer.render(scene, camera);
-}
-
-function xrLoop() {
-	renderer.setAnimationLoop( function () {
-		renderer.render( scene, camera );
-	});
+	renderer.setAnimationLoop(animate);
 }
