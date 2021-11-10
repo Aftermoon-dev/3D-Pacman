@@ -25,8 +25,7 @@ window.onload = function() {
 	initThreeJS();
 	initCannon();
 	initObject();
-	animate();
-	xrLoop();
+	renderer.setAnimationLoop(animate);
 }
 
 /**
@@ -93,5 +92,4 @@ function animate() {
 	TWEEN.update();
 	if(Utils.developerMode) debug.update();
 	renderer.render(scene, camera);
-	renderer.setAnimationLoop(animate);
 }
