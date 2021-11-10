@@ -41,27 +41,39 @@ export function initGachonMap(scene, world, controls, camera) {
 	]);
 	scene.background = texture;
 	
+	let ground_texture_dry = Utils.textureLoader.load('./resources/textures/brown_planks_09_disp_4k.png');
+
+			
 	// 바닥 만들기
-	var groundBody = new CANNON.Body({
-		shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 500 / 2, 8000 / 2)),
-		collisionFilterGroup: 2,
-		collisionFilterMask: 1 | 64,
-		mass: 0
+	Utils.textureLoader.load('./resources/textures/brown_planks_09_diff_4k.jpg', (texture) => {
+		const ground_material = new THREE.MeshPhongMaterial({
+			map: texture,
+			bumpMap: ground_texture_dry,
+		});
+
+		var groundBody = new CANNON.Body({
+			shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 500 / 2, 8000 / 2)),
+			collisionFilterGroup: 2,
+			collisionFilterMask: 1 | 64,
+			mass: 0
+		});
+
+		Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(10000, 500, 8000), ground_material), groundBody);
+		Utils.object['ground'].position(0, -200, 0);
+
 	});
-	Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(10000, 500, 8000), new THREE.MeshBasicMaterial({ color: 0x808080 })), groundBody);
-	Utils.object['ground'].position(0, -200, 0);
 
 	/** 벽 만들기 **/
 	// 맵 감싸는 벽
-	Utils.createWallObject(scene, world, 'wall6', 0x1200ff, 100, 800, 10000);
+	Utils.createTransparentWallObject(scene, world, 'wall6', 0x1200ff, 100, 800, 10000);
 	Utils.object['wall6'].position(0, 0, -4000);
 	Utils.object['wall6'].rotateY(90);
-	Utils.createWallObject(scene, world, 'wall9', 0x1200ff, 100, 800, 10000);
+	Utils.createTransparentWallObject(scene, world, 'wall9', 0x1200ff, 100, 800, 10000);
 	Utils.object['wall9'].position(0, 0, 4000);
 	Utils.object['wall9'].rotateY(90);
-	Utils.createWallObject(scene, world, 'wall42', 0x1200ff, 100, 800, 8000);
+	Utils.createTransparentWallObject(scene, world, 'wall42', 0x1200ff, 100, 800, 8000);
 	Utils.object['wall42'].position(5000, 0, 0);
-	Utils.createWallObject(scene, world, 'wall43', 0x1200ff, 100, 800, 8000);
+	Utils.createTransparentWallObject(scene, world, 'wall43', 0x1200ff, 100, 800, 8000);
 	Utils.object['wall43'].position(-5000, 0, 0);
 	
 	// C (고스트 시작 위치)

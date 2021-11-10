@@ -6,6 +6,7 @@
 
 import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/optimized/three.js';
 import { OrbitControls } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/controls/OrbitControls.js';
+import { VRButton } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/webxr/VRButton.js'
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js';
 import * as Utils from './js/utils.js';
 import * as Maps from './js/maps.js';
@@ -16,6 +17,8 @@ import CannonDebugRenderer from './js/CannonDebugRenderer.js';
 var world, canvas, camera, scene, renderer;
 var debug;
 var controls;
+var polyfill;
+let isXREnable = false;
 
 /**
  * Window OnLoad Event
@@ -38,6 +41,11 @@ function initThreeJS() {
 
 	renderer = new THREE.WebGLRenderer({ canvas });
 	renderer.setSize(canvas.width, canvas.height);
+	document.body.appendChild( VRButton.createButton( renderer ) );
+	renderer.xr.enabled = true;
+	renderer.setAnimationLoop( function () {
+		renderer.render( scene, camera );
+	});
 
 	scene = new THREE.Scene();
 
