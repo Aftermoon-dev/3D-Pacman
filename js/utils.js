@@ -135,6 +135,17 @@ export class worldObj {
 				this.mesh.quaternion.copy(body.quaternion);
 			}
 		}
+
+		// 객체 삭제
+		this.delete = function(scene, world) {
+			setTimeout(function() {
+				scene.remove(mesh);
+				this.mesh = undefined;
+				world.removeBody(body);
+				this.body = undefined;
+				delete object[objName];
+			}, 100);
+		}
 	}
 	
 	//객체의 위치를 알려줌
@@ -189,15 +200,6 @@ export class worldObj {
 		}
 
 		this.body.velocity.set(directionVector.x, 0, directionVector.z);
-	}
-
-	// 객체 삭제
-	delete(scene, world) {
-		scene.remove(this.mesh);
-		this.mesh = undefined;
-		world.removeBody(this.body);
-		this.body = undefined;
-		delete object[this.objName];
 	}
 }
 
@@ -547,7 +549,6 @@ export function setUserEvent(scene, world, controls, camera) {
 		let output = Object.fromEntries(Object.entries(object).filter(([k,v]) => v.body == e.body));
 		const targetItem = Object.keys(output)[0];
 
-		console.log(e);
 		// 고스트랑 닿을 경우
 		if (e.body.type == 3) {
 			console.log("Meet the Ghost!" + item4Flag);
