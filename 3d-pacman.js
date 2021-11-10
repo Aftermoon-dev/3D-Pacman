@@ -70,9 +70,9 @@ function initCannon() {
  */
 function initObject() {
 	// 맵 생성
-	// Maps.initGachonMap(scene, world, controls, camera);
-	Maps.initNaturalMap(scene, world, controls, camera);
-	// Maps.initSpaceMap(scene, world, controls, camera);
+	Maps.initGachonMap(scene, world, controls, camera);
+	//Maps.initNaturalMap(scene, world, controls, camera);
+	//Maps.initSpaceMap(scene, world, controls, camera);
 }
 
 /**

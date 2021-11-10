@@ -60,7 +60,7 @@ export var nowMoveOK = true; //이게 true일때 setCameraType에서 온전히 �
 export var targetPosition; //camera 이동할 때 지정해 줄 좌표
 export var isTween = false; //tween이 실행중인지
 
-export var developerMode = true; //개발자 모드 ON!
+export var developerMode = false; //개발자 모드 ON!
 
 /* Object Dictonary */
 export const object = {};
