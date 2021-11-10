@@ -51,7 +51,7 @@ export function initGachonMap(scene, world, controls, camera) {
 	Utils.object['wall42'].position(5000, 0, 0);
 	Utils.createWallObject(scene, world, 'wall43', 0x1200ff, 100, 800, 8000);
 	Utils.object['wall43'].position(-5000, 0, 0);
-
+	
 	// C (고스트 시작 위치)
 	Utils.createWallObject(scene, world, 'wall1', 0xFFFFFF, 100, 800, 1200);
 	Utils.object['wall1'].position(0, 0, -800);
@@ -152,10 +152,7 @@ export function initGachonMap(scene, world, controls, camera) {
 		Utils.createNewObject(scene, world, 'wall22', new THREE.Mesh(new THREE.BoxGeometry(1800, 800, 1500), leftSquareMaterialArray), wallBody);
 		Utils.object['wall22'].position(-3500, 0, 0);
 		Utils.object['wall22'].rotateY(90);
-
-		
 	});
-
 
 	// O
 	Utils.createWallObject(scene, world, 'wall23', 0x00b9f2, 1800, 800, 200);
@@ -229,6 +226,7 @@ export function initGachonMap(scene, world, controls, camera) {
 	//  -> 방향키 반대로 (빨강) / 속도 빨라지거나 느려지게 하는 것 (주황) / 팩맨 크기 커지는 것 (연두)
 	//  -> 유령 먹을 수 있게 되는 것 (하늘) / 3D -> 2D 시야 변경 (분홍)
 
+	/*
 	Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
 	Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500); 
 
@@ -243,16 +241,8 @@ export function initGachonMap(scene, world, controls, camera) {
 	
 	Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
 	Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500);
-
-	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500, 1);
-	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500, 2);
-	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500, 3);
-	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500, 4);
-	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500, 5);
-	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500, 6);
-	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500, 7);
-	Utils.createCircle(scene, world, Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500, 8);
-
+	*/
+	
 	// 텔레포트 구현
 	const obj1Pos = Utils.object['tpnorth'].body.position;
 	const obj2Pos = Utils.object['tpsouth'].body.position;
@@ -279,6 +269,387 @@ export function initGachonMap(scene, world, controls, camera) {
 
 	// 고스트
 	Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
+
+	// 동글이들
+	Utils.createCircle(scene, world, -4625, 140, -3675, 1);
+	Utils.createCircle(scene, world, -4625, 140, -3375, 2);
+	Utils.createCircle(scene, world, -4625, 140, -2975, 3);
+	Utils.createCircle(scene, world, -4625, 140, -2625, 4);
+	Utils.createCircle(scene, world, -4625, 140, -2275, 5);
+	Utils.createCircle(scene, world, -4625, 140, -1925, 6);
+	Utils.createCircle(scene, world, -4625, 140, -1575, 7);
+	Utils.createCircle(scene, world, -4625, 140, -1225, 8);
+	Utils.createCircle(scene, world, -4625, 140, -875, 9);
+	Utils.createCircle(scene, world, -4625, 140, -525, 10);
+	Utils.createCircle(scene, world, -4625, 140, -175, 11);
+
+	Utils.createCircle(scene, world, -4625, 140, 175, 12);
+	Utils.createCircle(scene, world, -4625, 140, 525, 13);
+	Utils.createCircle(scene, world, -4625, 140, 875, 14);
+	Utils.createCircle(scene, world, -4625, 140, 1225, 15);
+	Utils.createCircle(scene, world, -4625, 140, 1575, 16);
+	Utils.createCircle(scene, world, -4625, 140, 1925, 17);
+	Utils.createCircle(scene, world, -4625, 140, 2275, 18);
+	Utils.createCircle(scene, world, -4625, 140, 2625, 19);
+	Utils.createCircle(scene, world, -4625, 140, 2975, 20);
+	Utils.createCircle(scene, world, -4625, 140, 3375, 21);
+	Utils.createCircle(scene, world, -4625, 140, 3675, 22);
+	
+	Utils.createCircle(scene, world, 4675, 140, -3375, 23);
+	Utils.createCircle(scene, world, 4675, 140, -2975, 24);
+	Utils.createCircle(scene, world, 4675, 140, -2625, 25);
+	Utils.createCircle(scene, world, 4675, 140, -2275, 26);
+	Utils.createCircle(scene, world, 4675, 140, -1925, 27);
+	Utils.createCircle(scene, world, 4675, 140, -1575, 28);
+	Utils.createCircle(scene, world, 4675, 140, -1225, 29);
+	Utils.createCircle(scene, world, 4675, 140, -875, 30);
+	Utils.createCircle(scene, world, 4675, 140, -525, 31);
+	Utils.createCircle(scene, world, 4675, 140, -175, 32);
+
+	Utils.createCircle(scene, world, 4675, 140, 175, 33);
+	Utils.createCircle(scene, world, 4675, 140, 525, 34);
+	Utils.createCircle(scene, world, 4675, 140, 875, 35);
+	Utils.createCircle(scene, world, 4675, 140, 1225, 36);
+	Utils.createCircle(scene, world, 4675, 140, 1575, 37);
+	Utils.createCircle(scene, world, 4675, 140, 1925, 38);
+	Utils.createCircle(scene, world, 4675, 140, 2275, 39);
+	Utils.createCircle(scene, world, 4675, 140, 2625, 40);
+	Utils.createCircle(scene, world, 4675, 140, 2975, 41);
+	Utils.createCircle(scene, world, 4675, 140, 3375, 42);
+	
+	Utils.createCircle(scene, world, -2400, 140, -3375, 43);
+	Utils.createCircle(scene, world, -2400, 140, -2975, 44);
+	Utils.createCircle(scene, world, -2400, 140, -2625, 45);
+	Utils.createCircle(scene, world, -2400, 140, -2275, 46);
+	Utils.createCircle(scene, world, -2400, 140, -1925, 47);
+	Utils.createCircle(scene, world, -2400, 140, -1575, 48);
+	Utils.createCircle(scene, world, -2400, 140, -875, 49);
+	Utils.createCircle(scene, world, -2400, 140, -525, 50);
+	Utils.createCircle(scene, world, -2400, 140, -175, 51);
+
+	Utils.createCircle(scene, world, -2400, 140, 175, 52);
+	Utils.createCircle(scene, world, -2400, 140, 525, 53);
+	Utils.createCircle(scene, world, -2400, 140, 875, 54);
+	Utils.createCircle(scene, world, -2400, 140, 1575, 55);
+	Utils.createCircle(scene, world, -2400, 140, 1925, 56);
+	Utils.createCircle(scene, world, -2400, 140, 2275, 57);
+	Utils.createCircle(scene, world, -2400, 140, 2625, 58);
+	Utils.createCircle(scene, world, -2400, 140, 2975, 59);
+	Utils.createCircle(scene, world, -2400, 140, 3375, 60);
+	
+	Utils.createCircle(scene, world, 2400, 140, -3375, 61);
+	Utils.createCircle(scene, world, 2400, 140, -2975, 62);
+	Utils.createCircle(scene, world, 2400, 140, -2625, 63);
+	Utils.createCircle(scene, world, 2400, 140, -2275, 64);
+	Utils.createCircle(scene, world, 2400, 140, -1925, 65);
+	Utils.createCircle(scene, world, 2400, 140, -1575, 66);
+	Utils.createCircle(scene, world, 2400, 140, -875, 67);
+	Utils.createCircle(scene, world, 2400, 140, -525, 68);
+	Utils.createCircle(scene, world, 2400, 140, -175, 69);
+
+	Utils.createCircle(scene, world, 2400, 140, 175, 70);
+	Utils.createCircle(scene, world, 2400, 140, 525, 71);
+	Utils.createCircle(scene, world, 2400, 140, 875, 72);
+	Utils.createCircle(scene, world, 2400, 140, 1575, 73);
+	Utils.createCircle(scene, world, 2400, 140, 1925, 74);
+	Utils.createCircle(scene, world, 2400, 140, 2275, 75);
+	Utils.createCircle(scene, world, 2400, 140, 2625, 76);
+	Utils.createCircle(scene, world, 2400, 140, 2975, 77);
+	Utils.createCircle(scene, world, 2400, 140, 3375, 78);
+	
+	Utils.createCircle(scene, world, -4325, 140, 1225, 79);
+	Utils.createCircle(scene, world, -4025, 140, 1225, 80);
+	Utils.createCircle(scene, world, -3725, 140, 1225, 81);
+	Utils.createCircle(scene, world, -3425, 140, 1225, 82);
+	Utils.createCircle(scene, world, -3125, 140, 1225, 83);
+	Utils.createCircle(scene, world, -2825, 140, 1225, 84);
+	Utils.createCircle(scene, world, -2525, 140, 1225, 85);
+	Utils.createCircle(scene, world, -2225, 140, 1225, 86);
+	Utils.createCircle(scene, world, -1925, 140, 1225, 85);
+	Utils.createCircle(scene, world, -1625, 140, 1225, 86);
+
+	Utils.createCircle(scene, world, -1625, 140, 1225, 87);
+	Utils.createCircle(scene, world, -1625, 140, 925, 88);
+	Utils.createCircle(scene, world, -1625, 140, 625, 89);
+	Utils.createCircle(scene, world, -1625, 140, 325, 90);
+
+	Utils.createCircle(scene, world, -1625, 140, -325, 91);
+	Utils.createCircle(scene, world, -1625, 140, -575, 92);
+	Utils.createCircle(scene, world, -1625, 140, -825, 93);
+	Utils.createCircle(scene, world, -1275, 140, -325, 94);
+	Utils.createCircle(scene, world, -1275, 140, -575, 95);
+	Utils.createCircle(scene, world, -1275, 140, -825, 96);
+	
+	Utils.createCircle(scene, world, 1625, 140, -925, 97);
+	Utils.createCircle(scene, world, 1625, 140, -625, 98);
+	Utils.createCircle(scene, world, 1625, 140, -325, 99);
+
+	Utils.createCircle(scene, world, 1625, 140, 325, 100);
+	Utils.createCircle(scene, world, 1625, 140, 575, 101);
+	Utils.createCircle(scene, world, 1625, 140, 825, 102);
+	Utils.createCircle(scene, world, 1275, 140, 325, 103);
+	Utils.createCircle(scene, world, 1275, 140, 575, 104);
+	Utils.createCircle(scene, world, 1275, 140, 825, 105);
+
+	Utils.createCircle(scene, world, -1325, 140, 1225, 106);
+	Utils.createCircle(scene, world, -1025, 140, 1225, 107);
+	Utils.createCircle(scene, world, -725, 140, 1225, 108);
+	Utils.createCircle(scene, world, -425, 140, 1225, 109);
+	Utils.createCircle(scene, world, -125, 140, 1225, 110);
+	Utils.createCircle(scene, world, 175, 140, 1225, 111);
+	Utils.createCircle(scene, world, 475, 140, 1225, 112);
+	Utils.createCircle(scene, world, 775, 140, 1225, 113);
+	Utils.createCircle(scene, world, 1075, 140, 1225, 114);
+	Utils.createCircle(scene, world, 1375, 140, 1225, 115);
+	
+	Utils.createCircle(scene, world, 1675, 140, 1225, 116);
+	Utils.createCircle(scene, world, 1975, 140, 1225, 117);
+	Utils.createCircle(scene, world, 2275, 140, 1225, 118);
+	Utils.createCircle(scene, world, 2575, 140, 1225, 119);
+	Utils.createCircle(scene, world, 2875, 140, 1225, 120);
+	Utils.createCircle(scene, world, 3175, 140, 1225, 121);
+	Utils.createCircle(scene, world, 3475, 140, 1225, 122);
+	Utils.createCircle(scene, world, 3775, 140, 1225, 123);
+	Utils.createCircle(scene, world, 4075, 140, 1225, 124);
+	Utils.createCircle(scene, world, 4375, 140, 1225, 125);
+	Utils.createCircle(scene, world, 4675, 140, 1225, 126);
+	
+	Utils.createCircle(scene, world, -4325, 140, -1125, 127);
+	Utils.createCircle(scene, world, -4025, 140, -1125, 128);
+	Utils.createCircle(scene, world, -3725, 140, -1125, 129);
+	Utils.createCircle(scene, world, -3425, 140, -1125, 130);
+	Utils.createCircle(scene, world, -3125, 140, -1125, 131);
+	Utils.createCircle(scene, world, -2825, 140, -1125, 132);
+	Utils.createCircle(scene, world, -2525, 140, -1125, 133);
+	Utils.createCircle(scene, world, -2225, 140, -1125, 134);
+	Utils.createCircle(scene, world, -1925, 140, -1125, 135);
+	Utils.createCircle(scene, world, -1625, 140, -1125, 136);
+	
+	Utils.createCircle(scene, world, -4300, 140, 3675, 137);
+	Utils.createCircle(scene, world, -4000, 140, 3675, 138);
+	Utils.createCircle(scene, world, -3700, 140, 3675, 139);
+	Utils.createCircle(scene, world, -3400, 140, 3675, 140);
+	Utils.createCircle(scene, world, -3100, 140, 3675, 141);
+	Utils.createCircle(scene, world, -2800, 140, 3675, 142);
+	Utils.createCircle(scene, world, -2500, 140, 3675, 143);
+	Utils.createCircle(scene, world, -2200, 140, 3675, 144);
+	Utils.createCircle(scene, world, -1900, 140, 3675, 145);
+	Utils.createCircle(scene, world, -1600, 140, 3675, 146);
+	Utils.createCircle(scene, world, -1300, 140, 3675, 147);
+	
+	Utils.createCircle(scene, world, 1200, 140, 3675, 148);
+	Utils.createCircle(scene, world, 1500, 140, 3675, 149);
+	Utils.createCircle(scene, world, 1800, 140, 3675, 150);
+	Utils.createCircle(scene, world, 2100, 140, 3675, 151);
+	Utils.createCircle(scene, world, 2400, 140, 3675, 152);
+	Utils.createCircle(scene, world, 2700, 140, 3675, 153);
+	Utils.createCircle(scene, world, 3000, 140, 3675, 154);
+	Utils.createCircle(scene, world, 3300, 140, 3675, 155);
+	Utils.createCircle(scene, world, 3600, 140, 3675, 156);
+	Utils.createCircle(scene, world, 3900, 140, 3675, 157);
+	Utils.createCircle(scene, world, 4200, 140, 3675, 158);
+	Utils.createCircle(scene, world, 4500, 140, 3675, 159);
+
+	Utils.createCircle(scene, world, -2400, 140, 1925, 160);
+	Utils.createCircle(scene, world, -2100, 140, 1925, 161);
+	Utils.createCircle(scene, world, -1800, 140, 1925, 162);
+	Utils.createCircle(scene, world, -1500, 140, 1925, 163);
+	Utils.createCircle(scene, world, -1200, 140, 1925, 164);
+	Utils.createCircle(scene, world, -900, 140, 1925, 165);
+	Utils.createCircle(scene, world, -600, 140, 1925, 166);
+	Utils.createCircle(scene, world, -300, 140, 1925, 167);
+	Utils.createCircle(scene, world, 300, 140, 1925, 168);
+	Utils.createCircle(scene, world, 600, 140, 1925, 169);
+	Utils.createCircle(scene, world, 900, 140, 1925, 170);
+	Utils.createCircle(scene, world, 1200, 140, 1925, 171);
+	Utils.createCircle(scene, world, 1500, 140, 1925, 172);
+	Utils.createCircle(scene, world, 1800, 140, 1925, 173);
+	Utils.createCircle(scene, world, 2100, 140, 1925, 174);
+	Utils.createCircle(scene, world, 2400, 140, 1925, 175);
+	
+	Utils.createCircle(scene, world, -4300, 140, -3675, 176);
+	Utils.createCircle(scene, world, -4000, 140, -3675, 177);
+	Utils.createCircle(scene, world, -3700, 140, -3675, 178);
+	Utils.createCircle(scene, world, -3400, 140, -3675, 179);
+	Utils.createCircle(scene, world, -3100, 140, -3675, 180);
+	Utils.createCircle(scene, world, -2800, 140, -3675, 181);
+	Utils.createCircle(scene, world, -2500, 140, -3675, 182);
+	Utils.createCircle(scene, world, -2200, 140, -3675, 183);
+	Utils.createCircle(scene, world, -1900, 140, -3675, 184);
+	Utils.createCircle(scene, world, -1600, 140, -3675, 185);
+	Utils.createCircle(scene, world, -1300, 140, -3675, 186);
+	
+	Utils.createCircle(scene, world, 1200, 140, -3675, 187);
+	Utils.createCircle(scene, world, 1500, 140, -3675, 188);
+	Utils.createCircle(scene, world, 1800, 140, -3675, 189);
+	Utils.createCircle(scene, world, 2100, 140, -3675, 190);
+	Utils.createCircle(scene, world, 2400, 140, -3675, 191);
+	Utils.createCircle(scene, world, 2700, 140, -3675, 192);
+	Utils.createCircle(scene, world, 3000, 140, -3675, 193);
+	Utils.createCircle(scene, world, 3300, 140, -3675, 194);
+	Utils.createCircle(scene, world, 3600, 140, -3675, 195);
+	Utils.createCircle(scene, world, 3900, 140, -3675, 196);
+	Utils.createCircle(scene, world, 4200, 140, -3675, 197);
+	Utils.createCircle(scene, world, 4500, 140, -3675, 198);
+
+	Utils.createCircle(scene, world, -2400, 140, -1925, 199);
+	Utils.createCircle(scene, world, -2100, 140, -1925, 200);
+	Utils.createCircle(scene, world, -1800, 140, -1925, 201);
+	Utils.createCircle(scene, world, -1500, 140, -1925, 202);
+	Utils.createCircle(scene, world, -1200, 140, -1925, 203);
+	Utils.createCircle(scene, world, -900, 140, -1925, 204);
+	Utils.createCircle(scene, world, -600, 140, -1925, 205);
+	Utils.createCircle(scene, world, -300, 140, -1925, 206);
+	Utils.createCircle(scene, world, 0, 140, -1925, 207);
+	Utils.createCircle(scene, world, 300, 140, -1925, 208);
+	Utils.createCircle(scene, world, 600, 140, -1925, 209);
+	Utils.createCircle(scene, world, 900, 140, -1925, 210);
+	Utils.createCircle(scene, world, 1200, 140, -1925, 211);
+	Utils.createCircle(scene, world, 1500, 140, -1925, 212);
+	Utils.createCircle(scene, world, 1800, 140, -1925, 213);
+	Utils.createCircle(scene, world, 2100, 140, -1925, 214);
+	Utils.createCircle(scene, world, 2400, 140, -1925, 215);
+
+	Utils.createCircle(scene, world, -1200, 140, 2260, 216);
+	Utils.createCircle(scene, world, -1200, 140, 2595, 217);
+	Utils.createCircle(scene, world, -1200, 140, 2930, 218);
+	Utils.createCircle(scene, world, -1200, 140, 3265, 219);
+	
+	Utils.createCircle(scene, world, 0, 140, 1525, 220);
+	Utils.createCircle(scene, world, 0, 140, 1845, 221);
+	Utils.createCircle(scene, world, 0, 140, 2165, 222);
+	Utils.createCircle(scene, world, 0, 140, 2485, 223);
+	Utils.createCircle(scene, world, 0, 140, 2805, 224); 
+	Utils.createCircle(scene, world, 0, 140, 3125, 225);
+	
+	Utils.createCircle(scene, world, 0, 140, -1325, 226);
+	Utils.createCircle(scene, world, 0, 140, -1625, 226);
+	Utils.createCircle(scene, world, 0, 140, -1925, 227);
+	Utils.createCircle(scene, world, 0, 140, -2225, 228);
+	Utils.createCircle(scene, world, 0, 140, -2525, 229);
+	Utils.createCircle(scene, world, 0, 140, -2825, 230);
+	Utils.createCircle(scene, world, 0, 140, -3125, 231);
+
+	Utils.createCircle(scene, world, -1250, 140, -3375, 232);
+	Utils.createCircle(scene, world, -1250, 140, -3075, 233);
+	Utils.createCircle(scene, world, -1250, 140, -2775, 234);
+	Utils.createCircle(scene, world, -1250, 140, -2475, 235);
+	Utils.createCircle(scene, world, -1250, 140, -2175, 236);
+	
+	Utils.createCircle(scene, world, -900, 140, 925, 237);
+	Utils.createCircle(scene, world, -900, 140, 625, 238);
+	Utils.createCircle(scene, world, -900, 140, 325, 239);
+	Utils.createCircle(scene, world, -900, 140, 25, 240);
+	Utils.createCircle(scene, world, -900, 140, -275, 241);
+	Utils.createCircle(scene, world, -900, 140, -575, 242);
+	Utils.createCircle(scene, world, -900, 140, -875, 243);
+	
+	Utils.createCircle(scene, world, 1200, 140, -3375, 244);
+	Utils.createCircle(scene, world, 1200, 140, -3075, 245);
+	Utils.createCircle(scene, world, 1200, 140, -2775, 246);
+	Utils.createCircle(scene, world, 1200, 140, -2475, 247);
+	Utils.createCircle(scene, world, 1200, 140, -2175, 248);
+
+	Utils.createCircle(scene, world, 900, 140, 925, 237);
+	Utils.createCircle(scene, world, 900, 140, 625, 238);
+	Utils.createCircle(scene, world, 900, 140, 325, 239);
+	Utils.createCircle(scene, world, 900, 140, 25, 240);
+	Utils.createCircle(scene, world, 900, 140, -275, 241);
+	Utils.createCircle(scene, world, 900, 140, -575, 242);
+	Utils.createCircle(scene, world, 900, 140, -875, 243);
+
+	Utils.createCircle(scene, world, 3300, 140, -3375, 244);
+	Utils.createCircle(scene, world, 3300, 140, -3075, 245);
+	Utils.createCircle(scene, world, 3300, 140, -2775, 246);
+	Utils.createCircle(scene, world, 3600, 140, -3375, 247);
+	Utils.createCircle(scene, world, 3600, 140, -3075, 248);
+	Utils.createCircle(scene, world, 3600, 140, -2775, 249);
+	Utils.createCircle(scene, world, 3900, 140, -3375, 250);
+	Utils.createCircle(scene, world, 3900, 140, -3075, 251);
+	Utils.createCircle(scene, world, 3900, 140, -2775, 252);
+
+	Utils.createCircle(scene, world, 3300, 140, -2075, 253);
+	Utils.createCircle(scene, world, 3300, 140, -1775, 254);
+	Utils.createCircle(scene, world, 3300, 140, -1475, 255);
+	Utils.createCircle(scene, world, 3600, 140, -2075, 256);
+	Utils.createCircle(scene, world, 3600, 140, -1775, 257);
+	Utils.createCircle(scene, world, 3600, 140, -1475, 258);
+	Utils.createCircle(scene, world, 3900, 140, -2075, 259);
+	Utils.createCircle(scene, world, 3900, 140, -1775, 260);
+	Utils.createCircle(scene, world, 3900, 140, -1475, 261);
+
+	Utils.createCircle(scene, world, 3600, 140, -785, 262);
+	Utils.createCircle(scene, world, 3600, 140, -475, 263);
+	Utils.createCircle(scene, world, 3600, 140, -175, 264);
+	Utils.createCircle(scene, world, 3600, 140, 175, 265);
+	Utils.createCircle(scene, world, 3600, 140, 475, 266);
+	Utils.createCircle(scene, world, 3600, 140, 785, 267);
+
+	Utils.createCircle(scene, world, 3200, 140, -475, 268);
+	Utils.createCircle(scene, world, 3200, 140, -175, 269);
+	Utils.createCircle(scene, world, 3200, 140, 175, 270);
+	Utils.createCircle(scene, world, 3200, 140, 475, 271);
+	Utils.createCircle(scene, world, 4000, 140, -475, 272);
+	Utils.createCircle(scene, world, 4000, 140, -175, 273);
+	Utils.createCircle(scene, world, 4000, 140, 175, 274);
+	Utils.createCircle(scene, world, 4000, 140, 475, 275);
+
+	Utils.createCircle(scene, world, 3600, 140, 1575, 276);
+	Utils.createCircle(scene, world, 3900, 140, 1575, 277);
+	Utils.createCircle(scene, world, 3900, 140, 1875, 278);
+	Utils.createCircle(scene, world, 3900, 140, 2175, 279);
+
+	Utils.createCircle(scene, world, 3300, 140, 2705, 280);
+	Utils.createCircle(scene, world, 3300, 140, 3005, 281);
+	Utils.createCircle(scene, world, 3300, 140, 3305, 282);
+	Utils.createCircle(scene, world, 3600, 140, 3305, 283);
+	
+	Utils.createCircle(scene, world, -3900, 140, 3375, 284);
+	Utils.createCircle(scene, world, -3600, 140, 3375, 285);
+	Utils.createCircle(scene, world, -3300, 140, 3375, 286);
+	Utils.createCircle(scene, world, -3900, 140, 3075, 287);
+	Utils.createCircle(scene, world, -3600, 140, 3075, 288);
+	Utils.createCircle(scene, world, -3300, 140, 3075, 289);
+	Utils.createCircle(scene, world, -3900, 140, 2775, 290);
+	Utils.createCircle(scene, world, -3600, 140, 2775, 291);
+	Utils.createCircle(scene, world, -3300, 140, 2775, 292);
+
+	Utils.createCircle(scene, world, -3825, 140, -2875, 293);
+	Utils.createCircle(scene, world, -3525, 140, -2875, 294);
+	Utils.createCircle(scene, world, -3225, 140, -2875, 295);
+	Utils.createCircle(scene, world, -2925, 140, -2875, 296);
+
+	Utils.createCircle(scene, world, -3825, 140, -1975, 297);
+	Utils.createCircle(scene, world, -3525, 140, -1975, 298);
+	Utils.createCircle(scene, world, -3225, 140, -1975, 299);
+	Utils.createCircle(scene, world, -2925, 140, -1975, 300);
+
+	Utils.createCircle(scene, world, 1200, 140, 2255, 301);
+	Utils.createCircle(scene, world, 1200, 140, 2585, 302);
+	Utils.createCircle(scene, world, 1200, 140, 2915, 303);
+	Utils.createCircle(scene, world, 1200, 140, 3245, 304);
+	
+	Utils.createCircle(scene, world, -1325, 140, -1125, 305);
+	Utils.createCircle(scene, world, -1025, 140, -1125, 306);
+	Utils.createCircle(scene, world, -725, 140, -1125, 307);
+	Utils.createCircle(scene, world, -425, 140, -1125, 308);
+	Utils.createCircle(scene, world, -125, 140, -1125, 309);
+	Utils.createCircle(scene, world, 175, 140, -1125, 310);
+	Utils.createCircle(scene, world, 475, 140, -1125, 311);
+	Utils.createCircle(scene, world, 775, 140, -1125, 312);
+	Utils.createCircle(scene, world, 1075, 140, -1125, 313);
+	Utils.createCircle(scene, world, 1375, 140, -1125, 314);
+	
+	Utils.createCircle(scene, world, 1675, 140, -1125, 315);
+	Utils.createCircle(scene, world, 1975, 140, -1125, 316);
+	Utils.createCircle(scene, world, 2275, 140, -1125, 317);
+	Utils.createCircle(scene, world, 2575, 140, -1125, 318);
+	Utils.createCircle(scene, world, 2875, 140, -1125, 319);
+	Utils.createCircle(scene, world, 3175, 140, -1125, 320);
+	Utils.createCircle(scene, world, 3475, 140, -1125, 321);
+	Utils.createCircle(scene, world, 3775, 140, -1125, 322);
+	Utils.createCircle(scene, world, 4075, 140, -1125, 323);
+	Utils.createCircle(scene, world, 4375, 140, -1125, 324);
 }
 
 export function initBasicMap(scene, world, controls, camera) {
