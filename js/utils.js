@@ -10,12 +10,12 @@ import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVC
 import * as Maps from '../js/maps.js'
 
 /* Setting */
-const timeStep = 1/30;
+const timeStep = 1/60;
 
-export var userSpeed = 500; //유저의 속도를 결정
+export var userSpeed = 1300; //유저의 속도를 결정
 export var pacman_height = 180; //팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
 export var pacman_height2D = 7300; //2D view height
-export var ghostSpeed = 450; // 고스트 속도
+export var ghostSpeed = 1250; // 고스트 속도
 
 export const loadManager = new THREE.LoadingManager();
 loadManager.onStart = () => {
@@ -60,11 +60,13 @@ export var nowMoveOK = true; //이게 true일때 setCameraType에서 온전히 �
 export var targetPosition; //camera 이동할 때 지정해 줄 좌표
 export var isTween = false; //tween이 실행중인지
 
-
-export var developerMode = false; //개발자 모드 ON!
+export var developerMode = true; //개발자 모드 ON!
 
 /* Object Dictonary */
 export const object = {};
+
+/* Pacman Transparent Body */
+export let pacman_item = undefined;
 
 /* Audio List */
 export const audioList = {
@@ -94,6 +96,7 @@ export class worldObj {
 		this.objName = objName;
 		this.body = body;
 		this.mesh = mesh;
+		this.y = undefined;
 
 		this.mesh.position.copy(body.position);
 		this.mesh.quaternion.copy(body.quaternion);
@@ -104,6 +107,7 @@ export class worldObj {
 		}
 
 		this.position = function(x, y, z) {
+			this.y = y;
 			this.mesh.position.set(x, y, z);
 			this.body.position.set(x, y, z);
 		}
@@ -127,8 +131,21 @@ export class worldObj {
 		}
 		
 		this.update = function() {
-			this.mesh.position.copy(body.position);
-			this.mesh.quaternion.copy(body.quaternion);
+			if(this.body != undefined && this.mesh != undefined) {
+				this.mesh.position.copy(body.position);
+				this.mesh.quaternion.copy(body.quaternion);
+			}
+		}
+
+		// 객체 삭제
+		this.delete = function(scene, world) {
+			setTimeout(function() {
+				scene.remove(mesh);
+				this.mesh = undefined;
+				world.removeBody(body);
+				this.body = undefined;
+				delete object[objName];
+			}, 100);
 		}
 	}
 	
@@ -139,7 +156,12 @@ export class worldObj {
 
 	//객체의 회전률을 알려줌
 	getRotation() {
-	return this.body.rotation;
+		return this.body.rotation;
+	}
+
+	// y
+	getY() {
+		return this.y;
 	}
 
 	// 객체의 속도를 설정
@@ -180,14 +202,6 @@ export class worldObj {
 
 		this.body.velocity.set(directionVector.x, 0, directionVector.z);
 	}
-
-	// 객체 삭제 - 수행 후 object dict에서도 지워줄 것
-	delete(scene, world) {
-		scene.remove(this.mesh);
-		this.mesh = undefined;
-		world.removeBody(this.body);
-		this.body = undefined;
-	}
 }
 
 /**
@@ -209,23 +223,33 @@ export function createNewObject(scene, world, objName, mesh, body) {
  * @param {X} posx 
  * @param {Y} posy 
  * @param {Z} posz 
- * @param {Integer} radius 
+ * @param {Integer} radius
  */
 export function createPacman(scene, world, posx, posy, posz, radius) {
 	var pacmanMesh = new THREE.Mesh(new THREE.SphereGeometry(radius, 256, 128), new THREE.MeshPhongMaterial({ 
 		color: 0xffd400,
 		flatShading: true
 	}));
+
 	var pacmanBody = new CANNON.Body({ 
 		shape: new CANNON.Sphere(radius),
 		collisionFilterGroup: 1,
 		angularDamping: 1,
-		collisionFilterMask: 2 | 4 | 8 | 16 | 32 | 64 | 128, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥 64 고스트
+		collisionFilterMask: 2 | 4 | 8 | 16 | 32 | 64, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥 64 고스트
 		mass: 3,
+	});
+
+	pacman_item = new CANNON.Body({ 
+		shape: new CANNON.Sphere(radius),
+		angularDamping: 1,
+		collisionFilterMask: 2 | 128, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥 64 고스트
+		mass: 0,
 		type: 1
 	});
-	
+
 	createNewObject(scene, world, 'pacman', pacmanMesh, pacmanBody);
+	world.add(pacman_item);
+	
 	object['pacman'].position(posx, posy, posz);
 }
 
@@ -248,6 +272,21 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 	});
 	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshLambertMaterial({ color: wallcolor})), wallBody);
 }
+
+export function createTransparentWallObject(scene, world, wallname, wallcolor, x, y, z) {
+	var wallBody = new CANNON.Body({
+		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
+		collisionFilterGroup: 4,
+		mass: 0,
+		type: 1000
+	});
+	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshLambertMaterial({ 
+		color: wallcolor, 
+		transparent: true,
+		opacity: 0.5
+	})), wallBody);
+}
+
 
 export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x, y, z, material) {
 	var wallBody = new CANNON.Body({
@@ -349,7 +388,6 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber) 
 
 	object['pacman'].body.removeEventListener(userObjectCollide);
 	object['pacman'].delete(scene, world);
-	delete object['pacman'];
 
 	removeGlobalEventListener()
 	createPacman(scene, world, x, y, z, item3Flag);
@@ -363,7 +401,6 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber) 
 
 		object['pacman'].body.removeEventListener(userObjectCollide);
 		object['pacman'].delete(scene, world);
-		delete object['pacman'];
 
 		createPacman(scene, world, x, y, z, 180); // Default 180
 		removeGlobalEventListener()
@@ -473,6 +510,10 @@ export function setUserEvent(scene, world, controls, camera) {
 			// 	if (if2D == false)
 			// 		pacman_height -= 30;
 			// 	break;
+
+			case "Z":
+				applyItem3Event(scene, world, controls, camera);
+				break;
 		}
 	};
 	document.addEventListener("keydown", keyDownCallback);
@@ -507,6 +548,7 @@ export function setUserEvent(scene, world, controls, camera) {
 	// Collide Event
 	userObjectCollide = function(e) {
 		let output = Object.fromEntries(Object.entries(object).filter(([k,v]) => v.body == e.body));
+		const targetItem = Object.keys(output)[0];
 
 		// 고스트랑 닿을 경우
 		if (e.body.type == 3) {
@@ -514,8 +556,7 @@ export function setUserEvent(scene, world, controls, camera) {
 
 			// 먹는 모드일 경우
 			if(item4Flag) {
-				output[Object.keys(output)[0]].delete(scene, world);
-				delete object[output[Object.keys(output)[0]].objName];
+				object[targetItem].delete(scene, world);
 			}
 			// 아니면
 			else {
@@ -526,10 +567,8 @@ export function setUserEvent(scene, world, controls, camera) {
 			totalScore += 10;
 			document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
 			
-			console.log(Object.keys(output)[0]) /////////////////
-			output[Object.keys(output)[0]].delete(scene, world);
-			delete object[output[Object.keys(output)[0]].objName];
-			
+			object[targetItem].delete(scene, world);
+
 			// 현재 스테이지에 따라 다음 동작 정의
 			if(currentStage == 1) {
 				if (totalScore == 3400) {  // Stage 1 Clear 점수 넣기!
@@ -554,35 +593,30 @@ export function setUserEvent(scene, world, controls, camera) {
 			stopTimer(timer);
 			startTimer(1);
 			applyItem1Event();
-			output[Object.keys(output)[0]].delete(scene, world);
-			delete object[output[Object.keys(output)[0]].objName];
+			object[targetItem].delete(scene, world);
 		} else if (e.body.type == 102) {
 			stopTimer(timer);
 			startTimer(2);
 			applyItem2Event();
-			output[Object.keys(output)[0]].delete(scene, world);
-			delete object[output[Object.keys(output)[0]].objName];
+			object[targetItem].delete(scene, world);
 		} else if (e.body.type == 103) {
 			stopTimer(timer);
 			startTimer(3);
 			applyItem3Event(scene, world, controls, camera);
-			output[Object.keys(output)[0]].delete(scene, world);
-			delete object[output[Object.keys(output)[0]].objName];
+			object[targetItem].delete(scene, world);
 		} else if (e.body.type == 104) {
 			stopTimer(timer);
 			startTimer(4);
 			applyItem4Event();
-			output[Object.keys(output)[0]].delete(scene, world);
-			delete object[output[Object.keys(output)[0]].objName];
+			object[targetItem].delete(scene, world);
 		} else if (e.body.type == 105) {
 			stopTimer(timer);
 			startTimer(5);
 			applyItem5Event();
-			output[Object.keys(output)[0]].delete(scene, world);
-			delete object[output[Object.keys(output)[0]].objName];
+			object[targetItem].delete(scene, world);
 		}
 	};
-	userObject.body.addEventListener("collide", userObjectCollide);
+	pacman_item.addEventListener("collide", userObjectCollide);
 }
 
 
@@ -746,7 +780,7 @@ export function resetScene(scene, world) {
 			object[element].body.removeEventListener(userObjectCollide);
 		}
 		object[element].delete(scene, world);
-		delete object[element];
+		//delete object[element];
 	});
 }
 
@@ -834,6 +868,7 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		shape: new CANNON.Sphere(40),
 		collisionFilterGroup: 128,
 		collisionFilterMask: 1,
+		mass: 1,
 		type: 4
 	});
 
@@ -1013,9 +1048,8 @@ export function updatePhysics(scene, world, camera, controls, renderer) {
 		if(object['pacman'] != undefined) {
 			// 카메라 설정
 			selectCameraType(scene, object['pacman'], camera, controls, renderer);
+			pacman_item.position = object['pacman'].body.position;
 		}
-
-
 		Object.keys(object).forEach(function(key) {
 			object[key].update();
 		});
