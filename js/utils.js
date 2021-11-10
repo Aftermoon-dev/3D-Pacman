@@ -53,9 +53,6 @@ export var score = 0;
 export var totalScore = 0;   
 
 /* camera control variable */
-<<<<<<< HEAD
-export var if2D = false; 
-=======
 export var if2D = false;
 export var first2DFlage = true; //1인칭 -> 3인칭이 처음 된 건지 체크
 export var nowMoveOK = true; //이게 true일때 setCameraType에서 온전히 함수들이 작동 (false일때는 카메라가 이동중이라는 의미)
@@ -63,7 +60,6 @@ export var targetPosition; //camera 이동할 때 지정해 줄 좌표
 export var isTween = false; //tween이 실행중인지
 
 
->>>>>>> 56bef68cc5cab94acb42b9345fce7c96c0033d2a
 export var developerMode = false; //개발자 모드 ON!
 
 /* Object Dictonary */
