@@ -1130,9 +1130,9 @@ export function initSpaceMap(scene, world, controls, camera) {
 	});
 
 	// 팩맨
-	Utils.createPacman(scene, world, 2000, 230, 0, 180);
+	Utils.createPacman(scene, world, 0, 230, 0, 180);
 	Utils.setUserEvent(scene, world, controls, camera);
 	
 	// 고스트
-	Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
+	// Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
 }

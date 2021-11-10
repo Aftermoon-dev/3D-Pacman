@@ -456,6 +456,8 @@ export function setUserEvent(scene, world, controls, camera) {
 	// Key를 올렸을 때
 	keyDownCallback = function(event) {
 		userObject.body.angularDamping = 1;
+		if (isTween == true)
+			return;
 
 		switch(event.key) {
 			case "W":
@@ -621,10 +623,20 @@ export function setUserEvent(scene, world, controls, camera) {
 }
 
 
+/** 처음에 2D 5초간 보여주기
+ * @param {OrbitControls} controls
+ */
+export function initcamera(controls){
+	changePointOfView(object['pacman'], controls);
+	item5Timer = setTimeout(function(){
+		changePointOfView(object['pacman'], controls);
+	}, 10000);
+}
+
 /** 
  * 카메라 시점 변경 
 */
-function changePointOfView(userObject, controls, camera){
+function changePointOfView(userObject, controls){
 	if (if2D == false){ //1인칭 -> 2D
 		if2D = true;
 		//set position
@@ -848,6 +860,10 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		createNewObject(scene, world, objName, root, ghostBody);
 		object[objName].position(x, y, z);
 	});
+
+
+	//ghost 이동 함수 넣어야 할듯
+
 }
 
 /**
