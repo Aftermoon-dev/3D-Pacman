@@ -54,25 +54,6 @@ export function initNaturalMap(scene, world, controls, camera) {
 		});
 		Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(7000, 5, 8000), ground_material), groundBody);
 		Utils.object['ground'].position(0, -200, 0);
-
-		/*
-		// 아이템
-		Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
-		Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 0, Math.floor(Math.random() * 31) * 100 - 1500);
-
-		Utils.createItemObject(scene, world, 'item2', 0xffc000, 102);
-		Utils.object['item2'].position(Math.floor(Math.random() * 31) * 100 - 1500, 0, Math.floor(Math.random() * 31) * 100 - 1500);
-
-		Utils.createItemObject(scene, world, 'item3', 0x92d050, 103);
-		Utils.object['item3'].position(Math.floor(Math.random() * 31) * 100 - 1500, 0, Math.floor(Math.random() * 31) * 100 - 1500);
-
-		Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104);
-		Utils.object['item4'].position(Math.floor(Math.random() * 31) * 100 - 1500, 0, Math.floor(Math.random() * 31) * 100 - 1500);
-
-		Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
-		Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 0, Math.floor(Math.random() * 31) * 100 - 1500);
-		*/
-
 		
 		// 동글이들
 		// 제일 왼쪽 세로줄
@@ -222,6 +203,9 @@ export function initNaturalMap(scene, world, controls, camera) {
 		// 추가 점들
 		Utils.createCircle(scene, world, -475, 20, -3400);
 		Utils.createCircle(scene, world, 475, 20, 3400);
+
+		// 아이템
+		Utils.locateItem(scene, world, 1, 1, 1, 1, 1, 1);
 	});
 	
 	/** 벽 만들기 **/

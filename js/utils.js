@@ -321,6 +321,34 @@ export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x
 	})), wallBody);
 }
 
+
+/**
+ * 동글이 만들기
+ * @param {THREE.Scene} scene 
+ * @param {CANNON.World} world 
+ * @param {X} posx 
+ * @param {Y} posy 
+ * @param {Z} posz 
+ */
+ export function createCircle(scene, world, posx, posy, posz) {
+	var circleMesh = new THREE.Mesh(new THREE.SphereGeometry(40, 256, 128), new THREE.MeshPhongMaterial({ 
+		color: 0xFFFF7D,
+		flatShading: true 
+	}));
+
+	var circleBody = new CANNON.Body({ 
+		shape: new CANNON.Sphere(40),
+		collisionFilterGroup: 128,
+		collisionFilterMask: 1,
+		mass: 1,
+		type: 4
+	});
+
+	circleNumber++;
+	createNewObject(scene, world, 'circle' + circleNumber, circleMesh, circleBody);
+	object['circle' + circleNumber].position(posx, posy, posz);
+}
+
 /**
  * Item 등록
  * @param {THREE.Scene} scene
@@ -328,8 +356,11 @@ export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x
  * @param {String} itemName
  * @param {String (Color Hex Code, 0xFFFFFF)} itemColor
  * @param {Integer} itemNumber
+ * @param {X} posx 
+ * @param {Y} posy 
+ * @param {Z} posz 
  */
-export function createItemObject(scene, world, itemName, itemColor, itemNumber) { // item 번호 붙여서 번호마다 기능 다르게 넣기
+export function createItemObject(scene, world, itemName, itemColor, itemNumber, posx, posy, posz) { // item 번호 붙여서 번호마다 기능 다르게 넣기
 	var itemMesh = new THREE.Mesh(new THREE.SphereGeometry(80, 256, 128), new THREE.MeshPhongMaterial({ 
 		color: itemColor,
 		flatShading: true
@@ -343,6 +374,7 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber) 
 	});
 	
 	createNewObject(scene, world, itemName, itemMesh, itemBody);
+	object[itemName].position(posx, posy, posz);
 }
 
 /**
@@ -432,6 +464,109 @@ export function applyItem5Event() {
 	item5Timer = setTimeout(function(){
 		if2D = false
 	}, 5000);
+}
+
+/**
+ * Item Location Function
+ * @param {Integer} stageNum 
+ * @param {Integer} Item1Num 
+ * @param {Integer} Item2Num 
+ * @param {Integer} Item3Num 
+ * @param {Integer} Item4Num 
+ * @param {Integer} Item5Num 
+ */
+export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num, Item4Num, Item5Num) {
+	if (stageNum == 1) {
+		// 동글이 114개
+
+		for (var i = 0; i < Item1Num; i++) {
+			var randIndex = Math.floor((Math.random() * 115) + 1);
+			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			object['circle' + randIndex].delete(scene, world);
+		}
+		for (var i = 0; i < Item2Num; i++) {
+			var randIndex = Math.floor((Math.random() * 115) + 1);
+			createItemObject(scene, world, 'item2', 0xffc000, 102,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			object['circle' + randIndex].delete(scene, world);
+		}
+		for (var i = 0; i < Item3Num; i++) {
+			var randIndex = Math.floor((Math.random() * 115) + 1);
+			createItemObject(scene, world, 'item3', 0x92d050, 103,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			object['circle' + randIndex].delete(scene, world);
+		}
+		for (var i = 0; i < Item4Num; i++) {
+			var randIndex = Math.floor((Math.random() * 115) + 1);
+			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			object['circle' + randIndex].delete(scene, world);
+		}
+		for (var i = 0; i < Item5Num; i++) {
+			var randIndex = Math.floor((Math.random() * 115) + 1);
+			createItemObject(scene, world, 'item5', 0xff99cc, 105,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			object['circle' + randIndex].delete(scene, world);
+		}
+	} else if (stageNum == 2) {
+		// 동글이 142개
+
+		for (var i = 0; i < Item1Num; i++) {
+			var randIndex = Math.floor((Math.random() * 143) + 1);
+			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+
+		}
+		for (var i = 0; i < Item2Num; i++) {
+			var randIndex = Math.floor((Math.random() * 143) + 1);
+			createItemObject(scene, world, 'item2', 0xffc000, 102,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+		}
+		for (var i = 0; i < Item3Num; i++) {
+			var randIndex = Math.floor((Math.random() * 143) + 1);
+			createItemObject(scene, world, 'item3', 0x92d050, 103,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+		}
+		for (var i = 0; i < Item4Num; i++) {
+			var randIndex = Math.floor((Math.random() * 143) + 1);
+			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+		}
+		for (var i = 0; i < Item5Num; i++) {
+			var randIndex = Math.floor((Math.random() * 143) + 1);
+			createItemObject(scene, world, 'item5', 0xff99cc, 105,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+		}
+	} else if (stageNum == 3) {
+		// 동글이 204개
+
+		for (var i = 0; i < Item1Num; i++) {
+			var randIndex = Math.floor((Math.random() * 205) + 1);
+			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+		}
+		for (var i = 0; i < Item2Num; i++) {
+			var randIndex = Math.floor((Math.random() * 205) + 1);
+			createItemObject(scene, world, 'item2', 0xffc000, 102,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+		}
+		for (var i = 0; i < Item3Num; i++) {
+			var randIndex = Math.floor((Math.random() * 205) + 1);
+			createItemObject(scene, world, 'item3', 0x92d050, 103,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+		}
+		for (var i = 0; i < Item4Num; i++) {
+			var randIndex = Math.floor((Math.random() * 205) + 1);
+			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+		}
+		for (var i = 0; i < Item5Num; i++) {
+			var randIndex = Math.floor((Math.random() * 205) + 1);
+			createItemObject(scene, world, 'item5', 0xff99cc, 105,
+			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+		}
+	}
 }
 
 /**
@@ -864,35 +999,6 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 
 	//ghost 이동 함수 넣어야 할듯
 
-}
-
-/**
- * 동글이 만들기
- * @param {THREE.Scene} scene 
- * @param {CANNON.World} world 
- * @param {X} posx 
- * @param {Y} posy 
- * @param {Z} posz 
- */
- export function createCircle(scene, world, posx, posy, posz) {
-	var circleMesh = new THREE.Mesh(new THREE.SphereGeometry(40, 256, 128), new THREE.MeshPhongMaterial({ 
-		color: 0xFFFF7D,
-		flatShading: true 
-	}));
-
-	var circleBody = new CANNON.Body({ 
-		shape: new CANNON.Sphere(40),
-		collisionFilterGroup: 128,
-		collisionFilterMask: 1,
-		mass: 1,
-		type: 4
-	});
-
-	circleNumber++;
-	console.log(circleNumber);
-	var circleName = 'circle' + circleNumber;
-	createNewObject(scene, world, circleName, circleMesh, circleBody);
-	object[circleName].position(posx, posy, posz);
 }
 
 /**
