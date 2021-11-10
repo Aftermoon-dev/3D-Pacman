@@ -822,15 +822,14 @@ export function initSpaceMap(scene, world, controls, camera) {
 	Utils.updateStage(3);
 
 	// 맵 배경 택스쳐 이미지
-	
 	const loader = new THREE.CubeTextureLoader();
 	const texture = loader.load([
-		'resources/cubemaps/map1/cloud_px.png',
-		'resources/cubemaps/map1/cloud_nx.png',
-		'resources/cubemaps/map1/cloud_py.png',
-		'resources/cubemaps/map1/cloud_ny.png',
-		'resources/cubemaps/map1/cloud_pz.png',
-		'resources/cubemaps/map1/cloud_nz.png',
+		'resources/cubemaps/map1/gachon_px.png',
+		'resources/cubemaps/map1/gachon_nx.png',
+		'resources/cubemaps/map1/gachon_py.png',
+		'resources/cubemaps/map1/gachon_ny.png',
+		'resources/cubemaps/map1/gachon_pz.png',
+		'resources/cubemaps/map1/gachon_nz.png',
 	]);
 	scene.background = texture;
 	

@@ -18,13 +18,18 @@ var world, canvas, camera, scene, renderer;
 var debug;
 var controls;
 
+/* VR */
+export let isVRMode = false;
+
 /**
  * Window OnLoad Event
  */
 window.onload = function() {
 	initThreeJS();
+	initVR();
 	initCannon();
 	initObject();
+	Utils.initcamera(controls);
 	renderer.setAnimationLoop(animate);
 }
 
@@ -39,8 +44,6 @@ function initThreeJS() {
 
 	renderer = new THREE.WebGLRenderer({ canvas });
 	renderer.setSize(canvas.width, canvas.height);
-	document.body.appendChild( VRButton.createButton( renderer ) );
-	renderer.xr.enabled = true;
 	scene = new THREE.Scene();
 
 	camera = new THREE.PerspectiveCamera( 75, canvas.width / canvas.height, 1, 15000);
@@ -82,6 +85,27 @@ function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
+}
+
+function initVR() {
+	document.body.appendChild(VRButton.createButton(renderer));
+	const vrEnableButton = document.getElementById("VRButton");
+	renderer.xr.enabled = true;
+
+	vrEnableButton.addEventListener("click", function() {
+		if(vrEnableButton.innerHTML != "VR NOT SUPPORTED") {
+			if(!isVRMode) {
+				isVRMode = true;
+			}
+			else {
+				isVRMode = false;
+			}
+			console.log("VR Enable : " + isVRMode);
+		}
+		else {
+			console.log("VR Not Supported");
+		}
+	});
 }
 
 /**
