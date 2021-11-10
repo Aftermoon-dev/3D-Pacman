@@ -10,7 +10,7 @@ import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVC
 import * as Maps from '../js/maps.js'
 
 /* Setting */
-const timeStep = 1/30;
+const timeStep = 1/60;
 
 export var userSpeed = 500; //유저의 속도를 결정
 export var pacman_height = 180; //팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
@@ -506,6 +506,7 @@ export function setUserEvent(scene, world, controls, camera) {
 	// Collide Event
 	userObjectCollide = function(e) {
 		let output = Object.fromEntries(Object.entries(object).filter(([k,v]) => v.body == e.body));
+		const targetItem = Object.keys(output)[0];
 
 		// 고스트랑 닿을 경우
 		if (e.body.type == 3) {
@@ -513,8 +514,8 @@ export function setUserEvent(scene, world, controls, camera) {
 
 			// 먹는 모드일 경우
 			if(item4Flag) {
-				output[Object.keys(output)[0]].delete(scene, world);
-				delete object[output[Object.keys(output)[0]].objName];
+				object[targetItem].delete(scene, world);
+				delete object[targetItem];
 			}
 			// 아니면
 			else {
@@ -524,10 +525,9 @@ export function setUserEvent(scene, world, controls, camera) {
 			score += 10;
 			totalScore += 10;
 			document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
-			
-			console.log(Object.keys(output)[0]) /////////////////
-			output[Object.keys(output)[0]].delete(scene, world);
-			delete object[output[Object.keys(output)[0]].objName];
+		
+			object[targetItem].delete(scene, world);
+			delete object[targetItem];
 			
 			// 현재 스테이지에 따라 다음 동작 정의
 			if(currentStage == 1) {
@@ -553,34 +553,35 @@ export function setUserEvent(scene, world, controls, camera) {
 			stopTimer(timer);
 			startTimer(1);
 			applyItem1Event();
-			output[Object.keys(output)[0]].delete(scene, world);
-			delete object[output[Object.keys(output)[0]].objName];
+			object[targetItem].delete(scene, world);
+			delete object[targetItem];
 		} else if (e.body.type == 102) {
 			stopTimer(timer);
 			startTimer(2);
 			applyItem2Event();
-			output[Object.keys(output)[0]].delete(scene, world);
-			delete object[output[Object.keys(output)[0]].objName];
+			object[targetItem].delete(scene, world);
+			delete object[targetItem];
 		} else if (e.body.type == 103) {
 			stopTimer(timer);
 			startTimer(3);
 			applyItem3Event(scene, world, controls, camera);
-			output[Object.keys(output)[0]].delete(scene, world);
-			delete object[output[Object.keys(output)[0]].objName];
+			object[targetItem].delete(scene, world);
+			delete object[targetItem];
 		} else if (e.body.type == 104) {
 			stopTimer(timer);
 			startTimer(4);
 			applyItem4Event();
-			output[Object.keys(output)[0]].delete(scene, world);
-			delete object[output[Object.keys(output)[0]].objName];
+			object[targetItem].delete(scene, world);
+			delete object[targetItem];
 		} else if (e.body.type == 105) {
 			stopTimer(timer);
 			startTimer(5);
 			applyItem5Event();
-			output[Object.keys(output)[0]].delete(scene, world);
-			delete object[output[Object.keys(output)[0]].objName];
+			object[targetItem].delete(scene, world);
+			delete object[targetItem];
 		}
 	};
+
 	userObject.body.addEventListener("collide", userObjectCollide);
 }
 
@@ -834,6 +835,8 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		shape: new CANNON.Sphere(40),
 		collisionFilterGroup: 128,
 		collisionFilterMask: 1,
+		mass: 0,
+		allowSleep: false,
 		type: 4
 	});
 
@@ -1011,9 +1014,13 @@ export function updatePhysics(scene, world, camera, controls, renderer) {
 		if(object['pacman'] != undefined) {
 			// 카메라 설정
 			selectCameraType(scene, object['pacman'], camera, controls, renderer);
+			
+			// Y축으로 올라가지 않도록 고정
+			if(object['pacman'].body.velocity.y > 0) {
+				object['pacman'].body.velocity.set(object['pacman'].body.velocity.x, 0, object['pacman'].body.velocity.z);
+			}
+			
 		}
-
-
 		Object.keys(object).forEach(function(key) {
 			object[key].update();
 		});
