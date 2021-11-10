@@ -27,9 +27,7 @@ export function initGachonMap(scene, world, controls, camera) {
 
 	// 화면에 Stage 글자 변경
 	Utils.updateStage(1);
-
 	// 맵 배경 택스쳐 이미지
-	
 	const loader = new THREE.CubeTextureLoader();
 	const texture = loader.load([
 		'resources/cubemaps/map1/cloud_px.png',
