@@ -538,14 +538,14 @@ export function setUserEvent(scene, world, controls, camera) {
 				}
 			}
 			else if (currentStage == 2) {
-				if (totalScore == 4000) {  // Stage 2 Clear 점수 넣기!
+				if (totalScore == 5760) {  // Stage 2 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
 					Maps.initBasicMap(scene, world, controls, camera); // Next Map
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
 				}
 			}
 			else if (currentStage == 3) {
-				if (totalScore == 4600) {  // Stage 3 Clear 점수 넣기!
+				if (totalScore == 8000) {  // Stage 3 Clear 점수 넣기!
 					window.location.href = 'gameclear.html'; // Clear Page
 				}
 			}
