@@ -27,17 +27,15 @@ export function initGachonMap(scene, world, controls, camera) {
 
 	// 화면에 Stage 글자 변경
 	Utils.updateStage(1);
-
 	// 맵 배경 택스쳐 이미지
-	
 	const loader = new THREE.CubeTextureLoader();
 	const texture = loader.load([
-		'resources/cubemaps/map1/cloud_px.png',
-		'resources/cubemaps/map1/cloud_nx.png',
-		'resources/cubemaps/map1/cloud_py.png',
-		'resources/cubemaps/map1/cloud_ny.png',
-		'resources/cubemaps/map1/cloud_pz.png',
-		'resources/cubemaps/map1/cloud_nz.png',
+		'resources/cubemaps/map1/gachon_px.png',
+		'resources/cubemaps/map1/gachon_nx.png',
+		'resources/cubemaps/map1/gachon_py.png',
+		'resources/cubemaps/map1/gachon_ny.png',
+		'resources/cubemaps/map1/gachon_pz.png',
+		'resources/cubemaps/map1/gachon_nz.png',
 	]);
 	scene.background = texture;
 	
@@ -291,7 +289,7 @@ export function initGachonMap(scene, world, controls, camera) {
 	Utils.setUserEvent(scene, world, controls, camera);
 
 	// 고스트
-	Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
+	Utils.createGhost(scene, world, 'ghost1', 0, 360, 0, 0xFFFF00);
 
 	// 동글이들
 	// 제일 왼쪽 세로줄
@@ -756,14 +754,7 @@ export function initNaturalMap(scene, world, controls, camera) {
 		Utils.createCircle(scene, world, 475, 20, 3400);
 	});
 
-
-	Utils.textureLoader.load('/resources/textures/wall_texture_01.jpg', (texture) => {
-		const wall_material = new THREE.MeshBasicMaterial({
-			map: texture,
-		});
-
-		/** 벽 만들기 **/
-
+        /** 벽 만들기 **/
 		// C (고스트 시작 위치)
 		Utils.createWallObject(scene, world, 'wall1', 0xFFFFFF, 100, 800, 1600);
 		Utils.object['wall1'].position(0, 0, -400); // x,y,z (오른쪽으로 얼마나 갈건지(음수면 왼쪽),위로 얼마나 올라갈건지(공중),하단으로 얼마나 갈건지(음수면 상단으로))
@@ -865,15 +856,15 @@ export function initNaturalMap(scene, world, controls, camera) {
 		Utils.object['wall23'].position(300, 0, 1625); // x,y,z 
 
 		// 맵 감싸는 벽
-		Utils.createWallObjectWithTexture(scene, world, 'wall24', 0xFF0033, 300, 800, 7800, wall_material);
+		Utils.createTransparentWallObject(scene, world, 'wall24', 0x918572, 300, 800, 7800);
 		Utils.object['wall24'].position(0, 0, -4000);
 		Utils.object['wall24'].rotateY(90);
-		Utils.createWallObjectWithTexture(scene, world, 'wall25', 0xFF0033, 300, 800, 7800, wall_material);
+		Utils.createTransparentWallObject(scene, world, 'wall25', 0x918572, 300, 800, 7800);
 		Utils.object['wall25'].position(0, 0, 4000);
 		Utils.object['wall25'].rotateY(90);
-		Utils.createWallObjectWithTexture(scene, world, 'wall26', 0xFF0033, 300, 800, 7800, wall_material);
+		Utils.createTransparentWallObject(scene, world, 'wall26', 0x918572, 300, 800, 7800);
 		Utils.object['wall26'].position(3500, 0, 0);
-		Utils.createWallObjectWithTexture(scene, world, 'wall27', 0xFF0033, 300, 800, 7800, wall_material);
+		Utils.createTransparentWallObject(scene, world, 'wall27', 0x918572, 300, 800, 7800);
 		Utils.object['wall27'].position(-3500, 0, 0);
 
 		// 텔레포트 구현
@@ -896,13 +887,12 @@ export function initNaturalMap(scene, world, controls, camera) {
 			}
 		});
 
-		// 팩맨
-		Utils.createPacman(scene, world, 600, 0, 0, 180);
-		Utils.setUserEvent(scene, world, controls, camera);
+	// 팩맨
+	Utils.createPacman(scene, world, 600, 0, 0, 180);
+	Utils.setUserEvent(scene, world, controls, camera);
 		
-		// 고스트
-		Utils.createGhost(scene, world, 'ghost1', 0, 250, 0, 0xFFFF00);
-	});
+	// 고스트
+	Utils.createGhost(scene, world, 'ghost1', 0, 250, 0, 0xFFFF00);
 }
 
 export function initSpaceMap(scene, world, controls, camera) {
@@ -973,15 +963,15 @@ export function initSpaceMap(scene, world, controls, camera) {
 	Utils.object['wall3'].rotateY(90);
 
 	// 맵 감싸는 벽
-	Utils.createWallObject(scene, world, 'wall4', 0x282828, 100, 800, 8000);
+	Utils.createTransparentWallObject(scene, world, 'wall4', 0x282828, 100, 800, 8000);
 	Utils.object['wall4'].position(0, 0, -4000);            
 	Utils.object['wall4'].rotateY(90);
-	Utils.createWallObject(scene, world, 'wall5', 0x282828, 100, 800, 8000);
+	Utils.createTransparentWallObject(scene, world, 'wall5', 0x282828, 100, 800, 8000);
 	Utils.object['wall5'].position(0, 0, 4000);
 	Utils.object['wall5'].rotateY(90);
-	Utils.createWallObject(scene, world, 'wall6', 0x282828, 100, 800, 8000);
+	Utils.createTransparentWallObject(scene, world, 'wall6', 0x282828, 100, 800, 8000);
 	Utils.object['wall6'].position(-3900, 0, 0);
-	Utils.createWallObject(scene, world, 'wall7', 0x282828, 100, 800, 8000);
+	Utils.createTransparentWallObject(scene, world, 'wall7', 0x282828, 100, 800, 8000);
 	Utils.object['wall7'].position(3900, 0, 0);
 
 	// 왼쪽 텔레포트 윗 벽
