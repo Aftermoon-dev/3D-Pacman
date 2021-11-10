@@ -51,6 +51,7 @@ export var timerImage;
 /* Score Setting */
 export var score = 0;
 export var totalScore = 0;   
+export var circleNumber = 0;
 
 /* camera control variable */
 export var if2D = false;
@@ -822,9 +823,8 @@ export function createGhost(scene, world, objName, x, y, z, color) {
  * @param {X} posx 
  * @param {Y} posy 
  * @param {Z} posz 
- * @param {Integer} circleNumber
  */
- export function createCircle(scene, world, posx, posy, posz, circleNumber) {
+ export function createCircle(scene, world, posx, posy, posz) {
 	var circleMesh = new THREE.Mesh(new THREE.SphereGeometry(40, 256, 128), new THREE.MeshPhongMaterial({ 
 		color: 0xFFFF7D,
 		flatShading: true 
@@ -837,6 +837,8 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		type: 4
 	});
 
+	circleNumber++;
+	console.log(circleNumber);
 	var circleName = 'circle' + circleNumber;
 	createNewObject(scene, world, circleName, circleMesh, circleBody);
 	object[circleName].position(posx, posy, posz);
