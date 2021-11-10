@@ -12,9 +12,9 @@ import * as Maps from '../js/maps.js'
 /* Setting */
 const timeStep = 1/60;
 
-export var userSpeed = 1300; //유저의 속도를 결정
-export var pacman_height = 180; //팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
-export var pacman_height2D = 7300; //2D view height
+export var userSpeed = 3000; // 유저의 속도를 결정
+export var pacman_height = 180; // 팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
+export var pacman_height2D = 7300; // 2D view height
 export var ghostSpeed = 1250; // 고스트 속도
 
 export const loadManager = new THREE.LoadingManager();
@@ -55,12 +55,12 @@ export var circleNumber = 0;
 
 /* camera control variable */
 export var if2D = false;
-export var first2DFlage = true; //1인칭 -> 3인칭이 처음 된 건지 체크
-export var nowMoveOK = true; //이게 true일때 setCameraType에서 온전히 함수들이 작동 (false일때는 카메라가 이동중이라는 의미)
-export var targetPosition; //camera 이동할 때 지정해 줄 좌표
-export var isTween = false; //tween이 실행중인지
+export var first2DFlage = true; // 1인칭 -> 3인칭이 처음 된 건지 체크
+export var nowMoveOK = true; // 이게 true일때 setCameraType에서 온전히 함수들이 작동 (false일때는 카메라가 이동중이라는 의미)
+export var targetPosition; // camera 이동할 때 지정해 줄 좌표
+export var isTween = false; // tween이 실행중인지
 
-export var developerMode = false; //개발자 모드 ON!
+export var developerMode = false; // 개발자 모드 ON!
 
 /* Object Dictonary */
 export const object = {};
@@ -570,22 +570,22 @@ export function setUserEvent(scene, world, controls, camera) {
 			object[targetItem].delete(scene, world);
 
 			// 현재 스테이지에 따라 다음 동작 정의
-			if(currentStage == 1) {
-				if (totalScore == 3400) {  // Stage 1 Clear 점수 넣기!
+			if (currentStage == 1) {
+				if (score == 1140) {  // Stage 1 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
-					Maps.initBasicMap(scene, world, controls, camera); // Next Map
+					Maps.initSpaceMap(scene, world, controls, camera); // Next Map
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
 				}
 			}
 			else if (currentStage == 2) {
-				if (totalScore == 5760) {  // Stage 2 Clear 점수 넣기!
+				if (score == 1420) {  // Stage 2 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
-					Maps.initBasicMap(scene, world, controls, camera); // Next Map
+					Maps.initGachonMap(scene, world, controls, camera); // Next Map
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
 				}
 			}
 			else if (currentStage == 3) {
-				if (totalScore == 8000) {  // Stage 3 Clear 점수 넣기!
+				if (score == 2040) {  // Stage 3 Clear 점수 넣기!
 					window.location.href = 'gameclear.html'; // Clear Page
 				}
 			}
