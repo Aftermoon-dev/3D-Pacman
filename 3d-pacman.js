@@ -28,6 +28,7 @@ window.onload = function() {
 	initCannon();
 	initObject();
 	animate();
+	xrLoop();
 }
 
 /**
@@ -43,10 +44,6 @@ function initThreeJS() {
 	renderer.setSize(canvas.width, canvas.height);
 	document.body.appendChild( VRButton.createButton( renderer ) );
 	renderer.xr.enabled = true;
-	renderer.setAnimationLoop( function () {
-		renderer.render( scene, camera );
-	});
-
 	scene = new THREE.Scene();
 
 	camera = new THREE.PerspectiveCamera( 75, canvas.width / canvas.height, 1, 15000);
@@ -99,4 +96,10 @@ function animate() {
 	TWEEN.update();
 	if(Utils.developerMode) debug.update();
 	renderer.render(scene, camera);
+}
+
+function xrLoop() {
+	renderer.setAnimationLoop( function () {
+		renderer.render( scene, camera );
+	});
 }
