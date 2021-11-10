@@ -1,144 +1,72 @@
+<!DOCTYPE html>
 <html>
+	<head>
+        <title>3D Pacman</title>
+        <link rel="shortcut icon" href="favicon.png">
+        <!-- 글꼴 적용 -->
+        <meta charset="utf-8">
+        <link href="font/fontStyle.css" rel="stylesheet">
 
-<head>
-    <title>3D Pacman</title>
-    <link rel="shortcut icon" href="favicon.png">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.js"></script>
-    <script type="module" src="3d-pacman.js"></script>
-    <script type = "text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script>
-
-    <style type="text/css">
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            font-family: Monospace;
-        }
-
-        canvas {
-            outline: none;
-        }
-    </style>
-
-    <!-- 글꼴 적용 -->
-    <meta charset="utf-8">
-    <link href="font/fontStyle.css" rel="stylesheet">
-
-    <!-- 배경색 적용 -->
-    <style>
-        body {
-            background-color: #000000;
-        }
-    </style>
-
-    <!-- 여러 가지 적용 -->
-    <style>
-        #stage {
-            text-align: left;
-            float: left;
-            width: 33.3%;
-            margin-top: 12px;
-            margin-bottom: 8px;
-            color: #ffd400;
-            font-size: 2em;
-        }
-
-        #timer {
-            margin-top: 7px;
-            text-align: center;
-            float: left;
-            width: 33.3%;
-        }
-
-        #score {
-            text-align: right;
-            float: left;
-            width: 33.3%;
-            margin-top: 12px;
-            margin-bottom: 8px;
-            color: #ffd400;
-            font-size: 2em;
-        }
-
-        #loading {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-size: xx-large;
-            font-family: sans-serif;
-            color: #FFFFFF;
-        }
-
-        /* Loading Animation by https://loading.io/css/ */
-        .lds-facebook {
-            display: inline-block;
-            position: relative;
-            width: 80px;
-            height: 80px;
-        }
-
-        .lds-facebook div {
-            display: inline-block;
-            position: absolute;
-            left: 8px;
-            width: 16px;
-            background: #fff;
-            animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
-        }
-
-        .lds-facebook div:nth-child(1) {
-            left: 8px;
-            animation-delay: -0.24s;
-        }
-
-        .lds-facebook div:nth-child(2) {
-            left: 32px;
-            animation-delay: -0.12s;
-        }
-
-        .lds-facebook div:nth-child(3) {
-            left: 56px;
-            animation-delay: 0;
-        }
-
-        @keyframes lds-facebook {
-            0% {
-                top: 8px;
-                height: 64px;
+        <!-- 배경색 적용 -->
+        <style>
+            body {
+                background-color: #000000;
+            }
+        </style>
+        
+        <!-- 여러 가지 적용 -->
+        <style>
+            #title {
+                text-align: center;
+                margin-top: 40px;
+                color: #ffd400;
+                font-size: 4em;
+                width: 100%;
+            }
+            
+            #pacmanImage {
+                text-align: center;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                width: 100%;
             }
 
-            50%,
-            100% {
-                top: 24px;
-                height: 32px;
+            #button {
+                text-align: center;
+                margin-top: 40px;
+                width: 100%;
             }
-        }
-    </style>
-</head>
 
-<body>
-    <div id="stage"> <span id="stageNum" style = "padding-left: 10px">STAGE 1</span> </div>
+            .button {
+                background-color: rgb(122, 241, 92);
+                border: none;
+                color: black;
+                font-family: "bing";
+                font-size: 30px;
+                padding: 20px 60px;
+                text-align: center;
+                text-decoration: none;
+                margin-left: 16px;
+                margin-right: 16px;
+                cursor: pointer;
+            }
 
-    <div id = "timer">
-        <img id="timerimage" src = "./image/timerStartEnd.png" style="width: 50; height: 50;">
-    </div>
+            .button:active {
+                background-color: #3e8e41;
+                box-shadow: 0 5px #666;
+                transform: translateY(4px);
+            }
+            .button:hover {background-color: tomato}
 
-    <div id="score"> <span id="scoreNum" style = "padding-right: 10px">SCORE 0</span> </div>
-    <div id="loading" hidden>
-        <div class="lds-facebook"><div></div><div></div><div></div></div>
-    </div>
+        </style>
+    </head>
 
-    <canvas id="gl-canvas" width="1920" height="1080" tabindex="0">
-        Oops ... your browser doesn't support the HTML5 canvas element
-    </canvas>
-</body>
-
+	<body>
+        <div id = "title"> <span>3D PACMAN</span> </div>
+        <div id = "pacmanImage"> <img src="image/pacman.png" width = "200px" height = "200px"> </div>
+        <div id = "button">
+            <input type = "button" value= "GAME START" class = "button" onClick="location.href='game.html'"></button>
+            <input type = "button" value = "How to Play" class = "button" onClick="location.href='howToPlay.html'"></button>
+        </div>       
+    </body>
 </html>
