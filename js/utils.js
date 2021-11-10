@@ -5,6 +5,7 @@
  */
 
 import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/optimized/three.js';
+import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js';
 import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/loaders/GLTFLoader.js';
 import * as Maps from '../js/maps.js'
 
@@ -13,7 +14,7 @@ const timeStep = 1/30;
 
 export var userSpeed = 500; //유저의 속도를 결정
 export var pacman_height = 180; //팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
-export var pacman_height2D = 8000; //2D view height
+export var pacman_height2D = 7300; //2D view height
 export var ghostSpeed = 450; // 고스트 속도
 
 export const loadManager = new THREE.LoadingManager();
@@ -53,6 +54,12 @@ export var totalScore = 0;
 
 /* camera control variable */
 export var if2D = false;
+export var first2DFlage = true; //1인칭 -> 3인칭이 처음 된 건지 체크
+export var nowMoveOK = true; //이게 true일때 setCameraType에서 온전히 함수들이 작동 (false일때는 카메라가 이동중이라는 의미)
+export var targetPosition; //camera 이동할 때 지정해 줄 좌표
+export var isTween = false; //tween이 실행중인지
+
+
 export var developerMode = false; //개발자 모드 ON!
 
 /* Object Dictonary */
@@ -238,7 +245,7 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 		mass: 0,
 		type: 1000
 	});
-	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshPhongMaterial({ color: wallcolor})), wallBody);
+	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshLambertMaterial({ color: wallcolor})), wallBody);
 }
 
 export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x, y, z, material) {
@@ -443,15 +450,12 @@ export function setUserEvent(scene, world, controls, camera) {
 				else
 					userObject.setVelocity(3);
 				break;
+
+
 			//임시로 넣어둔 부분! 누르면 1인칭 <-> 3인칭
 			case "C":
 			case "c":
-				if (if2D == false){
-					if2D = true;
-				}
-				else{
-					if2D = false;
-				}
+				changePointOfView(userObject, controls, camera);
 				break;
 
 			// // 이부분은 팩맨 커지는 아이템에 사용하면 될 듯
@@ -579,24 +583,92 @@ export function setUserEvent(scene, world, controls, camera) {
 	userObject.body.addEventListener("collide", userObjectCollide);
 }
 
+
+/** 
+ * 카메라 시점 변경 
+*/
+function changePointOfView(userObject, controls, camera){
+	if (if2D == false){ //1인칭 -> 2D
+		if2D = true;
+		//set position
+		targetPosition = new THREE.Vector3(0, pacman_height2D, 200);
+		controls.target.set(0, 0, 0); 
+	}
+	else{ // 2D -> 1인칭
+		if2D = false;
+
+		//set position
+		var ve = userObject.getPosition(); //현재 팩맨 중심좌표
+		var direct = new THREE.Vector3();
+		targetPosition = new THREE.Vector3(ve.x - 10 * direct.x, pacman_height, ve.z - 10 * direct.z);
+	}
+}
+
 /**
  *  카메라 선택
  */
 function selectCameraType(scene, userObject, camera, controls){
+	var duration = 1500; //during 3 second
+	
+	if (nowMoveOK == false){ //c에서 조절
+		tweenCamera(targetPosition, duration, controls, camera);
+		nowMoveOK = true;
+	}
 	//1인칭 시점일 때만 작동함
 	if (if2D == false){
-		controls.minPolarAngle =  Math.PI * 0.5;
-		controls.maxPolarAngle =  Math.PI * 0.5;
-		controls.rotateSpeed = 1;
-		moveFirstPersonCameraAll(scene, userObject, camera, controls)
+		if (first2DFlage == false){
+			nowMoveOK = false;
+			// controls.reset()
+			first2DFlage = true;
+			controls.minPolarAngle =  Math.PI * 0.5;
+			controls.maxPolarAngle =  Math.PI * 0.5;
+			controls.rotateSpeed = 1;
+		}
+		if (nowMoveOK == true)
+			moveFirstPersonCameraAll(scene, userObject, camera, controls);
 	}
 	else if(if2D == true){
-		controls.minPolarAngle = 0;
-		controls.maxPolarAngle = 0;
-		controls.rotateSpeed = 0;
-		move2DCameraAll(scene, camera, controls);
+		if (first2DFlage == true){
+			// controls.saveState()
+			nowMoveOK = false;
+			first2DFlage = false;
+			controls.minPolarAngle = 0;
+			controls.maxPolarAngle = 0;
+			controls.rotateSpeed = 0;
+		}
+
+		if (nowMoveOK == true)
+			move2DCameraAll(scene, camera, controls);
 	}
 }
+
+/**
+ * 1인칭 <-> 3인칭 변환을 부드럽게 
+ * ref : https://stackoverflow.com/questions/45252751/how-to-use-tween-to-animate-the-cameras-position
+ * https://stackoverflow.com/questions/28091876/tween-camera-position-while-rotation-with-slerp-three-js 
+*/
+ function tweenCamera(targetPosition, duration, controls, camera) {
+    controls.enabled = false;
+	isTween = true;
+
+	//camera position
+    var position = new THREE.Vector3().copy(camera.position);
+
+	//position
+    var tween = new TWEEN.Tween(position)
+        .to( targetPosition, duration )
+        .easing( TWEEN.Easing.Linear.None)
+        .onUpdate( function () {
+            camera.position.copy( position );
+            camera.lookAt( controls.target );
+        } )
+		.onComplete( function () {
+            camera.position.copy( targetPosition );
+            controls.enabled = true;
+			isTween = false;
+        } ).start();
+}
+
 
 /**
  * orbitcontrol을 first person 시점으로 사용
@@ -615,7 +687,7 @@ function moveFirstPersonCameraAll(scene, userObject, camera, controls){
 	controls.update();
 
 	// AmbientLight 있었으면 없애기
-	if(ambientLight != undefined) {
+	if(isTween == false && ambientLight != undefined) {
 		removeAmbientLight(scene);
 	}
 
@@ -930,14 +1002,14 @@ function removePointLight(scene) {
 /**
  * Update Physical Engine 
  */
-export function updatePhysics(scene, world, camera, controls) {
+export function updatePhysics(scene, world, camera, controls, renderer) {
 	if (isloadingFinished) {
 		// Step the physics world
 		world.step(timeStep);
 
 		if(object['pacman'] != undefined) {
 			// 카메라 설정
-			selectCameraType(scene, object['pacman'], camera, controls);
+			selectCameraType(scene, object['pacman'], camera, controls, renderer);
 		}
 
 
