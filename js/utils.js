@@ -34,6 +34,8 @@ export const textureLoader = new THREE.TextureLoader(loadManager);
 export let isloadingFinished = false; // 로딩 완료 여부 확인
 
 /* Item Setting */
+//  -> 방향키 반대로 (빨강) / 속도 빨라지거나 느려지게 하는 것 (주황) / 팩맨 크기 커지는 것 (연두)
+//  -> 유령 먹을 수 있게 되는 것 (하늘) / 3D -> 2D 시야 변경 (분홍)
 export var useitem = true; //item 적용할꺼면 true로
 
 export var item1Flag = true;

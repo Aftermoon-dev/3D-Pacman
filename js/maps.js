@@ -392,24 +392,7 @@ export function initSpaceMap(scene, world, controls, camera) {
 		});
 		Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(8000, 500, 8000),ground_material), groundBody);
 		Utils.object['ground'].position(0, -200, 0);
-
-		/*
-		Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
-		Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500); 
-
-		Utils.createItemObject(scene, world, 'item2', 0xffc000, 102);
-		Utils.object['item2'].position(Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500);
 		
-		Utils.createItemObject(scene, world, 'item3', 0x92d050, 103);
-		Utils.object['item3'].position(Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500);
-		
-		Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104);
-		Utils.object['item4'].position(Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500);
-		
-		Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
-		Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500);
-		*/
-
 		// 오른쪽 첫번째 세로줄
 		Utils.createCircle(scene, world, -3475, 140, -3580);
 		Utils.createCircle(scene, world, -3475, 140, -3080);
@@ -596,6 +579,9 @@ export function initSpaceMap(scene, world, controls, camera) {
 
 		Utils.createCircle(scene, world, -1550, 140, 0);
 		Utils.createCircle(scene, world, 1550, 140, 0);
+		
+		// 아이템
+		Utils.locateItem(scene, world, 2, 1, 1, 1, 1, 1);
 	});
 
 	/** 벽 만들기 **/
@@ -1010,30 +996,6 @@ export function initSpaceMap(scene, world, controls, camera) {
 	Utils.object['wall41'].position(3550, 0, 2400);
 	Utils.object['wall41'].rotateY(-60);
 	
-	// 아이템 만들기
-	// random int 계산식 맵 크기에 따라서 나중에 수정해주기!!!
-	// Math.random() * (맵크기 / 간격 + 1) * (간격 얼마나 줄건지) - (맵크기 / 2)
-
-	// 아이템 종류
-	//  -> 방향키 반대로 (빨강) / 속도 빨라지거나 느려지게 하는 것 (주황) / 팩맨 크기 커지는 것 (연두)
-	//  -> 유령 먹을 수 있게 되는 것 (하늘) / 3D -> 2D 시야 변경 (분홍)
-	/*
-	Utils.createItemObject(scene, world, 'item1', 0xff5b5b, 101);
-	Utils.object['item1'].position(Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500); 
-
-	Utils.createItemObject(scene, world, 'item2', 0xffc000, 102);
-	Utils.object['item2'].position(Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500);
-	
-	Utils.createItemObject(scene, world, 'item3', 0x92d050, 103);
-	Utils.object['item3'].position(Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500);
-	
-	Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104);
-	Utils.object['item4'].position(Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500);
-	
-	Utils.createItemObject(scene, world, 'item5', 0xFF99CC, 105);
-	Utils.object['item5'].position(Math.floor(Math.random() * 31) * 100 - 1500, 140, Math.floor(Math.random() * 31) * 100 - 1500);
-	*/
-	
 	// 텔레포트 구현
 	const obj1Pos = Utils.object['tpnorth'].body.position;
 	const obj2Pos = Utils.object['tpsouth'].body.position;
@@ -1317,4 +1279,7 @@ export function initSpaceMap(scene, world, controls, camera) {
 	Utils.createCircle(scene, world, 0, 140, -2525);
 	Utils.createCircle(scene, world, 0, 140, 3125);
 	Utils.createCircle(scene, world, 0, 140, 2525);
+
+	// 아이템
+	Utils.locateItem(scene, world, 3, 1, 1, 1, 1, 1);
 }
