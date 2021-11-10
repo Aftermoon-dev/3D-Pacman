@@ -622,34 +622,33 @@ export function initGachonMap(scene, world, controls, camera) {
 	Utils.createCircle(scene, world, -3825, 140, -1975, 297);
 	Utils.createCircle(scene, world, -3525, 140, -1975, 298);
 	Utils.createCircle(scene, world, -3225, 140, -1975, 299);
-	Utils.createCircle(scene, world, -2925, 140, -1975, 300);
 
-	Utils.createCircle(scene, world, 1200, 140, 2255, 301);
-	Utils.createCircle(scene, world, 1200, 140, 2585, 302);
-	Utils.createCircle(scene, world, 1200, 140, 2915, 303);
-	Utils.createCircle(scene, world, 1200, 140, 3245, 304);
+	Utils.createCircle(scene, world, 1200, 140, 2255, 300);
+	Utils.createCircle(scene, world, 1200, 140, 2585, 301);
+	Utils.createCircle(scene, world, 1200, 140, 2915, 302);
+	Utils.createCircle(scene, world, 1200, 140, 3245, 303);
 	
-	Utils.createCircle(scene, world, -1325, 140, -1125, 305);
-	Utils.createCircle(scene, world, -1025, 140, -1125, 306);
-	Utils.createCircle(scene, world, -725, 140, -1125, 307);
-	Utils.createCircle(scene, world, -425, 140, -1125, 308);
-	Utils.createCircle(scene, world, -125, 140, -1125, 309);
-	Utils.createCircle(scene, world, 175, 140, -1125, 310);
-	Utils.createCircle(scene, world, 475, 140, -1125, 311);
-	Utils.createCircle(scene, world, 775, 140, -1125, 312);
-	Utils.createCircle(scene, world, 1075, 140, -1125, 313);
-	Utils.createCircle(scene, world, 1375, 140, -1125, 314);
+	Utils.createCircle(scene, world, -1325, 140, -1125, 304);
+	Utils.createCircle(scene, world, -1025, 140, -1125, 305);
+	Utils.createCircle(scene, world, -725, 140, -1125, 306);
+	Utils.createCircle(scene, world, -425, 140, -1125, 307);
+	Utils.createCircle(scene, world, -125, 140, -1125, 308);
+	Utils.createCircle(scene, world, 175, 140, -1125, 309);
+	Utils.createCircle(scene, world, 475, 140, -1125, 310);
+	Utils.createCircle(scene, world, 775, 140, -1125, 311);
+	Utils.createCircle(scene, world, 1075, 140, -1125, 312);
+	Utils.createCircle(scene, world, 1375, 140, -1125, 313);
 	
-	Utils.createCircle(scene, world, 1675, 140, -1125, 315);
-	Utils.createCircle(scene, world, 1975, 140, -1125, 316);
-	Utils.createCircle(scene, world, 2275, 140, -1125, 317);
-	Utils.createCircle(scene, world, 2575, 140, -1125, 318);
-	Utils.createCircle(scene, world, 2875, 140, -1125, 319);
-	Utils.createCircle(scene, world, 3175, 140, -1125, 320);
-	Utils.createCircle(scene, world, 3475, 140, -1125, 321);
-	Utils.createCircle(scene, world, 3775, 140, -1125, 322);
-	Utils.createCircle(scene, world, 4075, 140, -1125, 323);
-	Utils.createCircle(scene, world, 4375, 140, -1125, 324);
+	Utils.createCircle(scene, world, 1675, 140, -1125, 314);
+	Utils.createCircle(scene, world, 1975, 140, -1125, 315);
+	Utils.createCircle(scene, world, 2275, 140, -1125, 316);
+	Utils.createCircle(scene, world, 2575, 140, -1125, 317);
+	Utils.createCircle(scene, world, 2875, 140, -1125, 318);
+	Utils.createCircle(scene, world, 3175, 140, -1125, 319);
+	Utils.createCircle(scene, world, 3475, 140, -1125, 320);
+	Utils.createCircle(scene, world, 3775, 140, -1125, 321);
+	Utils.createCircle(scene, world, 4075, 140, -1125, 322);
+	Utils.createCircle(scene, world, 4375, 140, -1125, 323);
 }
 
 export function initBasicMap(scene, world, controls, camera) {
