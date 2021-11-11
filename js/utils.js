@@ -9,6 +9,7 @@ import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tw
 import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/loaders/GLTFLoader.js';
 import * as MapSpace from './maps/space.js'
 import * as MapGachon from './maps/gachon.js'
+import * as Loading from './loading.js';
 
 /* Setting */
 const timeStep = 1/60;
@@ -20,8 +21,14 @@ export var ghostSpeed = 1250; // 고스트 속도
 
 export const loadManager = new THREE.LoadingManager();
 loadManager.onStart = () => {
+	Loading.setLoadingValue(0);
 	document.getElementById("loading").style.visibility = "visible";
 	isloadingFinished = false;
+}
+
+loadManager.onProgress = (url, itemsLoaded, itemsTotal) => {
+	console.log("Load " + url + "! Currently " + itemsLoaded + " Loaded, Total " + itemsTotal);
+	Loading.setLoadingValue(itemsLoaded / itemsTotal * 100 | 0);
 }
 
 loadManager.onLoad = () => {

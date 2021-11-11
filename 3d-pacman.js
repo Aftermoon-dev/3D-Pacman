@@ -11,6 +11,7 @@ import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tw
 import * as Utils from './js/utils.js';
 import CannonDebugRenderer from './js/CannonDebugRenderer.js';
 import { initNaturalMap } from './js/maps/natural.js';
+import * as Loading from './js/loading.js';
 
 /* 필수 Variable */
 var world, canvas, camera, scene, renderer;
@@ -24,6 +25,7 @@ export let isVRMode = false;
  * Window OnLoad Event
  */
 window.onload = function() {
+	Loading.initLoading();
 	initThreeJS();
 	initVR();
 	initCannon();
