@@ -24,20 +24,20 @@ export function initGachonMap(scene, world, controls, camera) {
     // 맵 배경 택스쳐 이미지
     const loader = new THREE.CubeTextureLoader();
     const texture = loader.load([
-        '../../resources/cubemaps/map1/gachon_px.png',
-        '../../resources/cubemaps/map1/gachon_nx.png',
-        '../../resources/cubemaps/map1/gachon_py.png',
-        '../../resources/cubemaps/map1/gachon_ny.png',
-        '../../resources/cubemaps/map1/gachon_pz.png',
-        '../../resources/cubemaps/map1/gachon_nz.png',
+        './resources/cubemaps/map1/gachon_px.png',
+        './resources/cubemaps/map1/gachon_nx.png',
+        './resources/cubemaps/map1/gachon_py.png',
+        './resources/cubemaps/map1/gachon_ny.png',
+        './resources/cubemaps/map1/gachon_pz.png',
+        './resources/cubemaps/map1/gachon_nz.png',
     ]);
     scene.background = texture;
 
-    let ground_texture_dry = Utils.textureLoader.load('../../resources/textures/brown_planks_09_disp_4k.png');
+    let ground_texture_dry = Utils.textureLoader.load('./resources/textures/brown_planks_09_disp_4k.png');
 
 
     // 바닥 만들기
-    Utils.textureLoader.load('../../resources/textures/brown_planks_09_diff_4k.jpg', (texture) => {
+    Utils.textureLoader.load('./resources/textures/brown_planks_09_diff_4k.jpg', (texture) => {
         const ground_material = new THREE.MeshPhongMaterial({
             map: texture,
             bumpMap: ground_texture_dry,
@@ -145,7 +145,7 @@ export function initGachonMap(scene, world, controls, camera) {
     Utils.object['wall42'].position(1200, 0, -500);
 
     // 왼쪽 사각형
-    Utils.textureLoader.load('../../resources/textures/gachonlogo_texture.jpg', (texture) => {
+    Utils.textureLoader.load('./resources/textures/gachonlogo_texture.jpg', (texture) => {
         const gachonMaterial = new THREE.MeshPhongMaterial({
             map: texture,
         });
