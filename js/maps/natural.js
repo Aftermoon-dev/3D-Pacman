@@ -24,17 +24,17 @@ export function initNaturalMap(scene, world, controls, camera) {
     // 맵 배경 택스쳐 이미지
     const loader = new THREE.CubeTextureLoader();
     const texture = loader.load([
-        'resources/cubemaps/map2/natural_px.png',
-        'resources/cubemaps/map2/natural_nx.png',
-        'resources/cubemaps/map2/natural_py.png',
-        'resources/cubemaps/map2/natural_ny.png',
-        'resources/cubemaps/map2/natural_pz.png',
-        'resources/cubemaps/map2/natural_nz.png',
+        '../../resources/cubemaps/map2/natural_px.png',
+        '../../resources/cubemaps/map2/natural_nx.png',
+        '../../resources/cubemaps/map2/natural_py.png',
+        '../../resources/cubemaps/map2/natural_ny.png',
+        '../../resources/cubemaps/map2/natural_pz.png',
+        '../../resources/cubemaps/map2/natural_nz.png',
     ]);
     scene.background = texture;
 
     // 바닥과 벽 택스쳐 가져오기
-    Utils.textureLoader.load('/resources/textures/ground_texture_02.jpg', (texture) => {
+    Utils.textureLoader.load('../../resources/textures/ground_texture_02.jpg', (texture) => {
         const ground_material = new THREE.MeshBasicMaterial({
             map: texture,
         });
