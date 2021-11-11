@@ -716,7 +716,7 @@ export function setUserEvent(scene, world, controls, camera) {
 
 		// 고스트랑 닿을 경우
 		if (e.body.type == 3) {
-			console.log("Meet the Ghost!" + item4Flag);
+			console.log("Meet the Ghost! " + item4Flag);
 
 			// 먹는 모드일 경우
 			if(item4Flag) {

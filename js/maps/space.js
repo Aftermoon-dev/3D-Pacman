@@ -433,7 +433,7 @@ export function initSpaceMap(scene, world, controls, camera) {
     });
 
     // 팩맨
-    Utils.createPacman(scene, world, 0, 230, 0, 180);
+    Utils.createPacman(scene, world, 0, 450, -700, 180);
     Utils.setUserEvent(scene, world, controls, camera);
 
     // 고스트
