@@ -64,6 +64,7 @@ export var timerImage = document.getElementById("timerimage");
 export var score = 0;
 export var totalScore = 0;   
 export var circleNumber = 0;
+export var circlePosition = new Array();
 
 /* camera control variable */
 export var if2D = false;
@@ -339,6 +340,16 @@ export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x
 	circleNumber++;
 	createNewObject(scene, world, 'circle' + circleNumber, circleMesh, circleBody);
 	console.log(circleNumber);
+
+	var circlePositionTemp = [];
+	circlePositionTemp[0] = circleNumber;
+	circlePositionTemp[1] = posx;
+	circlePositionTemp[2] = posy;
+	circlePositionTemp[3] = posz;
+
+	circlePosition[circleNumber - 1] = circlePositionTemp;
+
+	console.log(circlePosition[circleNumber - 1]);
 	object['circle' + circleNumber].position(posx, posy, posz);
 }
 
@@ -473,102 +484,102 @@ export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num,
 		// 동글이 114개
 
 		for (var i = 0; i < Item1Num; i++) {
-			var randIndex = Math.floor((Math.random() * 114) + 1);
+			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item1 = ' + randIndex);
 			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
 			object['circle' + randIndex].delete(scene, world);
 		}
 		for (var i = 0; i < Item2Num; i++) {
-			var randIndex = Math.floor((Math.random() * 114) + 1);
+			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item2 = ' + randIndex);
 			createItemObject(scene, world, 'item2', 0xffc000, 102,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
 			object['circle' + randIndex].delete(scene, world);
 		}
 		for (var i = 0; i < Item3Num; i++) {
-			var randIndex = Math.floor((Math.random() * 114) + 1);
+			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item3 = ' + randIndex);
 			createItemObject(scene, world, 'item3', 0x92d050, 103,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
 			object['circle' + randIndex].delete(scene, world);
 		}
 		for (var i = 0; i < Item4Num; i++) {
-			var randIndex = Math.floor((Math.random() * 114) + 1);
+			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item4 = ' + randIndex);
 			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
 			object['circle' + randIndex].delete(scene, world);
 		}
 		for (var i = 0; i < Item5Num; i++) {
-			var randIndex = Math.floor((Math.random() * 114) + 1);
+			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item5 = ' + randIndex);
 			createItemObject(scene, world, 'item5', 0xff99cc, 105,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
 			object['circle' + randIndex].delete(scene, world);
 		}
 	} else if (stageNum == 2) {
 		// 동글이 142개
 
 		for (var i = 0; i < Item1Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 114);
+			var randIndex = Math.floor((Math.random() * 142) + 113);
 			console.log('item1 = ' + randIndex);
 			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
 		}
 		for (var i = 0; i < Item2Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 114);
+			var randIndex = Math.floor((Math.random() * 142) + 113);
 			console.log('item2 = ' + randIndex);
 			createItemObject(scene, world, 'item2', 0xffc000, 102,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
 		}
 		for (var i = 0; i < Item3Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 114);
+			var randIndex = Math.floor((Math.random() * 142) + 113);
 			console.log('item3 = ' + randIndex);
 			createItemObject(scene, world, 'item3', 0x92d050, 103,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
 		}
 		for (var i = 0; i < Item4Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 114);
+			var randIndex = Math.floor((Math.random() * 142) + 113);
 			console.log('item4 = ' + randIndex);
 			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
 		}
 		for (var i = 0; i < Item5Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 114);
+			var randIndex = Math.floor((Math.random() * 142) + 113);
 			console.log('item5 = ' + randIndex);
 			createItemObject(scene, world, 'item5', 0xff99cc, 105,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
 		}
 	} else if (stageNum == 3) {
 		// 동글이 204개
 
 		for (var i = 0; i < Item1Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 256);
+			var randIndex = Math.floor((Math.random() * 204) + 255);
 			console.log('item1 = ' + randIndex);
 			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
 			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
 		}
 		for (var i = 0; i < Item2Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 256);
+			var randIndex = Math.floor((Math.random() * 204) + 255);
 			console.log('item2 = ' + randIndex);
 			createItemObject(scene, world, 'item2', 0xffc000, 102,
 			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
 		}
 		for (var i = 0; i < Item3Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 256);
+			var randIndex = Math.floor((Math.random() * 204) + 255);
 			console.log('item3 = ' + randIndex);
 			createItemObject(scene, world, 'item3', 0x92d050, 103,
 			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
 		}
 		for (var i = 0; i < Item4Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 256);
+			var randIndex = Math.floor((Math.random() * 204) + 255);
 			console.log('item4 = ' + randIndex);
 			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
 			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
 		}
 		for (var i = 0; i < Item5Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 256);
+			var randIndex = Math.floor((Math.random() * 204) + 255);
 			console.log('item5 = ' + randIndex);
 			createItemObject(scene, world, 'item5', 0xff99cc, 105,
 			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
@@ -712,7 +723,7 @@ export function setUserEvent(scene, world, controls, camera) {
 
 			// 현재 스테이지에 따라 다음 동작 정의
 			if (currentStage == 1) {
-				if (score == 100) {  // Stage 1 Clear 점수 넣기!
+				if (score == 500) {  // Stage 1 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
 					isNeedClear = true;
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
@@ -720,7 +731,7 @@ export function setUserEvent(scene, world, controls, camera) {
 				}
 			}
 			else if (currentStage == 2) {
-				if (score == 100) {  // Stage 2 Clear 점수 넣기!
+				if (score == 500) {  // Stage 2 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
 					isNeedClear = true;
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
@@ -728,7 +739,7 @@ export function setUserEvent(scene, world, controls, camera) {
 				}
 			}
 			else if (currentStage == 3) {
-				if (score == 100) {  // Stage 3 Clear 점수 넣기!
+				if (score == 500) {  // Stage 3 Clear 점수 넣기!
 					window.location.href = 'gameclear.html'; // Clear Page
 				}
 			}
