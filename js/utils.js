@@ -9,13 +9,14 @@ import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tw
 import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/loaders/GLTFLoader.js';
 import * as MapSpace from './maps/space.js'
 import * as MapGachon from './maps/gachon.js'
-import * as Loading from './loading.js';
+import * as Loading from './loading.js'
+import * as Main from '../3d-pacman.js'
 
 /* Setting */
 const timeStep = 1/60;
 
 export var userSpeed = 3000; // 유저의 속도를 결정
-export var pacman_height = 180; // 팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
+export var pacman_height = 80; // 팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
 export var pacman_height2D = 7300; // 2D view height
 export var ghostSpeed = 1250; // 고스트 속도
 
@@ -71,7 +72,7 @@ export var nowMoveOK = true; // 이게 true일때 setCameraType에서 온전히 
 export var targetPosition; // camera 이동할 때 지정해 줄 좌표
 export var isTween = false; // tween이 실행중인지
 
-export var developerMode = false; // 개발자 모드 ON!
+export var developerMode = true; // 개발자 모드 ON!
 
 /* Object Dictonary */
 export const object = {};
@@ -99,6 +100,8 @@ let mouseMoveCallback = undefined;
 let userLight = undefined;
 let ambientLight = undefined;
 
+export let isNeedClear = false;
+
 /**
  * Mesh Object Class
  */
@@ -114,7 +117,7 @@ export class worldObj {
 
 		this.add = function(scene, world) {
 			scene.add(this.mesh);
-			world.add(this.body);
+			world.addBody(this.body);
 		}
 
 		this.position = function(x, y, z) {
@@ -257,9 +260,9 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 		mass: 0,
 		type: 1
 	});
-
+	
 	createNewObject(scene, world, 'pacman', pacmanMesh, pacmanBody);
-	world.add(pacman_item);
+	world.addBody(pacman_item);
 	
 	object['pacman'].position(posx, posy, posz);
 	pacman_item.position.set(posx, posy, posz);
@@ -292,6 +295,7 @@ export function createTransparentWallObject(scene, world, wallname, wallcolor, x
 		mass: 0,
 		type: 1000
 	});
+
 	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshLambertMaterial({ 
 		color: wallcolor, 
 		transparent: true,
@@ -309,29 +313,6 @@ export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x
 	});
 	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), material), wallBody);
 }
-
-/**
- * 고스트 시작 위치 벽 생성
- * @param {THREE.Scene} scene 
- * @param {CANNON.World} world 
- * @param {String} wallname 
- * @param {X} x 
- * @param {Y} y 
- * @param {Z} z 
- */
- export function createStartWallObject(scene, world, wallname, x, y, z) {
-	var wallBody = new CANNON.Body({
-		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
-		collisionFilterGroup: 8,
-		mass: 0,
-		type: 1000
-	});
-	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshPhongMaterial({ 
-		color: 0xffd400,
-		flatShading: true
-	})), wallBody);
-}
-
 
 /**
  * 동글이 만들기
@@ -657,7 +638,7 @@ export function setUserEvent(scene, world, controls, camera) {
 			//임시로 넣어둔 부분! 누르면 1인칭 <-> 3인칭
 			case "C":
 			case "c":
-				changePointOfView(userObject, controls, camera);
+				changePointOfView(userObject, controls);
 				break;
 
 			// // 이부분은 팩맨 커지는 아이템에 사용하면 될 듯
@@ -674,10 +655,6 @@ export function setUserEvent(scene, world, controls, camera) {
 			// 	if (if2D == false)
 			// 		pacman_height -= 30;
 			// 	break;
-
-			case "Z":
-				applyItem3Event(scene, world, controls, camera);
-				break;
 		}
 	};
 	document.addEventListener("keydown", keyDownCallback);
@@ -737,15 +714,17 @@ export function setUserEvent(scene, world, controls, camera) {
 			if (currentStage == 1) {
 				if (score == 100) {  // Stage 1 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
-					MapSpace.initSpaceMap(scene, world, controls, camera); // Next Map
+					isNeedClear = true;
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
+					updateStage(2);
 				}
 			}
 			else if (currentStage == 2) {
 				if (score == 100) {  // Stage 2 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
-					MapGachon.initGachonMap(scene, world, controls, camera); // Next Map
+					isNeedClear = true;
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
+					updateStage(3);
 				}
 			}
 			else if (currentStage == 3) {
@@ -787,11 +766,11 @@ export function setUserEvent(scene, world, controls, camera) {
 /** 처음에 2D 5초간 보여주기
  * @param {OrbitControls} controls
  */
-export function initcamera(controls){
-	changePointOfView(object['pacman'], controls);
-	item5Timer = setTimeout(function(){
-		changePointOfView(object['pacman'], controls);
-	}, 10000);
+export function initcamera(userObject, controls){
+	changePointOfView(userObject, controls);
+	setTimeout(function(){
+		changePointOfView(userObject, controls);
+	}, 5000);
 }
 
 /** 
@@ -883,7 +862,7 @@ function selectCameraType(scene, userObject, camera, controls){
 /**
  * orbitcontrol을 first person 시점으로 사용
  */
-function moveFirstPersonCameraAll(scene, userObject, camera, controls){
+export function moveFirstPersonCameraAll(scene, userObject, camera, controls){
 	userObject.body.angularDamping = 1; //계속 회전 방지
 
 	var ve = userObject.getPosition(); //현재 팩맨 중심좌표
@@ -895,7 +874,6 @@ function moveFirstPersonCameraAll(scene, userObject, camera, controls){
 
 	userObject.body.angularDamping = 1; //계속 회전 방지
 	controls.update();
-
 	// AmbientLight 있었으면 없애기
 	if(isTween == false && ambientLight != undefined) {
 		removeAmbientLight(scene);
@@ -940,22 +918,6 @@ export function removeGlobalEventListener() {
 	document.removeEventListener("keydown", keyDownCallback);
 	document.removeEventListener("keyup", keyUpCallback);
 	document.removeEventListener("mousemove", mouseMoveCallback);
-}
-
-/**
- * Scene 초기화
- * @param {THREE.Scene} scene 
- */
-export function resetScene(scene, world) {
-	removeGlobalEventListener();
-
-	Object.keys(object).forEach(element => {
-		if(element == "pacman") {
-			object[element].body.removeEventListener(userObjectCollide);
-		}
-		object[element].delete(scene, world);
-		//delete object[element];
-	});
 }
 
 /**
@@ -1191,14 +1153,34 @@ export function updatePhysics(scene, world, camera, controls, renderer) {
 	if (isloadingFinished) {
 		// Step the physics world
 		world.step(timeStep);
+		
+		if(isNeedClear) {
+			removeGlobalEventListener();
+			Main.clearAll();
+			Object.keys(object).forEach(element => {
+				object[element] = undefined;
+				delete object[element];
+			});
+			
+			if(currentStage == 2) {
+				MapSpace.initSpaceMap(scene, world, controls, camera);
+			}
+			else if(currentStage == 3) {
+				MapGachon.initGachonMap(scene, world, controls, camera);
+			}
 
-		if(object['pacman'] != undefined) {
-			// 카메라 설정
-			selectCameraType(scene, object['pacman'], camera, controls, renderer);
-			pacman_item.position = object['pacman'].body.position;
+			isNeedClear = false;
 		}
-		Object.keys(object).forEach(function(key) {
-			object[key].update();
-		});
+		else {
+			if(object['pacman'] != undefined) {
+				// 카메라 설정
+				selectCameraType(scene, object['pacman'], camera, controls, renderer);
+				pacman_item.position = object['pacman'].body.position;
+			}
+			Object.keys(object).forEach(function(key) {
+				object[key].update();
+			});
+		}
+		
 	}
 }

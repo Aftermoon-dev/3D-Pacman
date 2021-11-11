@@ -30,7 +30,6 @@ window.onload = function() {
 	initVR();
 	initCannon();
 	initObject();
-	Utils.initcamera(controls);
 	renderer.setAnimationLoop(animate);
 }
 
@@ -73,6 +72,9 @@ function initCannon() {
  * Initializing Object
  */
 function initObject() {
+	// Stage Set
+	Utils.updateStage(1);
+
 	// 맵 생성
 	initNaturalMap(scene, world, controls, camera);
 }
@@ -105,6 +107,19 @@ function initVR() {
 			console.log("VR Not Supported");
 		}
 	});
+}
+
+export function clearAll() {
+	for (var i = scene.children.length - 1; i >= 0; i--) {
+		var obj = scene.children[i];
+		if(obj.type.includes('Light') || obj.type.includes('Camera')) continue;
+		scene.remove(obj);
+	}
+
+	for (var i = world.bodies.length - 1; i >= 0; i--) {
+		var body = world.bodies[i];
+		world.removeBody(body);
+	}
 }
 
 /**
