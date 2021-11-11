@@ -9,9 +9,8 @@ import { OrbitControls } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6
 import { VRButton } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/webxr/VRButton.js'
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js';
 import * as Utils from './js/utils.js';
-import * as Maps from './js/maps.js';
 import CannonDebugRenderer from './js/CannonDebugRenderer.js';
-
+import { initNaturalMap } from './js/maps/natural.js';
 
 /* 필수 Variable */
 var world, canvas, camera, scene, renderer;
@@ -73,9 +72,7 @@ function initCannon() {
  */
 function initObject() {
 	// 맵 생성
-	Maps.initNaturalMap(scene, world, controls, camera);
-	// Maps.initSpaceMap(scene, world, controls, camera);
-	// Maps.initGachonMap(scene, world, controls, camera);
+	initNaturalMap(scene, world, controls, camera);
 }
 
 /**

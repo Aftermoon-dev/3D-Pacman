@@ -7,7 +7,8 @@
 import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/optimized/three.js';
 import TWEEN from 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.5.0/dist/tween.esm.js';
 import { GLTFLoader } from 'https://cdn.skypack.dev/pin/three@v0.134.0-dfARp6tVCbGvQehLfkdx/mode=imports,min/unoptimized/examples/jsm/loaders/GLTFLoader.js';
-import * as Maps from '../js/maps.js'
+import * as MapSpace from './maps/space.js'
+import * as MapGachon from './maps/gachon.js'
 
 /* Setting */
 const timeStep = 1/60;
@@ -728,14 +729,14 @@ export function setUserEvent(scene, world, controls, camera) {
 			if (currentStage == 1) {
 				if (score == 100) {  // Stage 1 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
-					Maps.initSpaceMap(scene, world, controls, camera); // Next Map
+					MapSpace.initSpaceMap(scene, world, controls, camera); // Next Map
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
 				}
 			}
 			else if (currentStage == 2) {
 				if (score == 100) {  // Stage 2 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
-					Maps.initGachonMap(scene, world, controls, camera); // Next Map
+					MapGachon.initGachonMap(scene, world, controls, camera); // Next Map
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
 				}
 			}
