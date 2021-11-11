@@ -24,18 +24,18 @@ export function initSpaceMap(scene, world, controls, camera) {
     // 맵 배경 택스쳐 이미지
     const loader = new THREE.CubeTextureLoader();
     const texture = loader.load([
-        './resources/cubemaps/map3/space_px.png',
-        './resources/cubemaps/map3/space_nx.png',
-        './resources/cubemaps/map3/space_py.png',
-        './resources/cubemaps/map3/space_ny.png',
-        './resources/cubemaps/map3/space_pz.png',
-        './resources/cubemaps/map3/space_nz.png',
+        'resources/cubemaps/map3/space_px.png',
+        'resources/cubemaps/map3/space_nx.png',
+        'resources/cubemaps/map3/space_py.png',
+        'resources/cubemaps/map3/space_ny.png',
+        'resources/cubemaps/map3/space_pz.png',
+        'resources/cubemaps/map3/space_nz.png',
     ]);
     scene.background = texture;
 
-    var texture_dry = Utils.textureLoader.load('./resources/textures/crater_texture_dry.png');
+    var texture_dry = Utils.textureLoader.load('resources/textures/crater_texture_dry.png');
 
-    Utils.textureLoader.load('./resources/textures/crater_texture.jpg', (texture) => {
+    Utils.textureLoader.load('resources/textures/crater_texture.jpg', (texture) => {
         const ground_material = new THREE.MeshBasicMaterial({
             map: texture,
             bumpMap: texture_dry,
