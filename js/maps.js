@@ -776,7 +776,7 @@ export function initSpaceMap(scene, world, controls, camera) {
  * @param {OrbitControls} controls
  * @param {PerspectiveCamera} camera
  */
- export function initGachonMap(scene, world, controls, camera) {
+export function initGachonMap(scene, world, controls, camera) {
 	// Scene 리셋
 	Utils.resetScene(scene, world);
 
@@ -1021,7 +1021,7 @@ export function initSpaceMap(scene, world, controls, camera) {
 	Utils.setUserEvent(scene, world, controls, camera);
 
 	// 고스트
-	Utils.createGhost(scene, world, 'ghost1', 0, 360, 0, 0xFFFF00);
+	// Utils.createGhost(scene, world, 'ghost1', 0, 360, 0, 0xFFFF00);
 
 	// 동글이들
 	// 제일 왼쪽 세로줄
