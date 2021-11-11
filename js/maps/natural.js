@@ -21,9 +21,8 @@ export function initNaturalMap(scene, world, controls, camera) {
     Utils.updateStage(1);
     Utils.ChangePacmanHeight(80);
 
-    // 맵 배경 택스쳐 이미지
-    const loader = new THREE.CubeTextureLoader();
-    const texture = loader.load([
+    // 맵 배경 택스쳐 이미지 
+    const texture = Utils.cubeLoader.load([
         'resources/cubemaps/map2/natural_px.png',
         'resources/cubemaps/map2/natural_nx.png',
         'resources/cubemaps/map2/natural_py.png',

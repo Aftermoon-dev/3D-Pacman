@@ -39,6 +39,7 @@ loadManager.onLoad = () => {
 
 export const loader = new GLTFLoader(loadManager);
 export const textureLoader = new THREE.TextureLoader(loadManager);
+export const cubeLoader = new THREE.CubeTextureLoader(loadManager);
 export let isloadingFinished = false; // 로딩 완료 여부 확인
 
 /* Item Setting */
