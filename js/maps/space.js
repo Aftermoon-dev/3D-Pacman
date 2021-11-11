@@ -438,5 +438,5 @@ export function initSpaceMap(scene, world, controls, camera) {
     Utils.setUserEvent(scene, world, controls, camera);
 
     // 고스트
-    // Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
+    Utils.createGhost(scene, world, 'ghost1', 0, 450, 0, 0xFFFF00);
 }
