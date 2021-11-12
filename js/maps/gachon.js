@@ -528,8 +528,5 @@ export function initGachonMap(scene, world, controls, camera) {
         Utils.audioList['gachon'].loop = true;
         Utils.audioList['gachon'].volume = 0.2;
         Utils.audioList['gachon'].play();
-
-        // 다음 맵 타이머
-        Utils.setFinishTimer(120000); //120000
     });    
 }

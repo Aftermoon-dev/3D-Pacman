@@ -36,6 +36,14 @@ loadManager.onLoad = () => {
 	document.getElementById("loading").style.visibility = "hidden";
 	console.log("Loading Finished");
 	isloadingFinished = true;
+
+	// Set Finish Timer
+	if(currentStage == 3) { // Gachon
+        setFinishTimer(120000); 
+	}
+	else { // Other Map
+		setFinishTimer(60000); 
+	}
 };
 
 export const loader = new GLTFLoader(loadManager);
@@ -73,7 +81,7 @@ export var nowMoveOK = true; // 이게 true일때 setCameraType에서 온전히 
 export var targetPosition; // camera 이동할 때 지정해 줄 좌표
 export var isTween = false; // tween이 실행중인지
 
-export var developerMode = false; // 개발자 모드 ON!
+export var developerMode = true; // 개발자 모드 ON!
 
 /* Object Dictonary */
 export const object = {};

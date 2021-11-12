@@ -341,9 +341,6 @@ export function initNaturalMap(scene, world, controls, camera) {
         Utils.locateItem(scene, world, 1, 1, 1, 1, 1, 3);
         Utils.createItemObject(scene, world, 'item42', 0x00b0f0, 104, 2475, 20, 3400);
 
-        // 다음 맵 타이머
-        Utils.setFinishTimer(60000); // 60000
-
         Utils.audioList['natural'].loop = true;
         Utils.audioList['natural'].volume = 0.2;
         Utils.audioList['natural'].play();
