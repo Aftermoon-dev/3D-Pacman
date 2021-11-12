@@ -466,17 +466,13 @@ export function applyItem3Event() {
 	
 	object['pacman'].position(x, y, z);
 	pacman_item.position.set(x, y, z);
+	object['pacman'].mesh.scale.set(item3Flag / 180, item3Flag / 180, item3Flag / 180);
 	object['pacman'].body.shapes[0].radius = item3Flag;
 	pacman_item.shapes[0].radius = item3Flag;
 	pacman_height += 30;
 
 	item3Timer = setTimeout(function () {
-		// var x = object['pacman'].body.position.x;
-		// var y = object['pacman'].body.position.y - 50;
-		// var z = object['pacman'].body.position.z;
-
-		// object['pacman'].position(x, y, z);
-		// pacman_item.position.set(x, y, z);
+		object['pacman'].mesh.scale.set(1.0, 1.0, 1.0);
 		object['pacman'].body.shapes[0].radius = 180;
 		pacman_item.shapes[0].radius = 180;
 		pacman_height -= 30;
