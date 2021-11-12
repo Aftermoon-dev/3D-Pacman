@@ -426,6 +426,9 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber, 
  * Item1 - 방향키 반대로
  */
 export function applyItem1Event() {
+	stopTimer(timer);
+	startTimer(1);
+	
 	item1Flag = false;
 
 	item1Timer = setTimeout(function () {
@@ -438,6 +441,9 @@ export function applyItem1Event() {
  * Item2 - 팩맨 Speed
  */
 export function applyItem2Event() {
+	stopTimer(timer);
+	startTimer(2);
+
 	var speedFlag = Math.random() * 10
 	// Random Integer 값을 이용해 0 ~ 4 = Speed Down / 5 ~ 9 = Speed Up
 
@@ -460,6 +466,9 @@ export function applyItem2Event() {
  * @param {THREE.PerspectiveCamera} camera
  */
 export function applyItem3Event() {
+	stopTimer(timer);
+	startTimer(3);
+
 	var x = object['pacman'].body.position.x;
 	var y = object['pacman'].body.position.y + 50;
 	var z = object['pacman'].body.position.z;
@@ -483,6 +492,9 @@ export function applyItem3Event() {
  * Item4 - Kill the Ghost
  */
 export function applyItem4Event() {
+	stopTimer(timer);
+	startTimer(4);
+
 	item4Flag = true;  
 	console.log(item4Flag);
 
@@ -514,11 +526,16 @@ export function applyItem4Event() {
  * Item5 - Change 3D -> 2D
  */
 export function applyItem5Event() {
-	if2D = true;
+	if(!if2D) {
+		stopTimer(timer);
+		startTimer(5);
 
-	item5Timer = setTimeout(function () {
-		if2D = false
-	}, 5000);
+		if2D = true;
+
+		item5Timer = setTimeout(function () {
+			if2D = false
+		}, 5000);
+	}
 }
 
 /**
@@ -793,28 +810,18 @@ export function setUserEvent(scene, world, controls, camera) {
 				}
 			}
 		} else if (e.body.type == 101) {
-			stopTimer(timer);
-			startTimer(1);
 			applyItem1Event();
 			object[targetItem].deleteReq();
 		} else if (e.body.type == 102) {
-			stopTimer(timer);
-			startTimer(2);
 			applyItem2Event();
 			object[targetItem].deleteReq();
 		} else if (e.body.type == 103) {
-			stopTimer(timer);
-			startTimer(3);
 			applyItem3Event();
 			object[targetItem].deleteReq();
 		} else if (e.body.type == 104) {
-			stopTimer(timer);
-			startTimer(4);
 			applyItem4Event();
 			object[targetItem].deleteReq();
 		} else if (e.body.type == 105) {
-			stopTimer(timer);
-			startTimer(5);
 			applyItem5Event();
 			object[targetItem].deleteReq();
 		}
