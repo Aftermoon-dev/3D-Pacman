@@ -73,7 +73,7 @@ export var nowMoveOK = true; // 이게 true일때 setCameraType에서 온전히 
 export var targetPosition; // camera 이동할 때 지정해 줄 좌표
 export var isTween = false; // tween이 실행중인지
 
-export var developerMode = true; // 개발자 모드 ON!
+export var developerMode = false; // 개발자 모드 ON!
 
 /* Object Dictonary */
 export const object = {};
@@ -86,7 +86,8 @@ export const audioList = {
 	'teleport': new Audio("./audio/teleport.mp3"),
 	'gameclear': new Audio("./audio/gameclear.mp3"),
 	'gameover': new Audio("./audio/gameover.mp3"),
-	'gachon': new Audio("./audio/sound_gachon1.mp3")
+	'gachon': new Audio("./audio/sound_gachon1.mp3"),
+	'pacman_eat': new Audio("./audio/pacman_eat.mp3")
 };
 
 /* Current Stage */
@@ -759,6 +760,10 @@ export function setUserEvent(scene, world, controls, camera) {
 				document.location.href = "./gameover.html";
 			}
 			//먹는모드가 맞다면 나머지는 고스트에서 처리함 + 여기다가 else해서 고스트 먹었을때 점수 올라가는거 하면 될듯
+			else {
+				// 먹는 소리 내기
+				playAudio("pacman_eat");
+			}
 
 		} else if (e.body.type == 4) { // Point
 			score += 10;
