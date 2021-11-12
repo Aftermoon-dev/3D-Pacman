@@ -490,7 +490,7 @@ export function initGachonMap(scene, world, controls, camera) {
         Utils.locateItem(scene, world, 3, 1, 1, 1, 1, 5);
 
         // 다음 맵 타이머
-        Utils.setFinishTimer(120000);
+        Utils.setFinishTimer(10000); //120000
 
         // 고정 위치 아이템 (item4)
         Utils.createItemObject(scene, world, 'item46', 0x00b0f0, 104, -1625, 20, 575);
