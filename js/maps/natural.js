@@ -339,6 +339,6 @@ export function initNaturalMap(scene, world, controls, camera) {
         Utils.initcamera(Utils.object['pacman'], controls);
 
         // 아이템
-        Utils.locateItem(scene, world, 1, 1, 1, 1, 1, 1,);
+        Utils.locateItem(scene, world, 1, 1, 1, 1, 1, 3);
     });
 }

@@ -414,9 +414,7 @@ export function createCircle(scene, world, posx, posy, posz) {
 		type: 4
 	});
 
-	circleNumber++;
 	createNewObject(scene, world, 'circle' + circleNumber, circleMesh, circleBody);
-	console.log(circleNumber);
 
 	var circlePositionTemp = [];
 	circlePositionTemp[0] = circleNumber;
@@ -424,10 +422,12 @@ export function createCircle(scene, world, posx, posy, posz) {
 	circlePositionTemp[2] = posy;
 	circlePositionTemp[3] = posz;
 
-	circlePosition[circleNumber - 1] = circlePositionTemp;
+	circlePosition[circleNumber] = circlePositionTemp;
 
-	console.log(circlePosition[circleNumber - 1]);
+	console.log(circlePosition[circleNumber]);
 	object['circle' + circleNumber].position(posx, posy, posz);
+
+	circleNumber++;
 }
 
 /**
@@ -578,6 +578,7 @@ export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num,
 			console.log('item1 = ' + randIndex);
 			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+			console.log(circlePosition[randIndex][0]);
 			object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item2Num; i++) {
@@ -585,94 +586,104 @@ export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num,
 			console.log('item2 = ' + randIndex);
 			createItemObject(scene, world, 'item2', 0xffc000, 102,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
-			object['circle' + randIndex].deleteReq();
+				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item3Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item3 = ' + randIndex);
 			createItemObject(scene, world, 'item3', 0x92d050, 103,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
-			object['circle' + randIndex].deleteReq();
+				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item4Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item4 = ' + randIndex);
 			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
-			object['circle' + randIndex].deleteReq();
+				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item5Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item5 = ' + randIndex);
 			createItemObject(scene, world, 'item5', 0xff99cc, 105,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
-			object['circle' + randIndex].deleteReq();
+				object['circle' + randIndex].deleteReq();
 		}
 	} else if (stageNum == 2) {
 		// 동글이 142개
 
 		for (var i = 0; i < Item1Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 113);
+			var randIndex = Math.floor((Math.random() * 142) + 114);
 			console.log('item1 = ' + randIndex);
 			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item2Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 113);
+			var randIndex = Math.floor((Math.random() * 142) + 114);
 			console.log('item2 = ' + randIndex);
 			createItemObject(scene, world, 'item2', 0xffc000, 102,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item3Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 113);
+			var randIndex = Math.floor((Math.random() * 142) + 114);
 			console.log('item3 = ' + randIndex);
 			createItemObject(scene, world, 'item3', 0x92d050, 103,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item4Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 113);
+			var randIndex = Math.floor((Math.random() * 142) + 114);
 			console.log('item4 = ' + randIndex);
 			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item5Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 113);
+			var randIndex = Math.floor((Math.random() * 142) + 114);
 			console.log('item5 = ' + randIndex);
 			createItemObject(scene, world, 'item5', 0xff99cc, 105,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+				object['circle' + randIndex].deleteReq();
 		}
 	} else if (stageNum == 3) {
 		// 동글이 204개
 
-		for (var i = 0; i < Item1Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 255);
+		for (var i = 0; i < Item1Num; i++) { 						
+			var randIndex = Math.floor((Math.random() * 204) + 256);
 			console.log('item1 = ' + randIndex);
 			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
-				object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item2Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 255);
+			var randIndex = Math.floor((Math.random() * 204) + 256);
 			console.log('item2 = ' + randIndex);
 			createItemObject(scene, world, 'item2', 0xffc000, 102,
-				object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item3Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 255);
+			var randIndex = Math.floor((Math.random() * 204) + 256);
 			console.log('item3 = ' + randIndex);
 			createItemObject(scene, world, 'item3', 0x92d050, 103,
-				object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item4Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 255);
+			var randIndex = Math.floor((Math.random() * 204) + 256);
 			console.log('item4 = ' + randIndex);
 			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
-				object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item5Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 255);
+			var randIndex = Math.floor((Math.random() * 204) + 256);
 			console.log('item5 = ' + randIndex);
 			createItemObject(scene, world, 'item5', 0xff99cc, 105,
-				object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+				object['circle' + randIndex].deleteReq();
 		}
 	}
 }
@@ -798,7 +809,7 @@ export function setUserEvent(scene, world, controls, camera) {
 
 			// 현재 스테이지에 따라 다음 동작 정의
 			if (currentStage == 1) {
-				if (score == 500) {  // Stage 1 Clear 점수 넣기!
+				if (score == 1070) {  // Stage 1 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
 					isNeedClear = true;
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
@@ -806,7 +817,7 @@ export function setUserEvent(scene, world, controls, camera) {
 				}
 			}
 			else if (currentStage == 2) {
-				if (score == 500) {  // Stage 2 Clear 점수 넣기!
+				if (score == 1340) {  // Stage 2 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
 					isNeedClear = true;
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
@@ -814,7 +825,7 @@ export function setUserEvent(scene, world, controls, camera) {
 				}
 			}
 			else if (currentStage == 3) {
-				if (score == 500) {  // Stage 3 Clear 점수 넣기!
+				if (score == 1950) {  // Stage 3 Clear 점수 넣기!
 					window.location.href = 'gameclear.html'; // Clear Page
 				}
 			}
@@ -1013,8 +1024,8 @@ export function removeGlobalEventListener() {
  * @param {CANNON.World} world 
  * @param {Object Name} name 
  * @param {X} x 
- * @param {Y} y 
- * @param {Z} z 
+ * @param {Y} y
+ * @param {Z} z
  * @param {Color} sur_color 
  * @param {collisionFilterGroup} collisionFilterGroup_val 
  * @param {mass} mass_val 

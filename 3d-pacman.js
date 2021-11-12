@@ -12,6 +12,7 @@ import * as Utils from './js/utils.js';
 import CannonDebugRenderer from './js/CannonDebugRenderer.js';
 import { initNaturalMap } from './js/maps/natural.js';
 import * as Loading from './js/loading.js';
+import { initGachonMap } from './js/maps/gachon.js';
 
 /* 필수 Variable */
 var world, canvas, camera, scene, renderer;
