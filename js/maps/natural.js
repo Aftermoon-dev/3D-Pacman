@@ -331,7 +331,10 @@ export function initNaturalMap(scene, world, controls, camera) {
 
         // 고스트
         Utils.createGhost(scene, world, 'ghost1', 0, 250, 0, 0xFFFF00);
-
+        
         Utils.initcamera(Utils.object['pacman'], controls);
+
+        // 아이템
+        Utils.locateItem(scene, world, 1, 1, 1, 1, 1, 1,);
     });
 }
