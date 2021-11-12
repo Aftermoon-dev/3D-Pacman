@@ -212,7 +212,7 @@ export function initNaturalMap(scene, world, controls, camera) {
         Utils.createCircle(scene, world, -475, 20, -3400);
 
         // 제일 밑 오른쪽 가로줄
-        Utils.createCircle(scene, world, 2475, 20, 3400);
+        //Utils.createCircle(scene, world, 2475, 20, 3400);
         Utils.createCircle(scene, world, 1975, 20, 3400);
         Utils.createCircle(scene, world, 1475, 20, 3400);
         Utils.createCircle(scene, world, 975, 20, 3400);
