@@ -85,7 +85,8 @@ export let pacman_item = undefined;
 export const audioList = {
 	'teleport': new Audio("./audio/teleport.mp3"),
 	'gameclear': new Audio("./audio/gameclear.mp3"),
-	'gameover': new Audio("./audio/gameover.mp3")
+	'gameover': new Audio("./audio/gameover.mp3"),
+	'gachon': new Audio("./audio/sound_gachon1.mp3")
 };
 
 /* Current Stage */
