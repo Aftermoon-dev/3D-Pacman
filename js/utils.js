@@ -1207,6 +1207,18 @@ export function stopAudio(audioName) {
 }
 
 /**
+ * 오디오 전부 정지
+ */
+export function stopAllAudio() {
+	for(var audioName in audioList) {
+		console.log(audioName);
+		audioList[audioName].currentTime = 0;
+		audioList[audioName].pause()
+	}
+	
+}
+
+/**
  * 스테이지 업데이트
  * @param {Stage Number} newStage 
  */
@@ -1215,6 +1227,7 @@ export function updateStage(newStage) {
 	document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
 	currentStage = newStage;
 	document.getElementById("stageNum").innerHTML = "STAGE " + currentStage;
+	stopAllAudio();
 }
 
 /**
@@ -1295,9 +1308,9 @@ function removePointLight(scene) {
  */
 export function setFinishTimer(finishMS) {
 	clearTimer = setTimeout(function () {
-		// if(score <= 100) {
-		// 	window.location.href = 'gameover.html?score=' + totalScore;
-		// }
+		if(score <= 100) {
+			window.location.href = 'gameover.html?score=' + totalScore;
+		}
 
 		stopTimer(timer); // 아이템 타이머 초기화!
 		isNeedClear = true;
