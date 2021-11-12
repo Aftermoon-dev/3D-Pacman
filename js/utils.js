@@ -1295,9 +1295,9 @@ function removePointLight(scene) {
  */
 export function setFinishTimer(finishMS) {
 	clearTimer = setTimeout(function () {
-		if(score <= 100) {
-			window.location.href = 'gameover.html?score=' + totalScore;
-		}
+		// if(score <= 100) {
+		// 	window.location.href = 'gameover.html?score=' + totalScore;
+		// }
 
 		stopTimer(timer); // 아이템 타이머 초기화!
 		isNeedClear = true;
