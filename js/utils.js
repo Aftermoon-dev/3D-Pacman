@@ -536,7 +536,7 @@ export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num,
 		for (var i = 0; i < Item1Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item1 = ' + randIndex);
-			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
+			createItemObject(scene, world, 'item1' + i, 0xff5b5b, 101,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 			console.log(circlePosition[randIndex][0]);
 			object['circle' + randIndex].deleteReq();
@@ -544,28 +544,28 @@ export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num,
 		for (var i = 0; i < Item2Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item2 = ' + randIndex);
-			createItemObject(scene, world, 'item2', 0xffc000, 102,
+			createItemObject(scene, world, 'item2' + i, 0xffc000, 102,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item3Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item3 = ' + randIndex);
-			createItemObject(scene, world, 'item3', 0x92d050, 103,
+			createItemObject(scene, world, 'item3' + i, 0x92d050, 103,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item4Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item4 = ' + randIndex);
-			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
+			createItemObject(scene, world, 'item4' + i, 0x00b0f0, 104,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item5Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item5 = ' + randIndex);
-			createItemObject(scene, world, 'item5', 0xff99cc, 105,
+			createItemObject(scene, world, 'item5' + i, 0xff99cc, 105,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
@@ -575,35 +575,35 @@ export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num,
 		for (var i = 0; i < Item1Num; i++) {
 			var randIndex = Math.floor((Math.random() * 142) + 114);
 			console.log('item1 = ' + randIndex);
-			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
+			createItemObject(scene, world, 'item1' + i, 0xff5b5b, 101,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item2Num; i++) {
 			var randIndex = Math.floor((Math.random() * 142) + 114);
 			console.log('item2 = ' + randIndex);
-			createItemObject(scene, world, 'item2', 0xffc000, 102,
+			createItemObject(scene, world, 'item2' + i, 0xffc000, 102,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item3Num; i++) {
 			var randIndex = Math.floor((Math.random() * 142) + 114);
 			console.log('item3 = ' + randIndex);
-			createItemObject(scene, world, 'item3', 0x92d050, 103,
+			createItemObject(scene, world, 'item3' + i, 0x92d050, 103,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item4Num; i++) {
 			var randIndex = Math.floor((Math.random() * 142) + 114);
 			console.log('item4 = ' + randIndex);
-			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
+			createItemObject(scene, world, 'item4' + i, 0x00b0f0, 104,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item5Num; i++) {
 			var randIndex = Math.floor((Math.random() * 142) + 114);
 			console.log('item5 = ' + randIndex);
-			createItemObject(scene, world, 'item5', 0xff99cc, 105,
+			createItemObject(scene, world, 'item5' + i, 0xff99cc, 105,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
@@ -613,35 +613,35 @@ export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num,
 		for (var i = 0; i < Item1Num; i++) { 						
 			var randIndex = Math.floor((Math.random() * 204) + 256);
 			console.log('item1 = ' + randIndex);
-			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
+			createItemObject(scene, world, 'item1' + i, 0xff5b5b, 101,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item2Num; i++) {
 			var randIndex = Math.floor((Math.random() * 204) + 256);
 			console.log('item2 = ' + randIndex);
-			createItemObject(scene, world, 'item2', 0xffc000, 102,
+			createItemObject(scene, world, 'item2' + i, 0xffc000, 102,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item3Num; i++) {
 			var randIndex = Math.floor((Math.random() * 204) + 256);
 			console.log('item3 = ' + randIndex);
-			createItemObject(scene, world, 'item3', 0x92d050, 103,
+			createItemObject(scene, world, 'item3' + i, 0x92d050, 103,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item4Num; i++) {
 			var randIndex = Math.floor((Math.random() * 204) + 256);
 			console.log('item4 = ' + randIndex);
-			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
+			createItemObject(scene, world, 'item4' + i, 0x00b0f0, 104,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item5Num; i++) {
 			var randIndex = Math.floor((Math.random() * 204) + 256);
 			console.log('item5 = ' + randIndex);
-			createItemObject(scene, world, 'item5', 0xff99cc, 105,
+			createItemObject(scene, world, 'item5' + i, 0xff99cc, 105,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
@@ -745,6 +745,7 @@ export function setUserEvent(scene, world, controls, camera) {
 	// Collide Event
 	userObjectCollide = function (e) {
 		let output = Object.fromEntries(Object.entries(object).filter(([k, v]) => v.body == e.body));
+		console.log(output);
 		const targetItem = Object.keys(output)[0];
 
 		// 고스트랑 닿을 경우
