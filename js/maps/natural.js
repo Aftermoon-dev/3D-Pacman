@@ -164,7 +164,7 @@ export function initNaturalMap(scene, world, controls, camera) {
             if (e.body.type == 1) {
                 Utils.stopAudio('teleport');
                 Utils.playAudio('teleport');
-                Utils.object['pacman'].position(obj2Pos.x + 500, 0, obj2Pos.z);
+                Utils.object['pacman'].position(obj2Pos.x + 500, Utils.object['pacman'].body.position.y, obj2Pos.z);
             }
         });
 
@@ -172,7 +172,7 @@ export function initNaturalMap(scene, world, controls, camera) {
             if (e.body.type == 1) {
                 Utils.stopAudio('teleport');
                 Utils.playAudio('teleport');
-                Utils.object['pacman'].position(obj1Pos.x - 500, 0, obj1Pos.z);
+                Utils.object['pacman'].position(obj1Pos.x - 500, Utils.object['pacman'].body.position.y, obj1Pos.z);
             }
         });
 

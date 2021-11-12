@@ -446,12 +446,12 @@ export function applyItem3Event() {
 	pacman_height += 30;
 
 	item3Timer = setTimeout(function () {
-		var x = object['pacman'].body.position.x;
-		var y = object['pacman'].body.position.y - 50;
-		var z = object['pacman'].body.position.z;
+		// var x = object['pacman'].body.position.x;
+		// var y = object['pacman'].body.position.y - 50;
+		// var z = object['pacman'].body.position.z;
 
-		object['pacman'].position(x, y, z);
-		pacman_item.position.set(x, y, z);
+		// object['pacman'].position(x, y, z);
+		// pacman_item.position.set(x, y, z);
 		object['pacman'].body.shapes[0].radius = 180;
 		pacman_item.shapes[0].radius = 180;
 		pacman_height -= 30;
@@ -659,21 +659,12 @@ export function setUserEvent(scene, world, controls, camera) {
 			case "c":
 				changePointOfView(object['pacman'], controls);
 				break;
+			case "Z":
+			case "z":
+				applyItem3Event();
+				break;
 
-			// // 이부분은 팩맨 커지는 아이템에 사용하면 될 듯
-			// //임시로 넣어둔 부분! 누르면 팩맨 카메라 높이가 올라감
-			// case "Z":
-			// case "z":
-			// 	if (if2D == false)
-			// 		pacman_height += 30;
-			// 	break;
-
-			// //임시로 넣어둔 부분! 누르면 팩맨 카메라 높이가 내려감
-			// case "X":
-			// case "x":
-			// 	if (if2D == false)
-			// 		pacman_height -= 30;
-			// 	break;
+	
 		}
 	};
 	document.addEventListener("keydown", keyDownCallback);

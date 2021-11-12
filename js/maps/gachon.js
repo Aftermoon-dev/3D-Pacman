@@ -206,7 +206,7 @@ export function initGachonMap(scene, world, controls, camera) {
             if (e.body.type == 1) {
                 Utils.stopAudio('teleport');
                 Utils.playAudio('teleport');
-                Utils.object['pacman'].position(obj2Pos.x, 230, obj2Pos.z - 800);
+                Utils.object['pacman'].position(obj2Pos.x, Utils.object['pacman'].body.position.y, obj2Pos.z - 800);
             }
         });
 
@@ -214,7 +214,7 @@ export function initGachonMap(scene, world, controls, camera) {
             if (e.body.type == 1) {
                 Utils.stopAudio('teleport');
                 Utils.playAudio('teleport');
-                Utils.object['pacman'].position(obj1Pos.x, 230, obj1Pos.z + 800);
+                Utils.object['pacman'].position(obj1Pos.x, Utils.object['pacman'].body.position.y, obj1Pos.z + 800);
             }
         });
 
