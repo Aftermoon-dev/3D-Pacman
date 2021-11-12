@@ -330,10 +330,10 @@ export function initNaturalMap(scene, world, controls, camera) {
         Utils.setUserEvent(scene, world, controls, camera);
 
         // 고스트
-        Utils.createGhost(scene, world, 'ghost1', 3000, 250, 3500, 0xFF8000, 3); //a방향 시작(주황)
-        Utils.createGhost(scene, world, 'ghost2', -3100, 250, 2500, 0x80FF00, 1); // w 방향 시작(초록)
-        Utils.createGhost(scene, world, 'ghost3', -3100, 250, -3500, 0x0080FF, 4); // d 방향 시작(파랑)
-        Utils.createGhost(scene, world, 'ghost4', 600, 250, -3500, 0xFF97FF, 2); // s 방향 시작(분홍)
+        Utils.createGhost(scene, world, 'ghost1', 3000, 250, 3500, 0xFF8000, 0); //a방향 시작(주황)
+        // Utils.createGhost(scene, world, 'ghost2', -3100, 250, 2500, 0x80FF00, 1); // w 방향 시작(초록)
+        // Utils.createGhost(scene, world, 'ghost3', -3100, 250, -3500, 0x0080FF, 4); // d 방향 시작(파랑)
+        // Utils.createGhost(scene, world, 'ghost4', 600, 250, -3500, 0xFF97FF, 2); // s 방향 시작(분홍)
 
         // set camera
         Utils.initcamera(Utils.object['pacman'], controls);

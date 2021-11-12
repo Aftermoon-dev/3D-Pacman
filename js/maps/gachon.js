@@ -220,272 +220,278 @@ export function initGachonMap(scene, world, controls, camera) {
 
         // 동글이들
         // 제일 왼쪽 세로줄
-        Utils.createCircle(scene, world, -4625, 20, -3675);
-        Utils.createCircle(scene, world, -4625, 20, -3175);
-        Utils.createCircle(scene, world, -4625, 20, -2675);
-        Utils.createCircle(scene, world, -4625, 20, -2175);
-        Utils.createCircle(scene, world, -4625, 20, -1675);
-        Utils.createCircle(scene, world, -4625, 20, -1175);
-        Utils.createCircle(scene, world, -4625, 20, -675);
-        Utils.createCircle(scene, world, -4625, 20, -175);
-        Utils.createCircle(scene, world, -4625, 20, 325);
-        Utils.createCircle(scene, world, -4625, 20, 825);
-        Utils.createCircle(scene, world, -4625, 20, 1225);
-        Utils.createCircle(scene, world, -4625, 20, 1825);
-        Utils.createCircle(scene, world, -4625, 20, 2325);
-        Utils.createCircle(scene, world, -4625, 20, 2825);
-        Utils.createCircle(scene, world, -4625, 20, 3325);
+        // Utils.createCircle(scene, world, -4625, 20, -3675);
+        // Utils.createCircle(scene, world, -4625, 20, -3175);
+        // Utils.createCircle(scene, world, -4625, 20, -2675);
+        // Utils.createCircle(scene, world, -4625, 20, -2175);
+        // Utils.createCircle(scene, world, -4625, 20, -1675);
+        // Utils.createCircle(scene, world, -4625, 20, -1175);
+        // Utils.createCircle(scene, world, -4625, 20, -675);
+        // Utils.createCircle(scene, world, -4625, 20, -175);
+        // Utils.createCircle(scene, world, -4625, 20, 325);
+        // Utils.createCircle(scene, world, -4625, 20, 825);
+        // Utils.createCircle(scene, world, -4625, 20, 1225);
+        // Utils.createCircle(scene, world, -4625, 20, 1825);
+        // Utils.createCircle(scene, world, -4625, 20, 2325);
+        // Utils.createCircle(scene, world, -4625, 20, 2825);
+        // Utils.createCircle(scene, world, -4625, 20, 3325);
 
-        // 제일 오른쪽 세로줄
-        Utils.createCircle(scene, world, 4675, 20, -3675);
-        Utils.createCircle(scene, world, 4675, 20, -3175);
-        Utils.createCircle(scene, world, 4675, 20, -2675);
-        Utils.createCircle(scene, world, 4675, 20, -2175);
-        Utils.createCircle(scene, world, 4675, 20, -1675);
-        Utils.createCircle(scene, world, 4675, 20, -1175);
-        Utils.createCircle(scene, world, 4675, 20, -675);
-        Utils.createCircle(scene, world, 4675, 20, -175);
-        Utils.createCircle(scene, world, 4675, 20, 325);
-        Utils.createCircle(scene, world, 4675, 20, 825);
-        Utils.createCircle(scene, world, 4675, 20, 1825);
-        Utils.createCircle(scene, world, 4675, 20, 2325);
-        Utils.createCircle(scene, world, 4675, 20, 2825);
-        Utils.createCircle(scene, world, 4675, 20, 3325);
+        // // 제일 오른쪽 세로줄
+        // Utils.createCircle(scene, world, 4675, 20, -3675);
+        // Utils.createCircle(scene, world, 4675, 20, -3175);
+        // Utils.createCircle(scene, world, 4675, 20, -2675);
+        // Utils.createCircle(scene, world, 4675, 20, -2175);
+        // Utils.createCircle(scene, world, 4675, 20, -1675);
+        // Utils.createCircle(scene, world, 4675, 20, -1175);
+        // Utils.createCircle(scene, world, 4675, 20, -675);
+        // Utils.createCircle(scene, world, 4675, 20, -175);
+        // Utils.createCircle(scene, world, 4675, 20, 325);
+        // Utils.createCircle(scene, world, 4675, 20, 825);
+        // Utils.createCircle(scene, world, 4675, 20, 1825);
+        // Utils.createCircle(scene, world, 4675, 20, 2325);
+        // Utils.createCircle(scene, world, 4675, 20, 2825);
+        // Utils.createCircle(scene, world, 4675, 20, 3325);
 
-        // 제일 밑 왼쪽 가로줄
-        Utils.createCircle(scene, world, -4625, 20, 3675);
-        Utils.createCircle(scene, world, -4125, 20, 3675);
-        Utils.createCircle(scene, world, -3625, 20, 3675);
-        Utils.createCircle(scene, world, -3125, 20, 3675);
-        Utils.createCircle(scene, world, -2625, 20, 3675);
-        Utils.createCircle(scene, world, -2125, 20, 3675);
-        Utils.createCircle(scene, world, -1625, 20, 3675);
-        Utils.createCircle(scene, world, -1125, 20, 3675);
+        // // 제일 밑 왼쪽 가로줄
+        // Utils.createCircle(scene, world, -4625, 20, 3675);
+        // Utils.createCircle(scene, world, -4125, 20, 3675);
+        // Utils.createCircle(scene, world, -3625, 20, 3675);
+        // Utils.createCircle(scene, world, -3125, 20, 3675);
+        // Utils.createCircle(scene, world, -2625, 20, 3675);
+        // Utils.createCircle(scene, world, -2125, 20, 3675);
+        // Utils.createCircle(scene, world, -1625, 20, 3675);
+        // Utils.createCircle(scene, world, -1125, 20, 3675);
 
-        // 제일 밑 오른쪽 가로줄
-        Utils.createCircle(scene, world, 4675, 20, -3675);
-        Utils.createCircle(scene, world, 4175, 20, -3675);
-        Utils.createCircle(scene, world, 3675, 20, -3675);
-        Utils.createCircle(scene, world, 3175, 20, -3675);
-        Utils.createCircle(scene, world, 2675, 20, -3675);
-        Utils.createCircle(scene, world, 2175, 20, -3675);
-        Utils.createCircle(scene, world, 1675, 20, -3675);
-        Utils.createCircle(scene, world, 1175, 20, -3675);
+        // // 제일 밑 오른쪽 가로줄
+        // Utils.createCircle(scene, world, 4675, 20, -3675);
+        // Utils.createCircle(scene, world, 4175, 20, -3675);
+        // Utils.createCircle(scene, world, 3675, 20, -3675);
+        // Utils.createCircle(scene, world, 3175, 20, -3675);
+        // Utils.createCircle(scene, world, 2675, 20, -3675);
+        // Utils.createCircle(scene, world, 2175, 20, -3675);
+        // Utils.createCircle(scene, world, 1675, 20, -3675);
+        // Utils.createCircle(scene, world, 1175, 20, -3675);
 
-        // 제일 위 왼쪽 가로줄
-        Utils.createCircle(scene, world, -4625, 20, -3675);
-        Utils.createCircle(scene, world, -4125, 20, -3675);
-        Utils.createCircle(scene, world, -3625, 20, -3675);
-        Utils.createCircle(scene, world, -3125, 20, -3675);
-        Utils.createCircle(scene, world, -2625, 20, -3675);
-        Utils.createCircle(scene, world, -2125, 20, -3675);
-        Utils.createCircle(scene, world, -1625, 20, -3675);
-        Utils.createCircle(scene, world, -1125, 20, -3675);
+        // // 제일 위 왼쪽 가로줄
+        // Utils.createCircle(scene, world, -4625, 20, -3675);
+        // Utils.createCircle(scene, world, -4125, 20, -3675);
+        // Utils.createCircle(scene, world, -3625, 20, -3675);
+        // Utils.createCircle(scene, world, -3125, 20, -3675);
+        // Utils.createCircle(scene, world, -2625, 20, -3675);
+        // Utils.createCircle(scene, world, -2125, 20, -3675);
+        // Utils.createCircle(scene, world, -1625, 20, -3675);
+        // Utils.createCircle(scene, world, -1125, 20, -3675);
 
-        // 제일 밑 오른쪽 가로줄
-        Utils.createCircle(scene, world, 4675, 20, 3675);
-        Utils.createCircle(scene, world, 4175, 20, 3675);
-        Utils.createCircle(scene, world, 3675, 20, 3675);
-        Utils.createCircle(scene, world, 3175, 20, 3675);
-        Utils.createCircle(scene, world, 2675, 20, 3675);
-        Utils.createCircle(scene, world, 2175, 20, 3675);
-        Utils.createCircle(scene, world, 1675, 20, 3675);
-        Utils.createCircle(scene, world, 1175, 20, 3675);
+        // // 제일 밑 오른쪽 가로줄
+        // Utils.createCircle(scene, world, 4675, 20, 3675);
+        // Utils.createCircle(scene, world, 4175, 20, 3675);
+        // Utils.createCircle(scene, world, 3675, 20, 3675);
+        // Utils.createCircle(scene, world, 3175, 20, 3675);
+        // Utils.createCircle(scene, world, 2675, 20, 3675);
+        // Utils.createCircle(scene, world, 2175, 20, 3675);
+        // Utils.createCircle(scene, world, 1675, 20, 3675);
+        // Utils.createCircle(scene, world, 1175, 20, 3675);
 
-        // 밑에서 두번째 가로줄
-        Utils.createCircle(scene, world, -4325, 20, 1225);
-        Utils.createCircle(scene, world, -3825, 20, 1225);
-        Utils.createCircle(scene, world, -3325, 20, 1225);
-        Utils.createCircle(scene, world, -2825, 20, 1225);
-        Utils.createCircle(scene, world, -2325, 20, 1225);
-        Utils.createCircle(scene, world, -1825, 20, 1225);
-        Utils.createCircle(scene, world, -1325, 20, 1225);
-        Utils.createCircle(scene, world, -825, 20, 1225);
-        Utils.createCircle(scene, world, -325, 20, 1225);
-        Utils.createCircle(scene, world, 175, 20, 1225);
-        Utils.createCircle(scene, world, 675, 20, 1225);
-        Utils.createCircle(scene, world, 1175, 20, 1225);
-        Utils.createCircle(scene, world, 1675, 20, 1225);
-        Utils.createCircle(scene, world, 2175, 20, 1225);
-        Utils.createCircle(scene, world, 2675, 20, 1225);
-        Utils.createCircle(scene, world, 3175, 20, 1225);
-        Utils.createCircle(scene, world, 3675, 20, 1225);
-        Utils.createCircle(scene, world, 4175, 20, 1225);
-        Utils.createCircle(scene, world, 4675, 20, 1225);
+        // // 밑에서 두번째 가로줄
+        // Utils.createCircle(scene, world, -4325, 20, 1225);
+        // Utils.createCircle(scene, world, -3825, 20, 1225);
+        // Utils.createCircle(scene, world, -3325, 20, 1225);
+        // Utils.createCircle(scene, world, -2825, 20, 1225);
+        // Utils.createCircle(scene, world, -2325, 20, 1225);
+        // Utils.createCircle(scene, world, -1825, 20, 1225);
+        // Utils.createCircle(scene, world, -1325, 20, 1225);
+        // Utils.createCircle(scene, world, -825, 20, 1225);
+        // Utils.createCircle(scene, world, -325, 20, 1225);
+        // Utils.createCircle(scene, world, 175, 20, 1225);
+        // Utils.createCircle(scene, world, 675, 20, 1225);
+        // Utils.createCircle(scene, world, 1175, 20, 1225);
+        // Utils.createCircle(scene, world, 1675, 20, 1225);
+        // Utils.createCircle(scene, world, 2175, 20, 1225);
+        // Utils.createCircle(scene, world, 2675, 20, 1225);
+        // Utils.createCircle(scene, world, 3175, 20, 1225);
+        // Utils.createCircle(scene, world, 3675, 20, 1225);
+        // Utils.createCircle(scene, world, 4175, 20, 1225);
+        // Utils.createCircle(scene, world, 4675, 20, 1225);
 
-        // 위에서 두번째 가로줄
-        Utils.createCircle(scene, world, -4325, 20, -1175);
-        Utils.createCircle(scene, world, -3825, 20, -1175);
-        Utils.createCircle(scene, world, -3325, 20, -1175);
-        Utils.createCircle(scene, world, -2825, 20, -1175);
-        Utils.createCircle(scene, world, -2325, 20, -1175);
-        Utils.createCircle(scene, world, -1825, 20, -1175);
-        Utils.createCircle(scene, world, -1325, 20, -1175);
-        Utils.createCircle(scene, world, -825, 20, -1175);
-        Utils.createCircle(scene, world, -325, 20, -1175);
-        Utils.createCircle(scene, world, 175, 20, -1175);
-        Utils.createCircle(scene, world, 675, 20, -1175);
-        Utils.createCircle(scene, world, 1175, 20, -1175);
-        Utils.createCircle(scene, world, 1675, 20, -1175);
-        Utils.createCircle(scene, world, 2175, 20, -1175);
-        Utils.createCircle(scene, world, 2675, 20, -1175);
-        Utils.createCircle(scene, world, 3175, 20, -1175);
-        Utils.createCircle(scene, world, 3675, 20, -1175);
-        Utils.createCircle(scene, world, 4175, 20, -1175);
-        Utils.createCircle(scene, world, 4675, 20, -1175);
+        // // 위에서 두번째 가로줄
+        // Utils.createCircle(scene, world, -4325, 20, -1175);
+        // Utils.createCircle(scene, world, -3825, 20, -1175);
+        // Utils.createCircle(scene, world, -3325, 20, -1175);
+        // Utils.createCircle(scene, world, -2825, 20, -1175);
+        // Utils.createCircle(scene, world, -2325, 20, -1175);
+        // Utils.createCircle(scene, world, -1825, 20, -1175);
+        // Utils.createCircle(scene, world, -1325, 20, -1175);
+        // Utils.createCircle(scene, world, -825, 20, -1175);
+        // Utils.createCircle(scene, world, -325, 20, -1175);
+        // Utils.createCircle(scene, world, 175, 20, -1175);
+        // Utils.createCircle(scene, world, 675, 20, -1175);
+        // Utils.createCircle(scene, world, 1175, 20, -1175);
+        // Utils.createCircle(scene, world, 1675, 20, -1175);
+        // Utils.createCircle(scene, world, 2175, 20, -1175);
+        // Utils.createCircle(scene, world, 2675, 20, -1175);
+        // Utils.createCircle(scene, world, 3175, 20, -1175);
+        // Utils.createCircle(scene, world, 3675, 20, -1175);
+        // Utils.createCircle(scene, world, 4175, 20, -1175);
+        // Utils.createCircle(scene, world, 4675, 20, -1175);
 
-        // 밑에서 두번째 가로줄
-        Utils.createCircle(scene, world, -4325, 20, 1225);
-        Utils.createCircle(scene, world, -3825, 20, 1225);
-        Utils.createCircle(scene, world, -3325, 20, 1225);
-        Utils.createCircle(scene, world, -2825, 20, 1225);
-        Utils.createCircle(scene, world, -2325, 20, 1225);
-        Utils.createCircle(scene, world, -1825, 20, 1225);
-        Utils.createCircle(scene, world, -1325, 20, 1225);
-        Utils.createCircle(scene, world, -825, 20, 1225);
-        Utils.createCircle(scene, world, -325, 20, 1225);
-        Utils.createCircle(scene, world, 175, 20, 1225);
-        Utils.createCircle(scene, world, 675, 20, 1225);
-        Utils.createCircle(scene, world, 1175, 20, 1225);
-        Utils.createCircle(scene, world, 1675, 20, 1225);
-        Utils.createCircle(scene, world, 2175, 20, 1225);
-        Utils.createCircle(scene, world, 2675, 20, 1225);
-        Utils.createCircle(scene, world, 3175, 20, 1225);
-        Utils.createCircle(scene, world, 3675, 20, 1225);
-        Utils.createCircle(scene, world, 4175, 20, 1225);
-        Utils.createCircle(scene, world, 4675, 20, 1225);
+        // // 밑에서 두번째 가로줄
+        // Utils.createCircle(scene, world, -4325, 20, 1225);
+        // Utils.createCircle(scene, world, -3825, 20, 1225);
+        // Utils.createCircle(scene, world, -3325, 20, 1225);
+        // Utils.createCircle(scene, world, -2825, 20, 1225);
+        // Utils.createCircle(scene, world, -2325, 20, 1225);
+        // Utils.createCircle(scene, world, -1825, 20, 1225);
+        // Utils.createCircle(scene, world, -1325, 20, 1225);
+        // Utils.createCircle(scene, world, -825, 20, 1225);
+        // Utils.createCircle(scene, world, -325, 20, 1225);
+        // Utils.createCircle(scene, world, 175, 20, 1225);
+        // Utils.createCircle(scene, world, 675, 20, 1225);
+        // Utils.createCircle(scene, world, 1175, 20, 1225);
+        // Utils.createCircle(scene, world, 1675, 20, 1225);
+        // Utils.createCircle(scene, world, 2175, 20, 1225);
+        // Utils.createCircle(scene, world, 2675, 20, 1225);
+        // Utils.createCircle(scene, world, 3175, 20, 1225);
+        // Utils.createCircle(scene, world, 3675, 20, 1225);
+        // Utils.createCircle(scene, world, 4175, 20, 1225);
+        // Utils.createCircle(scene, world, 4675, 20, 1225);
 
-        // 위에서 두번째 가로줄
-        Utils.createCircle(scene, world, -2400, 20, -1925);
-        Utils.createCircle(scene, world, -1900, 20, -1925);
-        Utils.createCircle(scene, world, -1400, 20, -1925);
-        Utils.createCircle(scene, world, -900, 20, -1925);
-        Utils.createCircle(scene, world, -400, 20, -1925);
-        Utils.createCircle(scene, world, 100, 20, -1925);
-        Utils.createCircle(scene, world, 600, 20, -1925);
-        Utils.createCircle(scene, world, 1100, 20, -1925);
-        Utils.createCircle(scene, world, 1600, 20, -1925);
-        Utils.createCircle(scene, world, 2100, 20, -1925);
+        // // 위에서 두번째 가로줄
+        // Utils.createCircle(scene, world, -2400, 20, -1925);
+        // Utils.createCircle(scene, world, -1900, 20, -1925);
+        // Utils.createCircle(scene, world, -1400, 20, -1925);
+        // Utils.createCircle(scene, world, -900, 20, -1925);
+        // Utils.createCircle(scene, world, -400, 20, -1925);
+        // Utils.createCircle(scene, world, 100, 20, -1925);
+        // Utils.createCircle(scene, world, 600, 20, -1925);
+        // Utils.createCircle(scene, world, 1100, 20, -1925);
+        // Utils.createCircle(scene, world, 1600, 20, -1925);
+        // Utils.createCircle(scene, world, 2100, 20, -1925);
 
-        // 밑에서 두번째 가로줄
-        Utils.createCircle(scene, world, -2400, 20, 1925);
-        Utils.createCircle(scene, world, -1900, 20, 1925);
-        Utils.createCircle(scene, world, -1400, 20, 1925);
-        Utils.createCircle(scene, world, -900, 20, 1925);
-        Utils.createCircle(scene, world, -400, 20, 1925);
-        Utils.createCircle(scene, world, 100, 20, 1925);
-        Utils.createCircle(scene, world, 600, 20, 1925);
-        Utils.createCircle(scene, world, 1100, 20, 1925);
-        Utils.createCircle(scene, world, 1600, 20, 1925);
-        Utils.createCircle(scene, world, 2100, 20, 1925);
+        // // 밑에서 두번째 가로줄
+        // Utils.createCircle(scene, world, -2400, 20, 1925);
+        // Utils.createCircle(scene, world, -1900, 20, 1925);
+        // Utils.createCircle(scene, world, -1400, 20, 1925);
+        // Utils.createCircle(scene, world, -900, 20, 1925);
+        // Utils.createCircle(scene, world, -400, 20, 1925);
+        // Utils.createCircle(scene, world, 100, 20, 1925);
+        // Utils.createCircle(scene, world, 600, 20, 1925);
+        // Utils.createCircle(scene, world, 1100, 20, 1925);
+        // Utils.createCircle(scene, world, 1600, 20, 1925);
+        // Utils.createCircle(scene, world, 2100, 20, 1925);
 
-        // 왼쪽 h
-        Utils.createCircle(scene, world, -1525, 20, -575);
-        Utils.createCircle(scene, world, -1625, 20, 575);
+        // // 왼쪽 h
+        // Utils.createCircle(scene, world, -1525, 20, -575);
+        // Utils.createCircle(scene, world, -1625, 20, 575);
 
-        // 오른쪽 4
-        Utils.createCircle(scene, world, 1625, 20, -575);
-        Utils.createCircle(scene, world, 1525, 20, 575);
+        // // 오른쪽 4
+        // Utils.createCircle(scene, world, 1625, 20, -575);
+        // Utils.createCircle(scene, world, 1525, 20, 575);
 
-        // H 윗부분
-        Utils.createCircle(scene, world, 3300, 20, -3225);
-        Utils.createCircle(scene, world, 3300, 20, -2775);
-        Utils.createCircle(scene, world, 3900, 20, -3225);
-        Utils.createCircle(scene, world, 3900, 20, -2775);
+        // // H 윗부분
+        // Utils.createCircle(scene, world, 3300, 20, -3225);
+        // Utils.createCircle(scene, world, 3300, 20, -2775);
+        // Utils.createCircle(scene, world, 3900, 20, -3225);
+        // Utils.createCircle(scene, world, 3900, 20, -2775);
 
-        // H 아랫부분
-        Utils.createCircle(scene, world, 3300, 20, -2075);
-        Utils.createCircle(scene, world, 3300, 20, -1625);
-        Utils.createCircle(scene, world, 3900, 20, -2075);
-        Utils.createCircle(scene, world, 3900, 20, -1625);
+        // // H 아랫부분
+        // Utils.createCircle(scene, world, 3300, 20, -2075);
+        // Utils.createCircle(scene, world, 3300, 20, -1625);
+        // Utils.createCircle(scene, world, 3900, 20, -2075);
+        // Utils.createCircle(scene, world, 3900, 20, -1625);
 
-        // O 통로 부분
-        Utils.createCircle(scene, world, 3600, 20, -785);
-        Utils.createCircle(scene, world, 3600, 20, 785);
+        // // O 통로 부분
+        // Utils.createCircle(scene, world, 3600, 20, -785);
+        // Utils.createCircle(scene, world, 3600, 20, 785);
 
-        // O 가운데 부분
-        Utils.createCircle(scene, world, 3300, 20, -325);
-        Utils.createCircle(scene, world, 3300, 20, 325);
-        Utils.createCircle(scene, world, 3900, 20, -325);
-        Utils.createCircle(scene, world, 3900, 20, 325);
+        // // O 가운데 부분
+        // Utils.createCircle(scene, world, 3300, 20, -325);
+        // Utils.createCircle(scene, world, 3300, 20, 325);
+        // Utils.createCircle(scene, world, 3900, 20, -325);
+        // Utils.createCircle(scene, world, 3900, 20, 325);
 
-        // N 오른쪽 윗부분
-        Utils.createCircle(scene, world, 3900, 20, 1575);
-        Utils.createCircle(scene, world, 3900, 20, 2175);
+        // // N 오른쪽 윗부분
+        // Utils.createCircle(scene, world, 3900, 20, 1575);
+        // Utils.createCircle(scene, world, 3900, 20, 2175);
 
-        // N 왼쪽 밑부분
-        Utils.createCircle(scene, world, 3300, 20, 2755);
-        Utils.createCircle(scene, world, 3300, 20, 3295);
+        // // N 왼쪽 밑부분
+        // Utils.createCircle(scene, world, 3300, 20, 2755);
+        // Utils.createCircle(scene, world, 3300, 20, 3295);
 
-        // A 밑부분
-        Utils.createCircle(scene, world, -3850, 20, 3225);
-        Utils.createCircle(scene, world, -3350, 20, 3225);
-        Utils.createCircle(scene, world, -3850, 20, 2825);
-        Utils.createCircle(scene, world, -3350, 20, 2825);
+        // // A 밑부분
+        // Utils.createCircle(scene, world, -3850, 20, 3225);
+        // Utils.createCircle(scene, world, -3350, 20, 3225);
+        // Utils.createCircle(scene, world, -3850, 20, 2825);
+        // Utils.createCircle(scene, world, -3350, 20, 2825);
 
-        // G 윗부분
-        Utils.createCircle(scene, world, -3825, 20, -2875);
-        Utils.createCircle(scene, world, -3225, 20, -2875);
+        // // G 윗부분
+        // Utils.createCircle(scene, world, -3825, 20, -2875);
+        // Utils.createCircle(scene, world, -3225, 20, -2875);
 
-        // G 밑부분
-        Utils.createCircle(scene, world, -3825, 20, -1975);
-        Utils.createCircle(scene, world, -3225, 20, -1975);
+        // // G 밑부분
+        // Utils.createCircle(scene, world, -3825, 20, -1975);
+        // Utils.createCircle(scene, world, -3225, 20, -1975);
 
-        // 추가 점들
-        Utils.createCircle(scene, world, -2400, 20, -3125);
-        Utils.createCircle(scene, world, -2400, 20, -2525);
-        Utils.createCircle(scene, world, -2400, 20, -1925);
-        Utils.createCircle(scene, world, -2400, 20, -575);
-        Utils.createCircle(scene, world, -2400, 20, 0);
-        Utils.createCircle(scene, world, -2400, 20, 575);
-        Utils.createCircle(scene, world, -2400, 20, 1925);
-        Utils.createCircle(scene, world, -2400, 20, 2525);
-        Utils.createCircle(scene, world, -2400, 20, 3125);
+        // // 추가 점들
+        // Utils.createCircle(scene, world, -2400, 20, -3125);
+        // Utils.createCircle(scene, world, -2400, 20, -2525);
+        // Utils.createCircle(scene, world, -2400, 20, -1925);
+        // Utils.createCircle(scene, world, -2400, 20, -575);
+        // Utils.createCircle(scene, world, -2400, 20, 0);
+        // Utils.createCircle(scene, world, -2400, 20, 575);
+        // Utils.createCircle(scene, world, -2400, 20, 1925);
+        // Utils.createCircle(scene, world, -2400, 20, 2525);
+        // Utils.createCircle(scene, world, -2400, 20, 3125);
 
-        Utils.createCircle(scene, world, 2400, 20, -3125);
-        Utils.createCircle(scene, world, 2400, 20, -2525);
-        Utils.createCircle(scene, world, 2400, 20, -1925);
-        Utils.createCircle(scene, world, 2400, 20, -575);
-        Utils.createCircle(scene, world, 2400, 20, 0);
-        Utils.createCircle(scene, world, 2400, 20, 575);
-        Utils.createCircle(scene, world, 2400, 20, 1925);
-        Utils.createCircle(scene, world, 2400, 20, 2525);
-        Utils.createCircle(scene, world, 2400, 20, 3125);
+        // Utils.createCircle(scene, world, 2400, 20, -3125);
+        // Utils.createCircle(scene, world, 2400, 20, -2525);
+        // Utils.createCircle(scene, world, 2400, 20, -1925);
+        // Utils.createCircle(scene, world, 2400, 20, -575);
+        // Utils.createCircle(scene, world, 2400, 20, 0);
+        // Utils.createCircle(scene, world, 2400, 20, 575);
+        // Utils.createCircle(scene, world, 2400, 20, 1925);
+        // Utils.createCircle(scene, world, 2400, 20, 2525);
+        // Utils.createCircle(scene, world, 2400, 20, 3125);
 
-        Utils.createCircle(scene, world, -900, 20, -575);
-        Utils.createCircle(scene, world, -900, 20, 0);
-        Utils.createCircle(scene, world, -900, 20, 575);
+        // Utils.createCircle(scene, world, -900, 20, -575);
+        // Utils.createCircle(scene, world, -900, 20, 0);
+        // Utils.createCircle(scene, world, -900, 20, 575);
 
-        Utils.createCircle(scene, world, 900, 20, -575);
-        Utils.createCircle(scene, world, 900, 20, 0);
-        Utils.createCircle(scene, world, 900, 20, 575);
+        // Utils.createCircle(scene, world, 900, 20, -575);
+        // Utils.createCircle(scene, world, 900, 20, 0);
+        // Utils.createCircle(scene, world, 900, 20, 575);
 
-        Utils.createCircle(scene, world, -1150, 20, -3125);
-        Utils.createCircle(scene, world, -1150, 20, -2525);
-        Utils.createCircle(scene, world, -1150, 20, 2525);
-        Utils.createCircle(scene, world, -1150, 20, 3125);
+        // Utils.createCircle(scene, world, -1150, 20, -3125);
+        // Utils.createCircle(scene, world, -1150, 20, -2525);
+        // Utils.createCircle(scene, world, -1150, 20, 2525);
+        // Utils.createCircle(scene, world, -1150, 20, 3125);
 
-        Utils.createCircle(scene, world, 1150, 20, -3125);
-        Utils.createCircle(scene, world, 1150, 20, -2525);
-        Utils.createCircle(scene, world, 1150, 20, 2525);
-        Utils.createCircle(scene, world, 1150, 20, 3125);
+        // Utils.createCircle(scene, world, 1150, 20, -3125);
+        // Utils.createCircle(scene, world, 1150, 20, -2525);
+        // Utils.createCircle(scene, world, 1150, 20, 2525);
+        // Utils.createCircle(scene, world, 1150, 20, 3125);
 
-        Utils.createCircle(scene, world, 0, 20, -3125);
-        Utils.createCircle(scene, world, 0, 20, -2525);
-        Utils.createCircle(scene, world, 0, 20, 3125);
-        Utils.createCircle(scene, world, 0, 20, 2525);
+        // Utils.createCircle(scene, world, 0, 20, -3125);
+        // Utils.createCircle(scene, world, 0, 20, -2525);
+        // Utils.createCircle(scene, world, 0, 20, 3125);
+        // Utils.createCircle(scene, world, 0, 20, 2525);
 
         // 팩맨
         Utils.createPacman(scene, world, 600, 0, 0, 180);
         Utils.setUserEvent(scene, world, controls, camera);
 
         // 고스트
-        Utils.createGhost(scene, world, 'ghost1', 0, 250, 0, 0xFFFF00);
+        Utils.createGhost(scene, world, 'ghost1', 4700, 250, 3700, 0xFF8000, 1); //1 (주황)
+        Utils.createGhost(scene, world, 'ghost2', -4700, 250, 3700, 0x80FF00, 4); // 4(초록)
+        Utils.createGhost(scene, world, 'ghost3', -4700, 250, -3700, 0x0080FF, 2); // 2 (파랑)
+        Utils.createGhost(scene, world, 'ghost4', 4700, 250, -3700, 0xFF97FF, 3); // 3 (분홍)
+        
 
+
+        // set camera
         Utils.initcamera(Utils.object['pacman'], controls);
 
         // 아이템
-        Utils.locateItem(scene, world, 3, 1, 1, 1, 1, 1,);
+        // Utils.locateItem(scene, world, 3, 1, 1, 1, 1, 1,);
     });
 
     // 왼쪽 사각형
