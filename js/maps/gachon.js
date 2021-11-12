@@ -498,6 +498,9 @@ export function initGachonMap(scene, world, controls, camera) {
         Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, 3300, 20, 2755);
         Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, -3850, 20, 2825);
         Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, -3225, 20, -1975);
+        
+        Utils.audioList['gachon'].loop = true;
+        Utils.audioList['gachon'].play();
     });
 
     // 왼쪽 사각형
