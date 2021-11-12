@@ -757,10 +757,11 @@ export function setUserEvent(scene, world, controls, camera) {
 
 			// 먹는 모드가 아니라면
 			if(item4Flag == false) {
-				document.location.href = "./gameover.html";
+				document.location.href = "./gameover.html?score=" + totalScore;
 			}
 			//먹는모드가 맞다면 나머지는 고스트에서 처리함 + 여기다가 else해서 고스트 먹었을때 점수 올라가는거 하면 될듯
 			else {
+				totalScore += 30;
 				// 먹는 소리 내기
 				playAudio("pacman_eat");
 			}
@@ -791,7 +792,7 @@ export function setUserEvent(scene, world, controls, camera) {
 			}
 			else if (currentStage == 3) {
 				if (score == 500) {  // Stage 3 Clear 점수 넣기!
-					window.location.href = 'gameclear.html'; // Clear Page
+					window.location.href = 'gameclear.html?score=' + totalScore; // Clear Page
 				}
 			}
 		} else if (e.body.type == 101) {

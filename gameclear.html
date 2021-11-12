@@ -29,10 +29,17 @@
                 width: 100%;
             }
 
-            #subtitle {
+            #subtitle1 {
                 text-align: center;
                 color: #ffd400;
                 font-size: 2.5em;
+                width: 100%;
+            }
+
+            #subtitle2 {
+                text-align: center;
+                color: #2ada2a;
+                font-size: 1.5em;
                 width: 100%;
             }
 
@@ -71,13 +78,32 @@
                 width: 100%;
             }
         </style>
+        <script>
+            let getParam = function (key) {
+                let _parammap = {};
+                    document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
+                        function decode(s) {
+                            return decodeURIComponent(s.split("+").join(" "));
+                        }
+
+                        _parammap[decode(arguments[1])] = decode(arguments[2]);
+                    });
+
+                    return _parammap[key];
+                };
+
+            window.onload = function() {
+                document.getElementById("subtitle2").innerHTML += "<span> Final Score : " + getParam("score") + "</span>"
+            }
+        </script>
     </head>
 
 	<body>
-        <audio id="audio" autoplay> <source src="./audio/gameclear.mp3"> </audio>
+        <audio id="audio" autoplay> <source src="./audio/gameclear.mp3s"> </audio>
         <div id = "pacmanImage"> <img src="image/pacman.png" width = "120px" height = "120px"> </div>
         <div id = "title"> <span> Game Clear </span> </div>
-        <div id = "subtitle"> <span> Congratulation! </span> </div>
+        <div id = "subtitle1"> <span> Congratulation! </span> </div>
+        <div id = "subtitle2"></div>
         <div id = "button">
             <input type = "button" value= "Home" class = "button" onClick="location.href='index.html'"></button>
         </div>

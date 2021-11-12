@@ -35,6 +35,13 @@
                 width: 100%;
             }
 
+            #subtitle1 {
+                text-align: center;
+                color: #2ada2a;
+                font-size: 1.5em;
+                width: 100%;
+            }
+
             .button {
                 background-color: rgb(122, 241, 92);
                 border: none;
@@ -57,12 +64,32 @@
             .button:hover {background-color: tomato}
 
         </style>
+
+        <script>
+            let getParam = function (key) {
+                let _parammap = {};
+                    document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
+                        function decode(s) {
+                            return decodeURIComponent(s.split("+").join(" "));
+                        }
+
+                        _parammap[decode(arguments[1])] = decode(arguments[2]);
+                    });
+
+                    return _parammap[key];
+                };
+
+            window.onload = function() {
+                document.getElementById("subtitle1").innerHTML += "<span> Final Score : " + getParam("score") + "</span>"
+            }
+        </script>
     </head>
 
 	<body>
         <audio id="audio" autoplay> <source src="./audio/gameover.mp3"> </audio>
         <div id = "ghostImage"> <img src="image/ghost2.png" width = "400px" height = "100px"> </div>
         <div id = "title"> <span> Game Over </span> </div>
+        <div id = "subtitle1"></div>
         <div id = "button">
             <input type = "button" value= "Home" class = "button" onClick="location.href='index.html'"></button>
             <input type = "button" value = "Restart" class = "button" onClick="location.href='game.html'"></button>
