@@ -489,18 +489,24 @@ export function initGachonMap(scene, world, controls, camera) {
         // 아이템
         Utils.locateItem(scene, world, 3, 1, 1, 1, 1, 5);
 
+        // 다음 맵 타이머
+        Utils.setFinishTimer(120000);
+
         // 고정 위치 아이템 (item4)
-        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, -1625, 20, 575);
-        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, 1625, 20, -575);
-        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, 3900, 20, -2775);
-        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, 3300, 20, -2075);
-        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, 3900, 20, 2175);
-        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, 3300, 20, 2755);
-        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, -3850, 20, 2825);
-        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, -3225, 20, -1975);
+        Utils.createItemObject(scene, world, 'item46', 0x00b0f0, 104, -1625, 20, 575);
+        Utils.createItemObject(scene, world, 'item47', 0x00b0f0, 104, 1625, 20, -575);
+        Utils.createItemObject(scene, world, 'item48', 0x00b0f0, 104, 3900, 20, -2775);
+        Utils.createItemObject(scene, world, 'item49', 0x00b0f0, 104, 3300, 20, -2075);
+        Utils.createItemObject(scene, world, 'item410', 0x00b0f0, 104, 3900, 20, 2175);
+        Utils.createItemObject(scene, world, 'item411', 0x00b0f0, 104, 3300, 20, 2755);
+        Utils.createItemObject(scene, world, 'item412', 0x00b0f0, 104, -3850, 20, 2825);
+        Utils.createItemObject(scene, world, 'item413', 0x00b0f0, 104, -3225, 20, -1975);
         
         Utils.audioList['gachon'].loop = true;
+        Utils.audioList['gachon'].volume = 0.2;
         Utils.audioList['gachon'].play();
+
+        
     });
 
     // 왼쪽 사각형

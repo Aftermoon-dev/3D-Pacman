@@ -15,7 +15,6 @@ import * as Utils from '../utils.js';
  * @param {PerspectiveCamera} camera
  */
 export function initNaturalMap(scene, world, controls, camera) {
-
     // 맵 배경 택스쳐 이미지 
     const texture = Utils.cubeLoader.load([
         'resources/cubemaps/map2/natural_px.png',
@@ -340,5 +339,13 @@ export function initNaturalMap(scene, world, controls, camera) {
 
         // 아이템
         Utils.locateItem(scene, world, 1, 1, 1, 1, 1, 3);
+        Utils.createItemObject(scene, world, 'item42', 0x00b0f0, 104, 2475, 20, 3400);
+
+        // 다음 맵 타이머
+        Utils.setFinishTimer(60000);
+
+        Utils.audioList['natural'].loop = true;
+        Utils.audioList['natural'].volume = 0.2;
+        Utils.audioList['natural'].play();
     });
 }

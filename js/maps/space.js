@@ -421,5 +421,12 @@ export function initSpaceMap(scene, world, controls, camera) {
 
         // 아이템
         Utils.locateItem(scene, world, 2, 1, 1, 1, 1, 4);
+
+        // 다음 맵 타이머
+        Utils.setFinishTimer(60000);
+
+        Utils.audioList['space'].loop = true;
+        Utils.audioList['space'].volume = 0.2;
+        Utils.audioList['space'].play();
     });
 }

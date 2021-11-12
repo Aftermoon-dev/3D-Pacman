@@ -87,7 +87,9 @@ export const audioList = {
 	'gameclear': new Audio("./audio/gameclear.mp3"),
 	'gameover': new Audio("./audio/gameover.mp3"),
 	'gachon': new Audio("./audio/sound_gachon1.mp3"),
-	'pacman_eat': new Audio("./audio/pacman_eat.mp3")
+	'pacman_eat': new Audio("./audio/pacman_eat.mp3"),
+	'natural': new Audio("./audio/sound_natural1.mp3"),
+	'space': new Audio("./audio/sound_space2.mp3"),
 };
 
 /* Current Stage */
@@ -108,6 +110,9 @@ export let isNeedClear = false;
 
 /* Delete Request List */
 const deleteReqList = [];
+
+/* Game Clear Timer */
+export let clearTimer = undefined;
 
 /**
  * Mesh Object Class
@@ -789,7 +794,7 @@ export function setUserEvent(scene, world, controls, camera) {
 
 			// 현재 스테이지에 따라 다음 동작 정의
 			if (currentStage == 1) {
-				if (score == 1070) {  // Stage 1 Clear 점수 넣기!
+				if (score == 1100) {  // Stage 1 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
 					isNeedClear = true;
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
@@ -797,7 +802,7 @@ export function setUserEvent(scene, world, controls, camera) {
 				}
 			}
 			else if (currentStage == 2) {
-				if (score == 1340) {  // Stage 2 Clear 점수 넣기!
+				if (score == 1300) {  // Stage 2 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
 					isNeedClear = true;
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
@@ -805,7 +810,7 @@ export function setUserEvent(scene, world, controls, camera) {
 				}
 			}
 			else if (currentStage == 3) {
-				if (score == 1950) {  // Stage 3 Clear 점수 넣기!
+				if (score == 1500) {  // Stage 3 Clear 점수 넣기!
 					window.location.href = 'gameclear.html?score=' + totalScore; // Clear Page
 				}
 			}
@@ -1110,19 +1115,21 @@ export function createGhost(scene, world, objName, x, y, z, color, direction) {
 				if (speedFlag == 4) object[objName].setVelocity(3, ghostSpeed+300);
 	
 				setTimeout(function(){
-					object[objName].setVelocity(0, ghostSpeed); //정지
+					if(object[objName] != undefined) {
+						object[objName].setVelocity(0, ghostSpeed); //정지
 
-					//어느 방향으로 갈지 탐색
-					var new_speedFlag = Math.floor(Math.random() * 4) + 1;
-					if (speedFlag == new_speedFlag){
-						new_speedFlag = (new_speedFlag + 1)%4+1
+						//어느 방향으로 갈지 탐색
+						var new_speedFlag = Math.floor(Math.random() * 4) + 1;
+						if (speedFlag == new_speedFlag){
+							new_speedFlag = (new_speedFlag + 1)%4+1
+						}
+			
+						var ghostPosition = object[objName].getPosition();
+						object[objName].setDirection(new_speedFlag)
+						object[objName].position(ghostPosition.x, y, ghostPosition.z);
+						// object[objName].rotateMesh(speedFlag);
+						object[objName].setVelocity(new_speedFlag, ghostSpeed);
 					}
-		
-					var ghostPosition = object[objName].getPosition();
-					object[objName].setDirection(new_speedFlag)
-					object[objName].position(ghostPosition.x, y, ghostPosition.z);
-					// object[objName].rotateMesh(speedFlag);
-					object[objName].setVelocity(new_speedFlag, ghostSpeed);
 				}, 500);
 
 			}
@@ -1279,6 +1286,35 @@ function removePointLight(scene) {
 		scene.remove(userLight);
 		userLight = undefined;
 	}
+}
+
+/**
+ * Set Clear Timer
+ * @param {ms} finishMS 
+ * @param {stage num} currentStage 
+ */
+export function setFinishTimer(finishMS) {
+	clearTimer = setTimeout(function () {
+		if(score <= 100) {
+			window.location.href = 'gameover.html?score=' + totalScore;
+		}
+
+		stopTimer(timer); // 아이템 타이머 초기화!
+		isNeedClear = true;
+		timerImage.setAttribute("src", "./image/timerStartEnd.png");
+
+		
+		// 현재 스테이지에 따라 다음 동작 정의
+		if (currentStage == 1) {
+			updateStage(2);
+		}
+		else if (currentStage == 2) {
+			updateStage(3);
+		}
+		else if (currentStage == 3) {
+			window.location.href = 'gameclear.html?score=' + totalScore; // Clear Page
+		}
+	}, finishMS)
 }
 
 /**
