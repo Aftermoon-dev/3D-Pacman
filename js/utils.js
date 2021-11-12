@@ -159,17 +159,6 @@ export class worldObj {
 				this.mesh.quaternion.copy(body.quaternion);
 			}
 		}
-
-		// 객체 삭제
-		this.delete = function(scene, world) {
-			setTimeout(function() {
-				scene.remove(mesh);
-				this.mesh = undefined;
-				world.removeBody(body);
-				this.body = undefined;
-				delete object[objName];
-			}, 100);
-		}
 	}
 	//current 방향 알려주기 => ghost용
 	getDirection() {
