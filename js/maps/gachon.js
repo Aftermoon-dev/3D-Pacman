@@ -202,6 +202,8 @@ export function initGachonMap(scene, world, controls, camera) {
         const obj1Pos = Utils.object['tpnorth'].body.position;
         const obj2Pos = Utils.object['tpsouth'].body.position;
 
+        Utils.audioList['teleport'].volume = 0.3;
+        
         Utils.object['tpnorth'].body.addEventListener("collide", function (e) {
             if (e.body.type == 1) {
                 Utils.playAudio('teleport');

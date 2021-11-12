@@ -205,6 +205,8 @@ export function initSpaceMap(scene, world, controls, camera) {
         const obj1Pos = Utils.object['tpleft'].body.position;
         const obj2Pos = Utils.object['tpright'].body.position;
 
+        Utils.audioList['teleport'].volume = 0.3;
+        
         Utils.object['tpleft'].body.addEventListener("collide", function (e) {
             if (e.body.type == 1) {
                 Utils.playAudio('teleport');
