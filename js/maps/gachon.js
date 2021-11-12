@@ -472,6 +472,32 @@ export function initGachonMap(scene, world, controls, camera) {
         Utils.createCircle(scene, world, 0, 20, -2525);
         Utils.createCircle(scene, world, 0, 20, 3125);
         Utils.createCircle(scene, world, 0, 20, 2525);
+        
+        // 왼쪽 사각형
+        Utils.textureLoader.load('resources/textures/gachonlogo_texture.jpg', (texture) => {
+            const gachonMaterial = new THREE.MeshPhongMaterial({
+                map: texture,
+            });
+
+            let leftSquareMaterialArray = [];
+            leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
+            leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
+            leftSquareMaterialArray.push(gachonMaterial);
+            leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
+            leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
+            leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
+
+            var wallBody = new CANNON.Body({
+                shape: new CANNON.Box(new CANNON.Vec3(1800 / 2, 800 / 2, 1500 / 2)),
+                collisionFilterGroup: 4,
+                mass: 0,
+                type: 1000
+            });
+
+            Utils.createNewObject(scene, world, 'wall22', new THREE.Mesh(new THREE.BoxGeometry(1800, 800, 1500), leftSquareMaterialArray), wallBody);
+            Utils.object['wall22'].position(-3500, 0, 0);
+            Utils.object['wall22'].rotateY(90);
+        });
 
         // 팩맨
         Utils.createPacman(scene, world, 600, 0, 0, 180);
@@ -505,32 +531,5 @@ export function initGachonMap(scene, world, controls, camera) {
 
         // 다음 맵 타이머
         Utils.setFinishTimer(120000); //120000
-    });
-
-    // 왼쪽 사각형
-    Utils.textureLoader.load('resources/textures/gachonlogo_texture.jpg', (texture) => {
-        const gachonMaterial = new THREE.MeshPhongMaterial({
-            map: texture,
-        });
-
-        let leftSquareMaterialArray = [];
-        leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
-        leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
-        leftSquareMaterialArray.push(gachonMaterial);
-        leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
-        leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
-        leftSquareMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0x00b9f2 }));
-
-        var wallBody = new CANNON.Body({
-            shape: new CANNON.Box(new CANNON.Vec3(1800 / 2, 800 / 2, 1500 / 2)),
-            collisionFilterGroup: 4,
-            mass: 0,
-            type: 1000
-        });
-
-        Utils.createNewObject(scene, world, 'wall22', new THREE.Mesh(new THREE.BoxGeometry(1800, 800, 1500), leftSquareMaterialArray), wallBody);
-        Utils.object['wall22'].position(-3500, 0, 0);
-        Utils.object['wall22'].rotateY(90);
-    });
-    
+    });    
 }
