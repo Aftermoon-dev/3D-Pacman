@@ -53,7 +53,7 @@ export var item1Timer;
 export var item2Timer;
 export var item3Flag = 220; // 팩맨 크기 넣어주기
 export var item3Timer;
-export var item4Flag = false;
+export var item4Flag = false; //true면 고스트 먹을 수 있음
 export var item4Timer;
 export var item5Timer;
 export var imageArray = [];
@@ -73,7 +73,7 @@ export var nowMoveOK = true; // 이게 true일때 setCameraType에서 온전히 
 export var targetPosition; // camera 이동할 때 지정해 줄 좌표
 export var isTween = false; // tween이 실행중인지
 
-export var developerMode = true; // 개발자 모드 ON!
+export var developerMode = false; // 개발자 모드 ON!
 
 /* Object Dictonary */
 export const object = {};
@@ -116,6 +116,8 @@ export class worldObj {
 		this.body = body;
 		this.mesh = mesh;
 		this.y = undefined;
+		this.currentDirection = 2; // ghost에서 사용
+		this.pre_detect_wall = undefined; //ghost에서 사용
 
 		this.mesh.position.copy(body.position);
 		this.mesh.quaternion.copy(body.quaternion);
@@ -155,6 +157,62 @@ export class worldObj {
 				this.mesh.quaternion.copy(body.quaternion);
 			}
 		}
+
+		//mesh만 돌리기 => ghost용
+		this.rotateMesh = function(flag){
+			// this.currentDirection
+			var angle = 360;
+			this.mesh.rotateY(angle * Math.PI / 180);
+			console.log(angle)
+
+			// if (flag == 1){ //위보기 180도
+			// 	this.mesh.rotateY(angle * Math.PI / 180);
+
+			// }
+			// else if (flag == 2){  //아래보기 0도
+			// 	this.mesh.rotateY(angle * Math.PI / 180);
+
+			// }
+			// else if (flag == 3){ //왼쪽보기 ??도
+			// 	this.mesh.rotateY(angle * Math.PI / 180);
+
+			// }
+			// else if (flag == 4){ //오른쪽보기 ??도
+			// 	this.mesh.rotateY(angle * Math.PI / 180);
+
+			// }
+
+		}
+
+
+		// 객체 삭제
+		this.delete = function(scene, world) {
+			setTimeout(function() {
+				scene.remove(mesh);
+				this.mesh = undefined;
+				world.removeBody(body);
+				this.body = undefined;
+				delete object[objName];
+			}, 100);
+		}
+	}
+	//current 방향 알려주기 => ghost용
+	getDirection() {
+		return this.currentDirection;
+	}
+
+	
+	getWall() {
+		return this.pre_detect_wall;
+	}
+
+	setWall(wall) {
+		this.pre_detect_wall = wall;
+	}
+
+	// 객체의 속도를 설정
+	setDirection(flag){
+		this.currentDirection = flag;
 	}
 
 	//객체의 위치를 알려줌
@@ -173,31 +231,31 @@ export class worldObj {
 	}
 
 	// 객체의 속도를 설정
-	setVelocity(flag) {
+	setVelocity(flag, speed){
 		var directionVector;
 
 		if (flag == 1) {
 			console.log("w");
 			directionVector = new CANNON.Vec3(0, 0, 1);
-			directionVector.z -= userSpeed;
+			directionVector.z -= speed;
 		}
 		else if (flag == 2) {
 			console.log("s");
 
 			directionVector = new CANNON.Vec3(0, 0, 1);
-			directionVector.z += userSpeed;
+			directionVector.z += speed;
 		}
 		else if (flag == 3) {
 			console.log("a");
 
 			directionVector = new CANNON.Vec3(1, 0, 0);
-			directionVector.x -= userSpeed;
+			directionVector.x -= speed;
 		}
 		else if (flag == 4) {
 			console.log("d");
 
 			directionVector = new CANNON.Vec3(1, 0, 0);
-			directionVector.x += userSpeed;
+			directionVector.x += speed;
 		}
 		else if (flag == 0) {
 			this.body.velocity.set(0, 0, 0);
@@ -271,7 +329,7 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 	pacman_item = new CANNON.Body({
 		shape: new CANNON.Sphere(radius),
 		angularDamping: 1,
-		collisionFilterMask: 2 | 16 | 32 | 64 | 128, // 바닥, 벽, 아이템, 텔레포트, 고스트
+		collisionFilterMask: 2 | 4 | 16 | 64 | 128, // 바닥, 벽, 아이템, 고스트, 동글이
 		mass: 0,
 		type: 1
 	});
@@ -299,6 +357,7 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 	var wallBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
 		collisionFilterGroup: 4,
+		collisionFilterMask: 1 | 64, // 팩맨, 유령
 		mass: 0,
 		type: 1000
 	});
@@ -309,6 +368,7 @@ export function createTransparentWallObject(scene, world, wallname, wallcolor, x
 	var wallBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
 		collisionFilterGroup: 4,
+		collisionFilterMask: 1 | 64, // 팩맨, 유령
 		mass: 0,
 		type: 1000
 	});
@@ -320,11 +380,11 @@ export function createTransparentWallObject(scene, world, wallname, wallcolor, x
 	})), wallBody);
 }
 
-
 export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x, y, z, material) {
 	var wallBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
 		collisionFilterGroup: 4,
+		collisionFilterMask: 1 | 64, // 팩맨, 유령
 		mass: 0,
 		type: 1000
 	});
@@ -388,7 +448,7 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber, 
 	var itemBody = new CANNON.Body({
 		shape: new CANNON.Sphere(80),
 		collisionFilterGroup: 16,
-		collisionFilterMask: 1 | 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥
+		collisionFilterMask: 1 | 2 ,
 		mass: 0,
 		type: itemNumber,
 	});
@@ -462,11 +522,30 @@ export function applyItem3Event() {
  * Item4 - Kill the Ghost
  */
 export function applyItem4Event() {
-	//changeGhostColor("ghost1", 0xFFFFFF);
-	item4Flag = true;
+	item4Flag = true;  
+	console.log(item4Flag);
+
+	//ghost 색 바꿔주기
+	Object.keys(object).forEach(function (key) {
+		if (key.includes("ghost")){
+			changeGhostColor(key, 0xFF97FF);
+		}
+	});
 
 	item4Timer = setTimeout(function () {
 		item4Flag = false;
+
+		//ghost 색 원래대로 바꾸기
+		//ghost 색 바꿔주기
+		Object.keys(object).forEach(function (key) {
+			if (key.includes("ghost")){
+				if (key == "ghost1") changeGhostColor(key, 0xFF8000);
+				if (key == "ghost2") changeGhostColor(key, 0x80FF00);
+				if (key == "ghost3") changeGhostColor(key, 0x0080FF);
+				if (key == "ghost4") changeGhostColor(key, 0xFF97FF);
+			}
+		});
+
 	}, 8000);
 }
 
@@ -624,33 +703,33 @@ export function setUserEvent(scene, world, controls, camera) {
 			case "W":
 			case "w":
 				if (item1Flag)
-					object['pacman'].setVelocity(1); //w
+					object['pacman'].setVelocity(1, userSpeed); //w
 				else
-					object['pacman'].setVelocity(2); //s		
+					object['pacman'].setVelocity(2, userSpeed); //s		
 				break;
 
 			case "S":
 			case "s":
 				if (item1Flag)
-					object['pacman'].setVelocity(2);
+					object['pacman'].setVelocity(2, userSpeed);
 				else
-					object['pacman'].setVelocity(1);
+					object['pacman'].setVelocity(1, userSpeed);
 				break;
 
 			case "A":
 			case "a":
 				if (item1Flag)
-					object['pacman'].setVelocity(3); //a
+					object['pacman'].setVelocity(3, userSpeed); //a
 				else
-					object['pacman'].setVelocity(4); //d
+					object['pacman'].setVelocity(4, userSpeed); //d
 				break;
 
 			case "D":
 			case "d":
 				if (item1Flag)
-					object['pacman'].setVelocity(4);
+					object['pacman'].setVelocity(4, userSpeed);
 				else
-					object['pacman'].setVelocity(3);
+					object['pacman'].setVelocity(3, userSpeed);
 				break;
 
 
@@ -661,10 +740,8 @@ export function setUserEvent(scene, world, controls, camera) {
 				break;
 			case "Z":
 			case "z":
-				applyItem3Event();
+				applyItem4Event();
 				break;
-
-	
 		}
 	};
 	document.addEventListener("keydown", keyDownCallback);
@@ -680,7 +757,7 @@ export function setUserEvent(scene, world, controls, camera) {
 			case "a":
 			case "D":
 			case "d":
-				object['pacman'].setVelocity(0);
+				object['pacman'].setVelocity(0, userSpeed);
 				break;
 		}
 	};
@@ -705,14 +782,12 @@ export function setUserEvent(scene, world, controls, camera) {
 		if (e.body.type == 3) {
 			console.log("Meet the Ghost! " + item4Flag);
 
-			// 먹는 모드일 경우
-			if (item4Flag) {
-				object[targetItem].deleteReq();
-			}
-			// 아니면
-			else {
+			// 먹는 모드가 아니라면
+			if(item4Flag == false) {
 				document.location.href = "./gameover.html";
 			}
+			//먹는모드가 맞다면 나머지는 고스트에서 처리함 + 여기다가 else해서 고스트 먹었을때 점수 올라가는거 하면 될듯
+
 		} else if (e.body.type == 4) { // Point
 			score += 10;
 			totalScore += 10;
@@ -778,9 +853,10 @@ export function setUserEvent(scene, world, controls, camera) {
  */
 export function initcamera(userObject, controls) {
 	changePointOfView(userObject, controls);
-	setTimeout(function () {
-		changePointOfView(userObject, controls);
-	}, 5000);
+
+	// setTimeout(function(){
+	// 	changePointOfView(userObject, controls);
+	// }, 5000);
 }
 
 /** 
@@ -962,15 +1038,16 @@ export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterG
  * @param {Position X} x 
  * @param {Position Y} y 
  * @param {Position Z} z 
- * @param {Color} color 
+ * @param {Color} color
+ * @param {direction} direction  
  */
-export function createGhost(scene, world, objName, x, y, z, color) {
+export function createGhost(scene, world, objName, x, y, z, color, direction) {
 	var ghostBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(150, 200, 150)),
 		collisionFilterGroup: 64,
 		angularDamping: 1,
-		collisionFilterMask: 1 | 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥
-		mass: 0,
+		collisionFilterMask: 1 | 2 | 4 , // 팩맨, 바닥, 벽
+		mass: 10,
 		type: 3
 	});
 
@@ -992,11 +1069,58 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		});
 		createNewObject(scene, world, objName, root, ghostBody);
 		object[objName].position(x, y, z);
+		object[objName].setDirection(direction)
+		object[objName].setVelocity(direction, ghostSpeed);
+
+		object[objName].body.addEventListener("collide",  function(e) {
+			let output = Object.fromEntries(Object.entries(object).filter(([k,v]) => v.body == e.body));
+			const targetWall = Object.keys(output)[0];
+			var wall = object[objName].getWall();
+
+			if (item4Flag == true && e.body.type == 1){ //먹는 모드인데 팩맨을 만난다면?
+				//사망햇다가
+				object[objName].deleteReq();
+				changeGhostColor(objName, color);
+
+				setTimeout(function(){
+				//8초 뒤에 원래 리스폰 자리에서 부활
+				createNewObject(scene, world, objName, root, ghostBody);
+				object[objName].position(x, y, z);
+				object[objName].setDirection(direction)
+				object[objName].setVelocity(direction, ghostSpeed);
+				}, 8000);
+
+			}
+
+			else if (wall != targetWall){
+				object[objName].setWall(targetWall);
+
+				var speedFlag = object[objName].getDirection(); //반대편으로 조금 갔다가
+				if (speedFlag == 1) object[objName].setVelocity(2, ghostSpeed+300);
+				if (speedFlag == 2) object[objName].setVelocity(1, ghostSpeed+300);
+				if (speedFlag == 3) object[objName].setVelocity(4, ghostSpeed+300);
+				if (speedFlag == 4) object[objName].setVelocity(3, ghostSpeed+300);
+	
+				setTimeout(function(){
+					object[objName].setVelocity(0, ghostSpeed); //정지
+
+					//어느 방향으로 갈지 탐색
+					var new_speedFlag = Math.floor(Math.random() * 4) + 1;
+					if (speedFlag == new_speedFlag){
+						new_speedFlag = (new_speedFlag + 1)%4+1
+					}
+		
+					var ghostPosition = object[objName].getPosition();
+					object[objName].setDirection(new_speedFlag)
+					object[objName].position(ghostPosition.x, y, ghostPosition.z);
+					// object[objName].rotateMesh(speedFlag);
+					object[objName].setVelocity(new_speedFlag, ghostSpeed);
+				}, 500);
+
+			}
+		});
+
 	});
-
-
-	//ghost 이동 함수 넣어야 할듯
-
 }
 
 /**
