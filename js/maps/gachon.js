@@ -37,8 +37,8 @@ export function initGachonMap(scene, world, controls, camera) {
 
         var groundBody = new CANNON.Body({
             shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 5 / 2, 8000 / 2)),
-            collisionFilterGroup: 2,
-            collisionFilterMask: 1 | 64,
+            collisionFilterGroup: 4,
+            collisionFilterMask: 1 | 2 | 8 | 16 | 32 | 64,
             mass: 0
         });
 
@@ -75,7 +75,7 @@ export function initGachonMap(scene, world, controls, camera) {
         Utils.object['wall4'].position(-600, 0, -3100);
         Utils.createWallObject(scene, world, 'wall5', 0x1200ff, 600, 800, 1800);
         Utils.object['wall5'].position(600, 0, -3100);
-        Utils.makeBox(scene, world, 'tpnorth', 600, 50, 600, 0x008000, 32, 0);
+        Utils.createTeleportBox(scene, world, 'tpnorth', 600, 50, 600);
         Utils.object['tpnorth'].position(0, 50, -3700);
 
         // 아래 Teleport 벽
@@ -83,7 +83,7 @@ export function initGachonMap(scene, world, controls, camera) {
         Utils.object['wall7'].position(-600, 0, 3100);
         Utils.createWallObject(scene, world, 'wall8', 0x1200ff, 600, 800, 1800);
         Utils.object['wall8'].position(600, 0, 3100);
-        Utils.makeBox(scene, world, 'tpsouth', 600, 50, 600, 0x008000, 32, 0);
+        Utils.createTeleportBox(scene, world, 'tpsouth', 600, 50, 600);
         Utils.object['tpsouth'].position(0, 50, 3700);
 
         // 위 2칸 블록 왼쪽
@@ -204,7 +204,6 @@ export function initGachonMap(scene, world, controls, camera) {
 
         Utils.object['tpnorth'].body.addEventListener("collide", function (e) {
             if (e.body.type == 1) {
-                Utils.stopAudio('teleport');
                 Utils.playAudio('teleport');
                 Utils.object['pacman'].position(obj2Pos.x, Utils.object['pacman'].body.position.y, obj2Pos.z - 800);
             }
@@ -212,7 +211,6 @@ export function initGachonMap(scene, world, controls, camera) {
 
         Utils.object['tpsouth'].body.addEventListener("collide", function (e) {
             if (e.body.type == 1) {
-                Utils.stopAudio('teleport');
                 Utils.playAudio('teleport');
                 Utils.object['pacman'].position(obj1Pos.x, Utils.object['pacman'].body.position.y, obj1Pos.z + 800);
             }

@@ -320,16 +320,17 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 
 	var pacmanBody = new CANNON.Body({
 		shape: new CANNON.Sphere(radius),
-		collisionFilterGroup: 1,
 		angularDamping: 1,
-		collisionFilterMask: 2 | 4, // 바닥 및 벽
+		collisionFilterGroup: 1,
+		collisionFilterMask: 4 | 8,
 		mass: 3,
 	});
 
 	pacman_item = new CANNON.Body({
 		shape: new CANNON.Sphere(radius),
 		angularDamping: 1,
-		collisionFilterMask: 2 | 4 | 16 | 64 | 128, // 바닥, 벽, 아이템, 고스트, 동글이
+		collisionFilterGroup: 2,
+		collisionFilterMask: 4 | 8 | 16 | 32 | 64,
 		mass: 0,
 		type: 1
 	});
@@ -356,8 +357,8 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 	var wallBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
-		collisionFilterGroup: 4,
-		collisionFilterMask: 1 | 64, // 팩맨, 유령
+		collisionFilterGroup: 8,
+		collisionFilterMask: 1 | 32,
 		mass: 0,
 		type: 1000
 	});
@@ -367,8 +368,8 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 export function createTransparentWallObject(scene, world, wallname, wallcolor, x, y, z) {
 	var wallBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
-		collisionFilterGroup: 4,
-		collisionFilterMask: 1 | 64, // 팩맨, 유령
+		collisionFilterGroup: 8,
+		collisionFilterMask: 1 | 32,
 		mass: 0,
 		type: 1000
 	});
@@ -383,8 +384,8 @@ export function createTransparentWallObject(scene, world, wallname, wallcolor, x
 export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x, y, z, material) {
 	var wallBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
-		collisionFilterGroup: 4,
-		collisionFilterMask: 1 | 64, // 팩맨, 유령
+		collisionFilterGroup: 8,
+		collisionFilterMask: 1 | 32,
 		mass: 0,
 		type: 1000
 	});
@@ -407,8 +408,8 @@ export function createCircle(scene, world, posx, posy, posz) {
 
 	var circleBody = new CANNON.Body({
 		shape: new CANNON.Sphere(40),
-		collisionFilterGroup: 128,
-		collisionFilterMask: 1,
+		collisionFilterGroup: 64,
+		collisionFilterMask: 2 | 4,
 		mass: 1,
 		type: 4
 	});
@@ -448,7 +449,7 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber, 
 	var itemBody = new CANNON.Body({
 		shape: new CANNON.Sphere(80),
 		collisionFilterGroup: 16,
-		collisionFilterMask: 1 | 2 ,
+		collisionFilterMask: 2 | 4,
 		mass: 0,
 		type: itemNumber,
 	});
@@ -1017,18 +1018,44 @@ export function removeGlobalEventListener() {
  * @param {Color} sur_color 
  * @param {collisionFilterGroup} collisionFilterGroup_val 
  * @param {mass} mass_val 
+ * @param {type} type_val 
  */
-export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterGroup_val, mass_val) {
+export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterGroup_val, mass_val, type_val) {
 	var boxBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
 		collisionFilterGroup: collisionFilterGroup_val,
-		mass: mass_val
+		mass: mass_val,
+		type: type_val
 	});
 	createNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshPhongMaterial({
 		color: sur_color,
 		flatShading: true
 	})), boxBody);
 }
+
+/**
+ * 상자 만들기
+ * @param {THREE.Scene} scene 
+ * @param {CANNON.World} world 
+ * @param {Object Name} name 
+ * @param {X} x 
+ * @param {Y} y 
+ * @param {Z} z 
+ */
+ export function createTeleportBox(scene, world, name, x, y, z) {
+	var boxBody = new CANNON.Body({
+		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
+		collisionFilterGroup: 8,
+		collisionFilterMask: 1 | 2,
+		mass: 0,
+		type: 1001
+	});
+	createNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshPhongMaterial({
+		color: 0x008000,
+		flatShading: true
+	})), boxBody);
+}
+
 
 /**
  * 고스트 생성
@@ -1044,9 +1071,9 @@ export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterG
 export function createGhost(scene, world, objName, x, y, z, color, direction) {
 	var ghostBody = new CANNON.Body({
 		shape: new CANNON.Box(new CANNON.Vec3(150, 200, 150)),
-		collisionFilterGroup: 64,
+		collisionFilterGroup: 32,
 		angularDamping: 1,
-		collisionFilterMask: 1 | 2 | 4 , // 팩맨, 바닥, 벽
+		collisionFilterMask: 2 | 4 | 8 | 32,
 		mass: 10,
 		type: 3
 	});
@@ -1178,6 +1205,7 @@ export function stopTimer(timer) {
  * @param {Audio Name} audioName 
  */
 export function playAudio(audioName) {
+	audioList[audioName].currentTime = 0;
 	audioList[audioName].play();
 }
 

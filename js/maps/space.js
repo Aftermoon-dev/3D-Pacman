@@ -37,8 +37,8 @@ export function initSpaceMap(scene, world, controls, camera) {
         // 바닥 만들기
         var groundBody = new CANNON.Body({
             shape: new CANNON.Box(new CANNON.Vec3(10000 / 2, 5 / 2, 8000 / 2)),
-            collisionFilterGroup: 2,
-            collisionFilterMask: 1 | 64,
+            collisionFilterGroup: 4,
+            collisionFilterMask: 1 | 2 | 8 | 16 | 32 | 64,
             mass: 0
         });
         Utils.createNewObject(scene, world, 'ground', new THREE.Mesh(new THREE.BoxGeometry(10000, 5, 8000), ground_material), groundBody);
@@ -83,11 +83,11 @@ export function initSpaceMap(scene, world, controls, camera) {
         Utils.object['wall11'].position(3100, 0, 800);
 
         // 왼쪽 텔레포트 박스
-        Utils.makeBox(scene, world, 'tpleft', 680, 50, 680, 0x008000, 32, 0);
+        Utils.createTeleportBox(scene, world, 'tpleft', 680, 50, 680);
         Utils.object['tpleft'].position(-3500, -200, 0);
 
         // 오른쪽 텔레포트 박스
-        Utils.makeBox(scene, world, 'tpright', 680, 50, 680, 0x008000, 32, 0);
+        Utils.createTeleportBox(scene, world, 'tpright', 680, 50, 680);
         Utils.object['tpright'].position(3500, -200, 0);
 
         // 위 중앙 기둥
@@ -207,7 +207,6 @@ export function initSpaceMap(scene, world, controls, camera) {
 
         Utils.object['tpleft'].body.addEventListener("collide", function (e) {
             if (e.body.type == 1) {
-                Utils.stopAudio('teleport');
                 Utils.playAudio('teleport');
                 Utils.object['pacman'].position(obj2Pos.x - 600, Utils.object['pacman'].body.position.y, obj2Pos.z);
             }
@@ -215,7 +214,6 @@ export function initSpaceMap(scene, world, controls, camera) {
 
         Utils.object['tpright'].body.addEventListener("collide", function (e) {
             if (e.body.type == 1) {
-                Utils.stopAudio('teleport');
                 Utils.playAudio('teleport');
                 Utils.object['pacman'].position(obj1Pos.x + 600, Utils.object['pacman'].body.position.y, obj1Pos.z);
             }
