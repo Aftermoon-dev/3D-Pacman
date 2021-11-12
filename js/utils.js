@@ -603,35 +603,35 @@ export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num,
 		// 동글이 142개
 
 		for (var i = 0; i < Item1Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 114);
+			var randIndex = Math.floor((Math.random() * 133) + 114);
 			console.log('item1 = ' + randIndex);
 			createItemObject(scene, world, 'item1' + i, 0xff5b5b, 101,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item2Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 114);
+			var randIndex = Math.floor((Math.random() * 133) + 114);
 			console.log('item2 = ' + randIndex);
 			createItemObject(scene, world, 'item2' + i, 0xffc000, 102,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item3Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 114);
+			var randIndex = Math.floor((Math.random() * 133) + 114);
 			console.log('item3 = ' + randIndex);
 			createItemObject(scene, world, 'item3' + i, 0x92d050, 103,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item4Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 114);
+			var randIndex = Math.floor((Math.random() * 133) + 114);
 			console.log('item4 = ' + randIndex);
 			createItemObject(scene, world, 'item4' + i, 0x00b0f0, 104,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item5Num; i++) {
-			var randIndex = Math.floor((Math.random() * 142) + 114);
+			var randIndex = Math.floor((Math.random() * 133) + 114);
 			console.log('item5 = ' + randIndex);
 			createItemObject(scene, world, 'item5' + i, 0xff99cc, 105,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
@@ -641,35 +641,35 @@ export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num,
 		// 동글이 204개
 
 		for (var i = 0; i < Item1Num; i++) { 						
-			var randIndex = Math.floor((Math.random() * 204) + 256);
+			var randIndex = Math.floor((Math.random() * 187) + 256);
 			console.log('item1 = ' + randIndex);
 			createItemObject(scene, world, 'item1' + i, 0xff5b5b, 101,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item2Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 256);
+			var randIndex = Math.floor((Math.random() * 187) + 256);
 			console.log('item2 = ' + randIndex);
 			createItemObject(scene, world, 'item2' + i, 0xffc000, 102,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item3Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 256);
+			var randIndex = Math.floor((Math.random() * 187) + 256);
 			console.log('item3 = ' + randIndex);
 			createItemObject(scene, world, 'item3' + i, 0x92d050, 103,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item4Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 256);
+			var randIndex = Math.floor((Math.random() * 187) + 256);
 			console.log('item4 = ' + randIndex);
 			createItemObject(scene, world, 'item4' + i, 0x00b0f0, 104,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 				object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item5Num; i++) {
-			var randIndex = Math.floor((Math.random() * 204) + 256);
+			var randIndex = Math.floor((Math.random() * 187) + 256);
 			console.log('item5 = ' + randIndex);
 			createItemObject(scene, world, 'item5' + i, 0xff99cc, 105,
 				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
