@@ -420,6 +420,6 @@ export function initSpaceMap(scene, world, controls, camera) {
         Utils.initcamera(Utils.object['pacman'], controls);
 
         // 아이템
-        Utils.locateItem(scene, world, 2, 1, 1, 1, 1, 1,);
+        Utils.locateItem(scene, world, 2, 1, 1, 1, 1, 4);
     });
 }

@@ -216,8 +216,8 @@ export function initGachonMap(scene, world, controls, camera) {
             }
         });
 
-        //동글이들
-        //제일 왼쪽 세로줄
+        // 동글이들
+        // 제일 왼쪽 세로줄
         Utils.createCircle(scene, world, -4625, 20, -3675);
         Utils.createCircle(scene, world, -4625, 20, -3175);
         Utils.createCircle(scene, world, -4625, 20, -2675);
@@ -379,20 +379,20 @@ export function initGachonMap(scene, world, controls, camera) {
 
         // 왼쪽 h
         Utils.createCircle(scene, world, -1525, 20, -575);
-        Utils.createCircle(scene, world, -1625, 20, 575);
+        // Utils.createCircle(scene, world, -1625, 20, 575);
 
         // 오른쪽 4
-        Utils.createCircle(scene, world, 1625, 20, -575);
+        // Utils.createCircle(scene, world, 1625, 20, -575);
         Utils.createCircle(scene, world, 1525, 20, 575);
 
         // H 윗부분
         Utils.createCircle(scene, world, 3300, 20, -3225);
         Utils.createCircle(scene, world, 3300, 20, -2775);
         Utils.createCircle(scene, world, 3900, 20, -3225);
-        Utils.createCircle(scene, world, 3900, 20, -2775);
+        // Utils.createCircle(scene, world, 3900, 20, -2775);
 
         // H 아랫부분
-        Utils.createCircle(scene, world, 3300, 20, -2075);
+        // Utils.createCircle(scene, world, 3300, 20, -2075);
         Utils.createCircle(scene, world, 3300, 20, -1625);
         Utils.createCircle(scene, world, 3900, 20, -2075);
         Utils.createCircle(scene, world, 3900, 20, -1625);
@@ -409,16 +409,16 @@ export function initGachonMap(scene, world, controls, camera) {
 
         // N 오른쪽 윗부분
         Utils.createCircle(scene, world, 3900, 20, 1575);
-        Utils.createCircle(scene, world, 3900, 20, 2175);
+        // Utils.createCircle(scene, world, 3900, 20, 2175);
 
         // N 왼쪽 밑부분
-        Utils.createCircle(scene, world, 3300, 20, 2755);
+        // Utils.createCircle(scene, world, 3300, 20, 2755);
         Utils.createCircle(scene, world, 3300, 20, 3295);
 
         // A 밑부분
         Utils.createCircle(scene, world, -3850, 20, 3225);
         Utils.createCircle(scene, world, -3350, 20, 3225);
-        Utils.createCircle(scene, world, -3850, 20, 2825);
+        // Utils.createCircle(scene, world, -3850, 20, 2825);
         Utils.createCircle(scene, world, -3350, 20, 2825);
 
         // G 윗부분
@@ -427,7 +427,7 @@ export function initGachonMap(scene, world, controls, camera) {
 
         // G 밑부분
         Utils.createCircle(scene, world, -3825, 20, -1975);
-        Utils.createCircle(scene, world, -3225, 20, -1975);
+        // Utils.createCircle(scene, world, -3225, 20, -1975);
 
         // 추가 점들
         Utils.createCircle(scene, world, -2400, 20, -3125);
@@ -482,15 +482,23 @@ export function initGachonMap(scene, world, controls, camera) {
         Utils.createGhost(scene, world, 'ghost2', -4700, 250, 3700, 0x80FF00, 4); // 4(초록)
         Utils.createGhost(scene, world, 'ghost3', -4700, 250, -3700, 0x0080FF, 2); // 2 (파랑)
         Utils.createGhost(scene, world, 'ghost4', 4700, 250, -3700, 0xFF97FF, 3); // 3 (분홍)
-        
-
 
         // set camera
         Utils.initcamera(Utils.object['pacman'], controls);
 
         // 아이템
-        Utils.locateItem(scene, world, 3, 1, 1, 1, 1, 1,);
+        Utils.locateItem(scene, world, 3, 1, 1, 1, 1, 5);
 
+        // 고정 위치 아이템 (item4)
+        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, -1625, 20, 575);
+        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, 1625, 20, -575);
+        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, 3900, 20, -2775);
+        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, 3300, 20, -2075);
+        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, 3900, 20, 2175);
+        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, 3300, 20, 2755);
+        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, -3850, 20, 2825);
+        Utils.createItemObject(scene, world, 'item4', 0x00b0f0, 104, -3225, 20, -1975);
+        
         Utils.audioList['gachon'].loop = true;
         Utils.audioList['gachon'].play();
     });
