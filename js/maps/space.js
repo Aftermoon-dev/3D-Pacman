@@ -84,11 +84,11 @@ export function initSpaceMap(scene, world, controls, camera) {
 
         // 왼쪽 텔레포트 박스
         Utils.makeBox(scene, world, 'tpleft', 680, 50, 680, 0x008000, 32, 0);
-        Utils.object['tpleft'].position(-3500, 50, 0);
+        Utils.object['tpleft'].position(-3500, -200, 0);
 
         // 오른쪽 텔레포트 박스
         Utils.makeBox(scene, world, 'tpright', 680, 50, 680, 0x008000, 32, 0);
-        Utils.object['tpright'].position(3500, 50, 0);
+        Utils.object['tpright'].position(3500, -200, 0);
 
         // 위 중앙 기둥
         Utils.createWallObject(scene, world, 'wall12', 0x282828, 200, 800, 1400);
