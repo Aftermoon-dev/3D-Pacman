@@ -15,7 +15,7 @@ import * as Main from '../3d-pacman.js'
 /* Setting */
 const timeStep = 1 / 30;
 
-export var userSpeed = 3000; // 유저의 속도를 결정
+export var userSpeed = 1500; // 유저의 속도를 결정
 export var pacman_height = 80; // 팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
 export var pacman_height2D = 7300; // 2D view height
 export var ghostSpeed = 1250; // 고스트 속도
@@ -453,13 +453,13 @@ export function applyItem2Event() {
 	// Random Integer 값을 이용해 0 ~ 4 = Speed Down / 5 ~ 9 = Speed Up
 
 	if (speedFlag <= 4) {
-		userSpeed = 300;
+		userSpeed -= 1000;
 	} else {
-		userSpeed = 700;
+		userSpeed += 1000;
 	}
 
 	item2Timer = setTimeout(function () {
-		userSpeed = 3000;
+		userSpeed = 1500;
 	}, 8000)
 }
 
