@@ -13,7 +13,7 @@ import * as Loading from './loading.js'
 import * as Main from '../3d-pacman.js'
 
 /* Setting */
-const timeStep = 1/60;
+const timeStep = 1 / 60;
 
 export var userSpeed = 3000; // 유저의 속도를 결정
 export var pacman_height = 80; // 팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
@@ -62,7 +62,7 @@ export var timerImage = document.getElementById("timerimage");
 
 /* Score Setting */
 export var score = 0;
-export var totalScore = 0;   
+export var totalScore = 0;
 export var circleNumber = 0;
 export var circlePosition = new Array();
 
@@ -88,7 +88,7 @@ export const audioList = {
 	'gameover': new Audio("./audio/gameover.mp3")
 };
 
-/* Current Stage */ 
+/* Current Stage */
 export let currentStage = 0;
 
 /* Event Callback */
@@ -101,7 +101,11 @@ let mouseMoveCallback = undefined;
 let userLight = undefined;
 let ambientLight = undefined;
 
+/* All Clear Check */
 export let isNeedClear = false;
+
+/* Delete Request List */
+const deleteReqList = [];
 
 /**
  * Mesh Object Class
@@ -116,54 +120,43 @@ export class worldObj {
 		this.mesh.position.copy(body.position);
 		this.mesh.quaternion.copy(body.quaternion);
 
-		this.add = function(scene, world) {
+		this.add = function (scene, world) {
 			scene.add(this.mesh);
 			world.addBody(this.body);
 		}
 
-		this.position = function(x, y, z) {
+		this.position = function (x, y, z) {
 			this.y = y;
 			this.mesh.position.set(x, y, z);
 			this.body.position.set(x, y, z);
 		}
 
-		this.rotateX = function(angle) {
+		this.rotateX = function (angle) {
 			var axis = new CANNON.Vec3(1, 0, 0);
 			this.mesh.rotateX(angle * Math.PI / 180);
 			this.body.quaternion.setFromAxisAngle(axis, angle * Math.PI / 180);
 		}
 
-		this.rotateY = function(angle) {
+		this.rotateY = function (angle) {
 			var axis = new CANNON.Vec3(0, 1, 0);
 			this.mesh.rotateY(angle * Math.PI / 180);
 			this.body.quaternion.setFromAxisAngle(axis, angle * Math.PI / 180);
 		}
 
-		this.rotateZ = function(angle) {
+		this.rotateZ = function (angle) {
 			var axis = new CANNON.Vec3(0, 0, 1);
 			this.mesh.rotateZ(angle * Math.PI / 180);
 			this.body.quaternion.setFromAxisAngle(axis, angle * Math.PI / 180);
 		}
-		
-		this.update = function() {
-			if(this.body != undefined && this.mesh != undefined) {
+
+		this.update = function () {
+			if (this.body != undefined && this.mesh != undefined) {
 				this.mesh.position.copy(body.position);
 				this.mesh.quaternion.copy(body.quaternion);
 			}
 		}
-
-		// 객체 삭제
-		this.delete = function(scene, world) {
-			setTimeout(function() {
-				scene.remove(mesh);
-				this.mesh = undefined;
-				world.removeBody(body);
-				this.body = undefined;
-				delete object[objName];
-			}, 100);
-		}
 	}
-	
+
 	//객체의 위치를 알려줌
 	getPosition() {
 		return this.body.position;
@@ -180,42 +173,63 @@ export class worldObj {
 	}
 
 	// 객체의 속도를 설정
-	setVelocity(flag){
+	setVelocity(flag) {
 		var directionVector;
 
-		if (flag == 1){
+		if (flag == 1) {
 			console.log("w");
 			directionVector = new CANNON.Vec3(0, 0, 1);
 			directionVector.z -= userSpeed;
 		}
-		else if (flag == 2){
+		else if (flag == 2) {
 			console.log("s");
 
 			directionVector = new CANNON.Vec3(0, 0, 1);
 			directionVector.z += userSpeed;
 		}
-		else if (flag == 3){
+		else if (flag == 3) {
 			console.log("a");
 
 			directionVector = new CANNON.Vec3(1, 0, 0);
 			directionVector.x -= userSpeed;
 		}
-		else if (flag == 4){
+		else if (flag == 4) {
 			console.log("d");
 
 			directionVector = new CANNON.Vec3(1, 0, 0);
 			directionVector.x += userSpeed;
 		}
-		else if (flag == 0){
+		else if (flag == 0) {
 			this.body.velocity.set(0, 0, 0);
 			return;
 		}
 
-		if (if2D == false){ // 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
+		if (if2D == false) { // 팩맨의 로컬 좌표랑 매트릭스 연산 => 로컬 직진을 월드 좌표로 맴핑
 			directionVector = this.body.quaternion.vmult(directionVector);
 		}
 
 		this.body.velocity.set(directionVector.x, 0, directionVector.z);
+	}
+
+	// 삭제하기
+	delete(scene, world) {
+
+		if (this.mesh != undefined) {
+			scene.remove(this.mesh);
+			this.mesh = undefined;
+		}
+
+		if (this.body != undefined) {
+			world.removeBody(this.body);
+			this.body = undefined;
+		}
+
+		delete object[this.objName];
+	}
+
+	// 삭제 요청하기
+	deleteReq() {
+		deleteReqList.push(this.objName)
 	}
 }
 
@@ -226,8 +240,8 @@ export class worldObj {
  * @param {CANNON.Body} body
  */
 export function createNewObject(scene, world, objName, mesh, body) {
-    var newObj = new worldObj(objName, mesh, body);
-    newObj.add(scene, world);
+	var newObj = new worldObj(objName, mesh, body);
+	newObj.add(scene, world);
 	object[objName] = newObj;
 }
 
@@ -241,12 +255,12 @@ export function createNewObject(scene, world, objName, mesh, body) {
  * @param {Integer} radius
  */
 export function createPacman(scene, world, posx, posy, posz, radius) {
-	var pacmanMesh = new THREE.Mesh(new THREE.SphereGeometry(radius, 256, 128), new THREE.MeshPhongMaterial({ 
+	var pacmanMesh = new THREE.Mesh(new THREE.SphereGeometry(radius, 256, 128), new THREE.MeshPhongMaterial({
 		color: 0xffd400,
 		flatShading: true
 	}));
 
-	var pacmanBody = new CANNON.Body({ 
+	var pacmanBody = new CANNON.Body({
 		shape: new CANNON.Sphere(radius),
 		collisionFilterGroup: 1,
 		angularDamping: 1,
@@ -254,19 +268,21 @@ export function createPacman(scene, world, posx, posy, posz, radius) {
 		mass: 3,
 	});
 
-	pacman_item = new CANNON.Body({ 
+	pacman_item = new CANNON.Body({
 		shape: new CANNON.Sphere(radius),
 		angularDamping: 1,
 		collisionFilterMask: 2 | 16 | 32 | 64 | 128, // 바닥, 벽, 아이템, 텔레포트, 고스트
 		mass: 0,
 		type: 1
 	});
-	
+
 	createNewObject(scene, world, 'pacman', pacmanMesh, pacmanBody);
 	world.addBody(pacman_item);
-	
+
 	object['pacman'].position(posx, posy, posz);
 	pacman_item.position.set(posx, posy, posz);
+
+	console.log(object['pacman']);
 }
 
 /**
@@ -286,7 +302,7 @@ export function createWallObject(scene, world, wallname, wallcolor, x, y, z) {
 		mass: 0,
 		type: 1000
 	});
-	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshLambertMaterial({ color: wallcolor})), wallBody);
+	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshLambertMaterial({ color: wallcolor })), wallBody);
 }
 
 export function createTransparentWallObject(scene, world, wallname, wallcolor, x, y, z) {
@@ -297,8 +313,8 @@ export function createTransparentWallObject(scene, world, wallname, wallcolor, x
 		type: 1000
 	});
 
-	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshLambertMaterial({ 
-		color: wallcolor, 
+	createNewObject(scene, world, wallname, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshLambertMaterial({
+		color: wallcolor,
 		transparent: true,
 		opacity: 0.5
 	})), wallBody);
@@ -323,13 +339,13 @@ export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x
  * @param {Y} posy 
  * @param {Z} posz 
  */
- export function createCircle(scene, world, posx, posy, posz) {
-	var circleMesh = new THREE.Mesh(new THREE.SphereGeometry(40, 256, 128), new THREE.MeshPhongMaterial({ 
+export function createCircle(scene, world, posx, posy, posz) {
+	var circleMesh = new THREE.Mesh(new THREE.SphereGeometry(40, 256, 128), new THREE.MeshPhongMaterial({
 		color: 0xFFFF7D,
-		flatShading: true 
+		flatShading: true
 	}));
 
-	var circleBody = new CANNON.Body({ 
+	var circleBody = new CANNON.Body({
 		shape: new CANNON.Sphere(40),
 		collisionFilterGroup: 128,
 		collisionFilterMask: 1,
@@ -365,18 +381,18 @@ export function createWallObjectWithTexture(scene, world, wallname, wallcolor, x
  * @param {Z} posz 
  */
 export function createItemObject(scene, world, itemName, itemColor, itemNumber, posx, posy, posz) { // item 번호 붙여서 번호마다 기능 다르게 넣기
-	var itemMesh = new THREE.Mesh(new THREE.SphereGeometry(80, 256, 128), new THREE.MeshPhongMaterial({ 
+	var itemMesh = new THREE.Mesh(new THREE.SphereGeometry(80, 256, 128), new THREE.MeshPhongMaterial({
 		color: itemColor,
 		flatShading: true
 	}));
-	var itemBody = new CANNON.Body({ 
+	var itemBody = new CANNON.Body({
 		shape: new CANNON.Sphere(80),
 		collisionFilterGroup: 16,
 		collisionFilterMask: 1 | 2 | 4 | 8 | 32, // 2번 바닥 4번 벽 8번 고스트 시작 벽 16 아이템 32 텔레포트 바닥
 		mass: 0,
 		type: itemNumber,
 	});
-	
+
 	createNewObject(scene, world, itemName, itemMesh, itemBody);
 	object[itemName].position(posx, posy, posz);
 }
@@ -384,10 +400,10 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber, 
 /**
  * Item1 - 방향키 반대로
  */
- export function applyItem1Event() {
+export function applyItem1Event() {
 	item1Flag = false;
- 
-	item1Timer = setTimeout(function(){
+
+	item1Timer = setTimeout(function () {
 		item1Flag = true;
 	}, 8000)
 	// 8초 동안만 방향키 반대로 5초 지나면 원래대로!!
@@ -396,7 +412,7 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber, 
 /**
  * Item2 - 팩맨 Speed
  */
- export function applyItem2Event() {
+export function applyItem2Event() {
 	var speedFlag = Math.random() * 10
 	// Random Integer 값을 이용해 0 ~ 4 = Speed Down / 5 ~ 9 = Speed Up
 
@@ -405,8 +421,8 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber, 
 	} else {
 		userSpeed = 700;
 	}
- 
-	item2Timer = setTimeout(function(){
+
+	item2Timer = setTimeout(function () {
 		userSpeed = 3000;
 	}, 8000)
 }
@@ -418,32 +434,27 @@ export function createItemObject(scene, world, itemName, itemColor, itemNumber, 
  * @param {OrbitControls} controls
  * @param {THREE.PerspectiveCamera} camera
  */
- export function applyItem3Event(scene, world, controls, camera) {
+export function applyItem3Event() {
 	var x = object['pacman'].body.position.x;
 	var y = object['pacman'].body.position.y + 50;
 	var z = object['pacman'].body.position.z;
-
-	object['pacman'].body.removeEventListener(userObjectCollide);
-	object['pacman'].delete(scene, world);
-
-	removeGlobalEventListener()
-	createPacman(scene, world, x, y, z, item3Flag);
-	setUserEvent(scene, world, controls, camera);
-	pacman_height += 30;
 	
-	item3Timer = setTimeout(function(){
+	object['pacman'].position(x, y, z);
+	pacman_item.position.set(x, y, z);
+	object['pacman'].body.shapes[0].radius = item3Flag;
+	pacman_item.shapes[0].radius = item3Flag;
+	pacman_height += 30;
+
+	item3Timer = setTimeout(function () {
 		var x = object['pacman'].body.position.x;
-		var y = object['pacman'].body.position.y - 20;
+		var y = object['pacman'].body.position.y - 50;
 		var z = object['pacman'].body.position.z;
 
-		object['pacman'].body.removeEventListener(userObjectCollide);
-		object['pacman'].delete(scene, world);
-
-		createPacman(scene, world, x, y, z, 180); // Default 180
-		removeGlobalEventListener()
-		setUserEvent(scene, world, controls, camera);
+		object['pacman'].position(x, y, z);
+		pacman_item.position.set(x, y, z);
+		object['pacman'].body.shapes[0].radius = 180;
+		pacman_item.shapes[0].radius = 180;
 		pacman_height -= 30;
-		
 	}, 8000);
 }
 
@@ -454,7 +465,7 @@ export function applyItem4Event() {
 	//changeGhostColor("ghost1", 0xFFFFFF);
 	item4Flag = true;
 
-	item4Timer = setTimeout(function(){
+	item4Timer = setTimeout(function () {
 		item4Flag = false;
 	}, 8000);
 }
@@ -465,7 +476,7 @@ export function applyItem4Event() {
 export function applyItem5Event() {
 	if2D = true;
 
-	item5Timer = setTimeout(function(){
+	item5Timer = setTimeout(function () {
 		if2D = false
 	}, 5000);
 }
@@ -482,41 +493,40 @@ export function applyItem5Event() {
 export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num, Item4Num, Item5Num) {
 	if (stageNum == 1) {
 		// 동글이 114개
-
 		for (var i = 0; i < Item1Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item1 = ' + randIndex);
 			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
-			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
-			object['circle' + randIndex].delete(scene, world);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+			object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item2Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item2 = ' + randIndex);
 			createItemObject(scene, world, 'item2', 0xffc000, 102,
-			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
-			object['circle' + randIndex].delete(scene, world);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+			object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item3Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item3 = ' + randIndex);
 			createItemObject(scene, world, 'item3', 0x92d050, 103,
-			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
-			object['circle' + randIndex].delete(scene, world);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+			object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item4Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item4 = ' + randIndex);
 			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
-			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
-			object['circle' + randIndex].delete(scene, world);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+			object['circle' + randIndex].deleteReq();
 		}
 		for (var i = 0; i < Item5Num; i++) {
 			var randIndex = Math.floor(Math.random() * 114);
 			console.log('item5 = ' + randIndex);
 			createItemObject(scene, world, 'item5', 0xff99cc, 105,
-			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
-			object['circle' + randIndex].delete(scene, world);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
+			object['circle' + randIndex].deleteReq();
 		}
 	} else if (stageNum == 2) {
 		// 동글이 142개
@@ -525,31 +535,31 @@ export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num,
 			var randIndex = Math.floor((Math.random() * 142) + 113);
 			console.log('item1 = ' + randIndex);
 			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
-			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 		}
 		for (var i = 0; i < Item2Num; i++) {
 			var randIndex = Math.floor((Math.random() * 142) + 113);
 			console.log('item2 = ' + randIndex);
 			createItemObject(scene, world, 'item2', 0xffc000, 102,
-			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 		}
 		for (var i = 0; i < Item3Num; i++) {
 			var randIndex = Math.floor((Math.random() * 142) + 113);
 			console.log('item3 = ' + randIndex);
 			createItemObject(scene, world, 'item3', 0x92d050, 103,
-			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 		}
 		for (var i = 0; i < Item4Num; i++) {
 			var randIndex = Math.floor((Math.random() * 142) + 113);
 			console.log('item4 = ' + randIndex);
 			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
-			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 		}
 		for (var i = 0; i < Item5Num; i++) {
 			var randIndex = Math.floor((Math.random() * 142) + 113);
 			console.log('item5 = ' + randIndex);
 			createItemObject(scene, world, 'item5', 0xff99cc, 105,
-			circlePosition[randIndex][1], circlePosition[randIndex][2],circlePosition[randIndex][3]);
+				circlePosition[randIndex][1], circlePosition[randIndex][2], circlePosition[randIndex][3]);
 		}
 	} else if (stageNum == 3) {
 		// 동글이 204개
@@ -558,31 +568,31 @@ export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num,
 			var randIndex = Math.floor((Math.random() * 204) + 255);
 			console.log('item1 = ' + randIndex);
 			createItemObject(scene, world, 'item1', 0xff5b5b, 101,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+				object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
 		}
 		for (var i = 0; i < Item2Num; i++) {
 			var randIndex = Math.floor((Math.random() * 204) + 255);
 			console.log('item2 = ' + randIndex);
 			createItemObject(scene, world, 'item2', 0xffc000, 102,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+				object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
 		}
 		for (var i = 0; i < Item3Num; i++) {
 			var randIndex = Math.floor((Math.random() * 204) + 255);
 			console.log('item3 = ' + randIndex);
 			createItemObject(scene, world, 'item3', 0x92d050, 103,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+				object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
 		}
 		for (var i = 0; i < Item4Num; i++) {
 			var randIndex = Math.floor((Math.random() * 204) + 255);
 			console.log('item4 = ' + randIndex);
 			createItemObject(scene, world, 'item4', 0x00b0f0, 104,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+				object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
 		}
 		for (var i = 0; i < Item5Num; i++) {
 			var randIndex = Math.floor((Math.random() * 204) + 255);
 			console.log('item5 = ' + randIndex);
 			createItemObject(scene, world, 'item5', 0xff99cc, 105,
-			object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
+				object['circle' + randIndex].body.position.x, object['circle' + randIndex].body.position.y, object['circle' + randIndex].body.position.z);
 		}
 	}
 }
@@ -595,10 +605,8 @@ export function locateItem(scene, world, stageNum, Item1Num, Item2Num, Item3Num,
  * @param {PerspectiveCamera} camera
  */
 export function setUserEvent(scene, world, controls, camera) {
-	const userObject = object['pacman'];
-
-	userObject.body.velocity.set(0, 0, 0);
-	userObject.body.angularDamping = 1;
+	object['pacman'].body.velocity.set(0, 0, 0);
+	object['pacman'].body.angularDamping = 1;
 
 	//3인칭 뷰 일 때에는 마우스 작동이 아예 안되게! 
 	if (if2D == false)
@@ -606,50 +614,50 @@ export function setUserEvent(scene, world, controls, camera) {
 	else
 		controls.enabled = false;
 
-	// Key를 올렸을 때
-	keyDownCallback = function(event) {
-		userObject.body.angularDamping = 1;
+	// Key를 눌렀을 때
+	keyDownCallback = function (event) {
+		object['pacman'].body.angularDamping = 1;
 		if (isTween == true)
 			return;
 
-		switch(event.key) {
+		switch (event.key) {
 			case "W":
 			case "w":
 				if (item1Flag)
-					userObject.setVelocity(1); //w
+					object['pacman'].setVelocity(1); //w
 				else
-					userObject.setVelocity(2); //s		
+					object['pacman'].setVelocity(2); //s		
 				break;
 
 			case "S":
 			case "s":
 				if (item1Flag)
-					userObject.setVelocity(2);
+					object['pacman'].setVelocity(2);
 				else
-					userObject.setVelocity(1);
+					object['pacman'].setVelocity(1);
 				break;
 
 			case "A":
 			case "a":
 				if (item1Flag)
-					userObject.setVelocity(3); //a
+					object['pacman'].setVelocity(3); //a
 				else
-					userObject.setVelocity(4); //d
+					object['pacman'].setVelocity(4); //d
 				break;
-				
+
 			case "D":
 			case "d":
 				if (item1Flag)
-					userObject.setVelocity(4);
+					object['pacman'].setVelocity(4);
 				else
-					userObject.setVelocity(3);
+					object['pacman'].setVelocity(3);
 				break;
 
 
 			//임시로 넣어둔 부분! 누르면 1인칭 <-> 3인칭
 			case "C":
 			case "c":
-				changePointOfView(userObject, controls);
+				changePointOfView(object['pacman'], controls);
 				break;
 
 			// // 이부분은 팩맨 커지는 아이템에 사용하면 될 듯
@@ -671,8 +679,8 @@ export function setUserEvent(scene, world, controls, camera) {
 	document.addEventListener("keydown", keyDownCallback);
 
 	// Key를 뗐을 때 
-	keyUpCallback = function(event) {
-		switch(event.key) {
+	keyUpCallback = function (event) {
+		switch (event.key) {
 			case "W":
 			case "w":
 			case "S":
@@ -681,7 +689,7 @@ export function setUserEvent(scene, world, controls, camera) {
 			case "a":
 			case "D":
 			case "d":
-				userObject.setVelocity(0);
+				object['pacman'].setVelocity(0);
 				break;
 		}
 	};
@@ -691,15 +699,15 @@ export function setUserEvent(scene, world, controls, camera) {
 	mouseMoveCallback = function (event) {
 		const toangle = controls.getAzimuthalAngle() * (180 / Math.PI);
 		//1인칭 시점일 때만 작동함
-		if (if2D == false && userObject != undefined)
-			userObject.rotateY(toangle); //카메라 보는 각도가 정면이 되도록 팩맨을 돌림
+		if (if2D == false && object['pacman'] != undefined)
+			object['pacman'].rotateY(toangle); //카메라 보는 각도가 정면이 되도록 팩맨을 돌림
 
 	};
 	document.addEventListener("mousemove", mouseMoveCallback);
 
 	// Collide Event
-	userObjectCollide = function(e) {
-		let output = Object.fromEntries(Object.entries(object).filter(([k,v]) => v.body == e.body));
+	userObjectCollide = function (e) {
+		let output = Object.fromEntries(Object.entries(object).filter(([k, v]) => v.body == e.body));
 		const targetItem = Object.keys(output)[0];
 
 		// 고스트랑 닿을 경우
@@ -707,8 +715,8 @@ export function setUserEvent(scene, world, controls, camera) {
 			console.log("Meet the Ghost! " + item4Flag);
 
 			// 먹는 모드일 경우
-			if(item4Flag) {
-				object[targetItem].delete(scene, world);
+			if (item4Flag) {
+				object[targetItem].deleteReq();
 			}
 			// 아니면
 			else {
@@ -718,8 +726,8 @@ export function setUserEvent(scene, world, controls, camera) {
 			score += 10;
 			totalScore += 10;
 			document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
-			
-			object[targetItem].delete(scene, world);
+
+			object[targetItem].deleteReq();
 
 			// 현재 스테이지에 따라 다음 동작 정의
 			if (currentStage == 1) {
@@ -747,27 +755,27 @@ export function setUserEvent(scene, world, controls, camera) {
 			stopTimer(timer);
 			startTimer(1);
 			applyItem1Event();
-			object[targetItem].delete(scene, world);
+			object[targetItem].deleteReq();
 		} else if (e.body.type == 102) {
 			stopTimer(timer);
 			startTimer(2);
 			applyItem2Event();
-			object[targetItem].delete(scene, world);
+			object[targetItem].deleteReq();
 		} else if (e.body.type == 103) {
 			stopTimer(timer);
 			startTimer(3);
-			applyItem3Event(scene, world, controls, camera);
-			object[targetItem].delete(scene, world);
+			applyItem3Event();
+			object[targetItem].deleteReq();
 		} else if (e.body.type == 104) {
 			stopTimer(timer);
 			startTimer(4);
 			applyItem4Event();
-			object[targetItem].delete(scene, world);
+			object[targetItem].deleteReq();
 		} else if (e.body.type == 105) {
 			stopTimer(timer);
 			startTimer(5);
 			applyItem5Event();
-			object[targetItem].delete(scene, world);
+			object[targetItem].deleteReq();
 		}
 	};
 	pacman_item.addEventListener("collide", userObjectCollide);
@@ -777,9 +785,9 @@ export function setUserEvent(scene, world, controls, camera) {
 /** 처음에 2D 5초간 보여주기
  * @param {OrbitControls} controls
  */
-export function initcamera(userObject, controls){
+export function initcamera(userObject, controls) {
 	changePointOfView(userObject, controls);
-	setTimeout(function(){
+	setTimeout(function () {
 		changePointOfView(userObject, controls);
 	}, 5000);
 }
@@ -787,14 +795,14 @@ export function initcamera(userObject, controls){
 /** 
  * 카메라 시점 변경 
 */
-function changePointOfView(userObject, controls){
-	if (if2D == false){ //1인칭 -> 2D
+function changePointOfView(userObject, controls) {
+	if (if2D == false) { //1인칭 -> 2D
 		if2D = true;
 		//set position
 		targetPosition = new THREE.Vector3(0, pacman_height2D, 200);
-		controls.target.set(0, 0, 0); 
+		controls.target.set(0, 0, 0);
 	}
-	else{ // 2D -> 1인칭
+	else { // 2D -> 1인칭
 		if2D = false;
 
 		//set position
@@ -807,28 +815,28 @@ function changePointOfView(userObject, controls){
 /**
  *  카메라 선택
  */
-function selectCameraType(scene, userObject, camera, controls){
+function selectCameraType(scene, userObject, camera, controls) {
 	var duration = 1500; //during 3 second
-	
-	if (nowMoveOK == false){ //c에서 조절
+
+	if (nowMoveOK == false) { //c에서 조절
 		tweenCamera(targetPosition, duration, controls, camera);
 		nowMoveOK = true;
 	}
 	//1인칭 시점일 때만 작동함
-	if (if2D == false){
-		if (first2DFlage == false){
+	if (if2D == false) {
+		if (first2DFlage == false) {
 			nowMoveOK = false;
 			// controls.reset()
 			first2DFlage = true;
-			controls.minPolarAngle =  Math.PI * 0.5;
-			controls.maxPolarAngle =  Math.PI * 0.5;
+			controls.minPolarAngle = Math.PI * 0.5;
+			controls.maxPolarAngle = Math.PI * 0.5;
 			controls.rotateSpeed = 1;
 		}
 		if (nowMoveOK == true)
 			moveFirstPersonCameraAll(scene, userObject, camera, controls);
 	}
-	else if(if2D == true){
-		if (first2DFlage == true){
+	else if (if2D == true) {
+		if (first2DFlage == true) {
 			// controls.saveState()
 			nowMoveOK = false;
 			first2DFlage = false;
@@ -847,51 +855,51 @@ function selectCameraType(scene, userObject, camera, controls){
  * ref : https://stackoverflow.com/questions/45252751/how-to-use-tween-to-animate-the-cameras-position
  * https://stackoverflow.com/questions/28091876/tween-camera-position-while-rotation-with-slerp-three-js 
 */
- function tweenCamera(targetPosition, duration, controls, camera) {
-    controls.enabled = false;
+function tweenCamera(targetPosition, duration, controls, camera) {
+	controls.enabled = false;
 	isTween = true;
 
 	//camera position
-    var position = new THREE.Vector3().copy(camera.position);
+	var position = new THREE.Vector3().copy(camera.position);
 
 	//position
-    var tween = new TWEEN.Tween(position)
-        .to( targetPosition, duration )
-        .easing( TWEEN.Easing.Linear.None)
-        .onUpdate( function () {
-            camera.position.copy( position );
-            camera.lookAt( controls.target );
-        } )
-		.onComplete( function () {
-            camera.position.copy( targetPosition );
-            controls.enabled = true;
+	var tween = new TWEEN.Tween(position)
+		.to(targetPosition, duration)
+		.easing(TWEEN.Easing.Linear.None)
+		.onUpdate(function () {
+			camera.position.copy(position);
+			camera.lookAt(controls.target);
+		})
+		.onComplete(function () {
+			camera.position.copy(targetPosition);
+			controls.enabled = true;
 			isTween = false;
-        } ).start();
+		}).start();
 }
 
 
 /**
  * orbitcontrol을 first person 시점으로 사용
  */
-export function moveFirstPersonCameraAll(scene, userObject, camera, controls){
+export function moveFirstPersonCameraAll(scene, userObject, camera, controls) {
 	userObject.body.angularDamping = 1; //계속 회전 방지
 
 	var ve = userObject.getPosition(); //현재 팩맨 중심좌표
 	var direct = new THREE.Vector3();
 	camera.getWorldDirection(direct); // 카메라가 바라보는 방향 받아오기
-	
+
 	camera.position.set(ve.x - 10 * direct.x, pacman_height, ve.z - 10 * direct.z); //카메라 셋팅
 	controls.target.set(ve.x, pacman_height, ve.z); //타겟 설정 - 얘를 중심으로 공전
 
 	userObject.body.angularDamping = 1; //계속 회전 방지
 	controls.update();
 	// AmbientLight 있었으면 없애기
-	if(isTween == false && ambientLight != undefined) {
+	if (isTween == false && ambientLight != undefined) {
 		removeAmbientLight(scene);
 	}
 
 	// 기존에 사용자 Light 없으면
-	if(userLight == undefined) {
+	if (userLight == undefined) {
 		// 좌표에 따른 새 광원 생성
 		addPointLight(scene, 0xFFFFFF, 1, 0, ve.x + 10 * direct.x, pacman_height + 30, ve.z + 10 * direct.z);
 	}
@@ -899,25 +907,25 @@ export function moveFirstPersonCameraAll(scene, userObject, camera, controls){
 	else {
 		userLight.position.set(ve.x + 10 * direct.x, pacman_height, ve.z + 10 * direct.z);
 	}
-	
+
 }
 
 /**
  * orbitcontrol을 3인칭 시점(2D)으로 사용
  */
-function move2DCameraAll(scene, camera, controls){
+function move2DCameraAll(scene, camera, controls) {
 	//1인칭 시점일 때만 작동함
 	camera.position.set(0, pacman_height2D, 0); //카메라 셋팅
 	controls.target.set(0, 0, 0); //타겟 설정 - 얘를 중심으로 공전
 	controls.update();
 
 	// PointLight 있었으면 없애기
-	if(userLight != undefined) {
+	if (userLight != undefined) {
 		removePointLight(scene);
 	}
 
 	// AmbientLight 없으면 생성
-	if(ambientLight == undefined) {
+	if (ambientLight == undefined) {
 		addAmbientLight(scene, 0xFFFFFF, 1);
 	}
 }
@@ -926,9 +934,9 @@ function move2DCameraAll(scene, camera, controls){
  * Global Event Listener 삭제
  */
 export function removeGlobalEventListener() {
+	document.removeEventListener("mousemove", mouseMoveCallback);
 	document.removeEventListener("keydown", keyDownCallback);
 	document.removeEventListener("keyup", keyUpCallback);
-	document.removeEventListener("mousemove", mouseMoveCallback);
 }
 
 /**
@@ -945,11 +953,11 @@ export function removeGlobalEventListener() {
  */
 export function makeBox(scene, world, name, x, y, z, sur_color, collisionFilterGroup_val, mass_val) {
 	var boxBody = new CANNON.Body({
-	   shape: new CANNON.Box(new CANNON.Vec3(x/2, y/2, z/2)),
-	   collisionFilterGroup: collisionFilterGroup_val,
-	   mass: mass_val
+		shape: new CANNON.Box(new CANNON.Vec3(x / 2, y / 2, z / 2)),
+		collisionFilterGroup: collisionFilterGroup_val,
+		mass: mass_val
 	});
-	createNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshPhongMaterial ({ 
+	createNewObject(scene, world, name, new THREE.Mesh(new THREE.BoxGeometry(x, y, z), new THREE.MeshPhongMaterial({
 		color: sur_color,
 		flatShading: true
 	})), boxBody);
@@ -979,16 +987,16 @@ export function createGhost(scene, world, objName, x, y, z, color) {
 		const root = gltf.scene;
 		var ghost = root.children[0];
 		ghost.scale.set(1.5, 1.5, 1.5);
-		
+
 		root.traverse((ghost) => {
 			if (ghost.isMesh) {
 				// 눈 부분은 색 안바꾸게
-				if(ghost.material.color.r != 0 ||
+				if (ghost.material.color.r != 0 ||
 					ghost.material.color.g != 0 ||
 					ghost.material.color.b != 0) {
-						ghost.material.color.set(color);
-					}
-				
+					ghost.material.color.set(color);
+				}
+
 			}
 		});
 		createNewObject(scene, world, objName, root, ghostBody);
@@ -1009,34 +1017,34 @@ export function startTimer(ItemNumber) {
 
 	if (ItemNumber == 1) {
 		timerImage.setAttribute("src", "./image/timer1/item1-8.png");
-		imageArray=["./image/timer1/item1-7.png", "./image/timer1/item1-6.png", "./image/timer1/item1-5.png", "./image/timer1/item1-4.png",
-		"./image/timer1/item1-3.png", "./image/timer1/item1-2.png", "./image/timer1/item1-1.png", "./image/timer1/item1-0.png", "./image/timerStartEnd.png"];
+		imageArray = ["./image/timer1/item1-7.png", "./image/timer1/item1-6.png", "./image/timer1/item1-5.png", "./image/timer1/item1-4.png",
+			"./image/timer1/item1-3.png", "./image/timer1/item1-2.png", "./image/timer1/item1-1.png", "./image/timer1/item1-0.png", "./image/timerStartEnd.png"];
 	} else if (ItemNumber == 2) {
 		timerImage.setAttribute("src", "./image/timer2/item2-8.png");
-		imageArray=["./image/timer2/item2-7.png", "./image/timer2/item2-6.png", "./image/timer2/item2-5.png", "./image/timer2/item2-4.png", 
-		"./image/timer2/item2-3.png", "./image/timer2/item2-2.png", "./image/timer2/item2-1.png", "./image/timer2/item2-0.png", "./image/timerStartEnd.png"];
+		imageArray = ["./image/timer2/item2-7.png", "./image/timer2/item2-6.png", "./image/timer2/item2-5.png", "./image/timer2/item2-4.png",
+			"./image/timer2/item2-3.png", "./image/timer2/item2-2.png", "./image/timer2/item2-1.png", "./image/timer2/item2-0.png", "./image/timerStartEnd.png"];
 	} else if (ItemNumber == 3) {
 		timerImage.setAttribute("src", "./image/timer3/item3-8.png");
-		imageArray=["./image/timer3/item3-7.png", "./image/timer3/item3-6.png", "./image/timer3/item3-5.png", "./image/timer3/item3-4.png", 
-		"./image/timer3/item3-3.png", "./image/timer3/item3-2.png", "./image/timer3/item3-1.png", "./image/timer3/item3-0.png", "./image/timerStartEnd.png"];
+		imageArray = ["./image/timer3/item3-7.png", "./image/timer3/item3-6.png", "./image/timer3/item3-5.png", "./image/timer3/item3-4.png",
+			"./image/timer3/item3-3.png", "./image/timer3/item3-2.png", "./image/timer3/item3-1.png", "./image/timer3/item3-0.png", "./image/timerStartEnd.png"];
 	} else if (ItemNumber == 4) {
 		timerImage.setAttribute("src", "./image/timer4/item4-8.png");
-		imageArray=["./image/timer4/item4-7.png", "./image/timer4/item4-6.png", "./image/timer4/item4-5.png", "./image/timer4/item4-4.png", 
-		"./image/timer4/item4-3.png", "./image/timer4/item4-2.png", "./image/timer4/item4-1.png", "./image/timer4/item4-0.png", "./image/timerStartEnd.png"];
+		imageArray = ["./image/timer4/item4-7.png", "./image/timer4/item4-6.png", "./image/timer4/item4-5.png", "./image/timer4/item4-4.png",
+			"./image/timer4/item4-3.png", "./image/timer4/item4-2.png", "./image/timer4/item4-1.png", "./image/timer4/item4-0.png", "./image/timerStartEnd.png"];
 	} else if (ItemNumber == 5) {
 		timerImage.setAttribute("src", "./image/timer5/item5-5.png");
-		imageArray = ["./image/timer5/item5-4.png", "./image/timer5/item5-3.png", "./image/timer5/item5-2.png", 
-		"./image/timer5/item5-1.png", "./image/timer5/item5-0.png", "./image/timerStartEnd.png"];
+		imageArray = ["./image/timer5/item5-4.png", "./image/timer5/item5-3.png", "./image/timer5/item5-2.png",
+			"./image/timer5/item5-1.png", "./image/timer5/item5-0.png", "./image/timerStartEnd.png"];
 	}
-	
+
 	var imageIndex = 0;
 	timer = setInterval(changeImage, 1000);
 
-	function changeImage(){
+	function changeImage() {
 		timerImage.setAttribute("src", imageArray[imageIndex]);
 		imageIndex++;
 		console.log(imageArray);
-		if (imageIndex >= imageArray.length){
+		if (imageIndex >= imageArray.length) {
 			clearInterval(timer);
 		}
 	}
@@ -1068,14 +1076,6 @@ export function stopAudio(audioName) {
 }
 
 /**
- * 팩맨 카메라 높이 변경
- * @param {Pacman height} height 
- */
- export function ChangePacmanHeight(height){
-	pacman_height = height;
-}
-
-/**
  * 스테이지 업데이트
  * @param {Stage Number} newStage 
  */
@@ -1083,7 +1083,7 @@ export function updateStage(newStage) {
 	score = 0;
 	document.getElementById("scoreNum").innerHTML = "SCORE " + score.toString();
 	currentStage = newStage;
-	document.getElementById("stageNum").innerHTML="STAGE " + currentStage;
+	document.getElementById("stageNum").innerHTML = "STAGE " + currentStage;
 }
 
 /**
@@ -1095,10 +1095,10 @@ export function changeGhostColor(objectName, color) {
 	object[objectName].mesh.traverse((ghost) => {
 		if (ghost.isMesh) {
 			// 눈 부분은 색 안바꾸게
-			if(ghost.material.color.r != 0 ||
+			if (ghost.material.color.r != 0 ||
 				ghost.material.color.g != 0 ||
 				ghost.material.color.b != 0) {
-					ghost.material.color.set(color);
+				ghost.material.color.set(color);
 			}
 		}
 	});
@@ -1122,7 +1122,7 @@ function addAmbientLight(scene, color, intensity) {
  * @param {THREE.Scene} scene 
  */
 function removeAmbientLight(scene) {
-	if(ambientLight != undefined) {
+	if (ambientLight != undefined) {
 		scene.remove(ambientLight);
 		ambientLight = undefined;
 	}
@@ -1151,7 +1151,7 @@ function addPointLight(scene, color, intensity, distance, x, y, z) {
  * @param {THREE.Scene} scene 
  */
 function removePointLight(scene) {
-	if(userLight != undefined) {
+	if (userLight != undefined) {
 		scene.remove(userLight);
 		userLight = undefined;
 	}
@@ -1164,34 +1164,47 @@ export function updatePhysics(scene, world, camera, controls, renderer) {
 	if (isloadingFinished) {
 		// Step the physics world
 		world.step(timeStep);
-		
-		if(isNeedClear) {
+
+		if (isNeedClear) {
+			deleteReqList.splice(0, deleteReqList.length);
 			removeGlobalEventListener();
 			Main.clearAll();
 			Object.keys(object).forEach(element => {
 				object[element] = undefined;
 				delete object[element];
 			});
-			
-			if(currentStage == 2) {
+
+			if (currentStage == 2) {
 				MapSpace.initSpaceMap(scene, world, controls, camera);
 			}
-			else if(currentStage == 3) {
+			else if (currentStage == 3) {
 				MapGachon.initGachonMap(scene, world, controls, camera);
 			}
 
 			isNeedClear = false;
 		}
 		else {
-			if(object['pacman'] != undefined) {
+			// 삭제 요청 리스트를 통한 삭제 처리
+			while (deleteReqList.length > 0) {
+				let deleteItem = deleteReqList.pop();
+				if (object[deleteItem] != undefined) {
+					// 아이템 전용 팩맨 Body 처리
+					if (deleteItem == "pacman" && pacman_item != undefined) {
+						world.removeBody(pacman_item);
+						pacman_item = undefined;
+					}
+					object[deleteItem].delete(scene, world);
+				}
+			}
+
+			if (object['pacman'] != undefined) {
 				// 카메라 설정
 				selectCameraType(scene, object['pacman'], camera, controls, renderer);
 				pacman_item.position = object['pacman'].body.position;
 			}
-			Object.keys(object).forEach(function(key) {
+			Object.keys(object).forEach(function (key) {
 				object[key].update();
 			});
 		}
-		
 	}
 }
