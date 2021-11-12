@@ -15,7 +15,7 @@
 2021-2 Gachon Univ. Dept. of Software Computer Graphics Term Project
 |Name|<a href="https://github.com/JM2308">Jimin Ko<a>|<a href="https://github.com/catsaveearth">Suhyeon Kim</a>|<a href="https://github.com/Taehyuny">Taehyun Park</a>|<a href="https://github.com/Aftermoon-dev">Minjae Seon</a>|
 |:--|:--:|:--:|:--:|:--:|
-|**Role**|Item Algorithm|Cameras & Ghost Algorithm|Maps|Structure & Maps|
+|**Role**|Item Models & Item Algorithms|Camera & Ghost Algorithms|Maps & Textures|Base Structures & Physics & Maps|
 
 ## Licenses
 ```
