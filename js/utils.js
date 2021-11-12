@@ -13,7 +13,7 @@ import * as Loading from './loading.js'
 import * as Main from '../3d-pacman.js'
 
 /* Setting */
-const timeStep = 1 / 60;
+const timeStep = 1 / 30;
 
 export var userSpeed = 3000; // 유저의 속도를 결정
 export var pacman_height = 80; // 팩맨의 카메라 높이 결정  -> 나중에 아이템에서 써먹을수있음
@@ -158,33 +158,6 @@ export class worldObj {
 				this.mesh.quaternion.copy(body.quaternion);
 			}
 		}
-
-		//mesh만 돌리기 => ghost용
-		this.rotateMesh = function(flag){
-			// this.currentDirection
-			var angle = 360;
-			this.mesh.rotateY(angle * Math.PI / 180);
-			console.log(angle)
-
-			// if (flag == 1){ //위보기 180도
-			// 	this.mesh.rotateY(angle * Math.PI / 180);
-
-			// }
-			// else if (flag == 2){  //아래보기 0도
-			// 	this.mesh.rotateY(angle * Math.PI / 180);
-
-			// }
-			// else if (flag == 3){ //왼쪽보기 ??도
-			// 	this.mesh.rotateY(angle * Math.PI / 180);
-
-			// }
-			// else if (flag == 4){ //오른쪽보기 ??도
-			// 	this.mesh.rotateY(angle * Math.PI / 180);
-
-			// }
-
-		}
-
 
 		// 객체 삭제
 		this.delete = function(scene, world) {
@@ -530,7 +503,7 @@ export function applyItem4Event() {
 	//ghost 색 바꿔주기
 	Object.keys(object).forEach(function (key) {
 		if (key.includes("ghost")){
-			changeGhostColor(key, 0xFF97FF);
+			changeGhostColor(key, 0xFF0000);
 		}
 	});
 
@@ -736,14 +709,11 @@ export function setUserEvent(scene, world, controls, camera) {
 
 
 			//임시로 넣어둔 부분! 누르면 1인칭 <-> 3인칭
-			case "C":
-			case "c":
-				changePointOfView(object['pacman'], controls);
-				break;
-			case "Z":
-			case "z":
-				applyItem4Event();
-				break;
+			// case "C":
+			// case "c":
+			// 	changePointOfView(object['pacman'], controls);
+			// 	break;
+
 		}
 	};
 	document.addEventListener("keydown", keyDownCallback);
@@ -856,9 +826,9 @@ export function setUserEvent(scene, world, controls, camera) {
 export function initcamera(userObject, controls) {
 	changePointOfView(userObject, controls);
 
-	// setTimeout(function(){
-	// 	changePointOfView(userObject, controls);
-	// }, 5000);
+	setTimeout(function(){
+		changePointOfView(userObject, controls);
+	}, 5000);
 }
 
 /** 
