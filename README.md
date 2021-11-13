@@ -42,6 +42,26 @@
    SOFTWARE.
 ```
 ## Third-Party License
+ ### Pac-man
+ ```
+ PAC-MAN™ & ©1980 BANDAI NAMCO Entertainment Inc.
+ The project has nothing to do with the original Pacman.
+ ```
+ ### Audio File
+ ```
+ Files in the audio/ do not have the license for that project.
+ Each sound is owned by the copyright holder as follows.
+
+   teleport.mp3 @ Starcraft by Blizzard Entertainment
+   gameover.mp3 @ Crazy Arcade by Nexon Korea
+   gameclear.mp3 @
+   pacman_eat.mp3 @ Team Fortress 2 by Valve Corporation
+   sound_intro.mp3 @
+   sound_natural1.mp3 @
+   sound_space2.mp3 @
+   sound_gachon1.mp3 @
+
+ ```
  ### THREE.js (https://github.com/mrdoob/three.js)
  ```
    The MIT License
