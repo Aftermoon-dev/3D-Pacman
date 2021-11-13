@@ -55,16 +55,16 @@
  ### Audio File
  ```
    The files in audio/ are not under the license of the project.
-   Each sound is owned by the copyright holder as follows.
-
+   Each sound is from the source below.
+   
       teleport.mp3 @ Starcraft by Blizzard Entertainment
       gameover.mp3 @ Crazy Arcade by Nexon Korea
-      gameclear.mp3 @
+      gameclear.mp3 @ https://youtubelab.tistory.com/30
       pacman_eat.mp3 @ Team Fortress 2 by Valve Corporation
-      sound_intro.mp3 @
-      sound_natural1.mp3 @
-      sound_space2.mp3 @
-      sound_gachon1.mp3 @
+      sound_intro.mp3 @ https://pixabay.com/ko/music/-factory-area-10410/
+      sound_natural1.mp3 @ https://pixabay.com/ko/music/-simple-giftssimple-interludestorm-in-the-valley-from-the-simple-gifts-show-13/
+      sound_space2.mp3 @ https://pixabay.com/ko/music/-wi2p-1469/
+      sound_gachon1.mp3 @ https://pixabay.com/ko/music/-elixir-of-life-9420/
  ```
  ### THREE.js (https://github.com/mrdoob/three.js)
  ```
