@@ -1,6 +1,7 @@
 <h1 align="center">3D-Pacman</h1>
 
 <p align="center">
+    <a href="https://opensource.org/licenses/MIT"><img alt="License" src="https://img.shields.io/github/license/Aftermoon-dev/3D-Pacman"></a>
     <a href="https://github.com/Aftermoon-dev/3D-Pacman"><img alt="Github Stars" src="https://img.shields.io/github/stars/Aftermoon-dev/3D-Pacman?style=social"></a>
 </p>
 
