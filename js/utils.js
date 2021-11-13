@@ -802,7 +802,7 @@ export function setUserEvent(scene, world, controls, camera) {
 
 			// 현재 스테이지에 따라 다음 동작 정의
 			if (currentStage == 1) {
-				if (score == 1100) {  // Stage 1 Clear 점수 넣기!
+				if (score == 1000) {  // Stage 1 Clear 점수 넣기!
 					stopTimer(timer); // 아이템 타이머 초기화!
 					isNeedClear = true;
 					timerImage.setAttribute("src", "./image/timerStartEnd.png");
